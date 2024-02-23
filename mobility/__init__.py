@@ -36,4 +36,8 @@ def create_app(test_config=None):
     def about():
         return render_template('about.html', HelloWorld='Hello World')
 
+    @app.route('/Noah')
+    def noah():
+        return render_template('noah.html',noah='hello world')
+
     return app
