@@ -15,6 +15,10 @@ def about():
 def noah():
     return render_template('noah.html',noah='hello world')
 
+@app.route('/abdullah')
+def abdullah():
+    return render_template('abdullah.html',abdullah='hello world')
+
 if __name__ == '__main__':
     URL = 'http://127.0.0.1:5000/base'
     webbrowser.open_new_tab(URL)

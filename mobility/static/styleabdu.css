@@ -1,0 +1,58 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+nav {
+    color: #0C2340;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header {
+    background-color: #00214e;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+}
+
+section {
+    padding: 20px;
+    text-align: center;
+}
+
+.profile-info {
+    display: flex; /* Utilisation de flexbox pour aligner les éléments horizontalement */
+    justify-content: center; /* Centrage horizontal */
+    align-items: center; /* Centrage vertical */
+}
+
+.profile-picture {
+    margin-right: 20px; /* Marge à droite pour séparer la photo du texte */
+}
+
+.profile-picture img {
+    border-radius: 20px; /* Ajout de coins arrondis */
+    width: 200px; /* Largeur fixe pour la photo */
+    height: auto; /* Pour conserver le ratio de l'image */
+}
+
+.profile-text {
+    background-color: #f0f0f0; /* Couleur de fond grise */
+    padding: 20px;
+    border-radius: 10px; /* Coins arrondis */
+    max-width: 300px; /* Largeur maximale du bloc de texte */
+}
+
+footer {
+    background-color: #00214e; /* Couleur de fond identique au header */
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
