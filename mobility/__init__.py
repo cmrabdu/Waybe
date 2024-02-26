@@ -44,12 +44,12 @@ def create_app(test_config=None):
         return render_template('abdullah.html',abdullah='hello world')
 
     
-    @app.route('/abdullah')
+    @app.route('/houari')
     def houari():
         return render_template('houari.html',houari='hello world')
 
 
-    @app.route('/abdullah')
+    @app.route('/guillaume')
     def guillaume():
         return render_template('guillaume.html',guillaume='hello world')
 
