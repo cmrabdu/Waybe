@@ -1,13 +1,46 @@
+image: python:3.11-alpine 
+
+before_script:
+  - python3 -m venv .venv
+  - . ./.venv/bin/activate
+  - python3 -m pip install -r requirements.txt
+
+cache:
+  paths:
+    - ~/.cache/pip
+    - .venv
+
 stages:
-  - build
+  - ver
+  - pretest
   - test
 
-build_job:
-  stage: build
+ver:
+  stage: ver
   script:
-    - pip install -r requirements.txt
+    - python3 --version
+    - whoami
 
-test_job:
-  stage: test
+pretest:
+  stage: pretest
   script:
-    - python -m unittest discover tests
+    - flask --app mobility --debug routes
+
+tests:
+  stage: test
+  artifacts:
+    paths:
+      - htmlcov/
+  script:
+    - coverage run --source ./mobility/ -m unittest discover -v -s ./mobility/tests
+    - coverage report -m
+    - coverage html
+  coverage: '/TOTAL.+ ([0-9]{1,3}%)/'
+
+docs:
+  stage: test
+  artifacts:
+    paths:
+      - html/mobility
+  script:
+    - pdoc --html mobility 

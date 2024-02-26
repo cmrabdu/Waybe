@@ -2,3 +2,5 @@ flask
 flask-sqlalchemy
 PyMySQL
 gunicorn
+coverage
+pdoc3
