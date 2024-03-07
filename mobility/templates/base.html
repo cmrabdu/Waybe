@@ -13,24 +13,55 @@
     <link rel="shortcut icon" href="/static/favicon.ico"/>
 
 </head>
-<body style="stars: url({{ url_for('static', filename='stars2.png') }});">
+<body >
 
     <nav>
         <ul class="menu">
-            <li><a href="/about">Equipe</a></li>
-            <li><a href="/noah">statistique</a></li>
-            <li><a href="/abdullah">Abdullah Camur</a></li>
-            <li><a href="/houari">Houari Benkechida</a></li>
-            <li><a href="/guillaume">Guillaume Sablon</a></li>
+            <li><a href="/about">Team</a></li>
+            <li><a href="/statisque">stats</a></li>
+            <li><a href="/request">Request</a></li>
         </ul>
     </nav>
 
-    <div class="logo"style="rose: url({{ url_for('static', filename='rose.png') }});">
+    <div class="logo">
         <div class="titre" >
             WAY-BE
         </div>
     </div>
-    <H2>Accès Anticipé</H2>
+    <div class="h2">
+        <H2>Accès anticipé</H2>
+    </div>
+
+   <div class="welcome">
+       <img src="static/wheels.png">
+       <p class="typing-text">
+
+
+            Bienvenue sur le chantier de rénovation mobile de WAY-BE ! 🚧⚙️ Actuellement,
+           le site roule sur ses jantes comme un cascadeur dans un film d'action, mais ne
+           vous inquiétez pas, nous ajoutons de nouveaux pneus plus rapidement que Flash peut
+           traverser un carrefour ! 🏎️💨 Nos développeurs jonglent avec des lignes de code comme
+           des acrobates du cirque, prêts à vous offrir une expérience en ligne plus fluide qu'un
+           tourbillon dans une machine à laver. Alors, mettez votre casque, attachez-vous bien,
+           et préparez-vous à être ébloui(e) par notre nouvelle version, bientôt disponible sur
+           tous vos écrans mobiles ! 📱✨
+       </p>
+   </div>
+
+    <audio   controls  id="music" src="/static/tk.mp3"></audio>
+   <script>
+       // Sélectionnez le titre
+        var title = document.querySelector('.titre');
+
+        // Sélectionnez la balise audio
+        var music = document.getElementById('music');
+
+        // Ajoutez un écouteur d'événements pour le survol du titre
+        title.addEventListener('mouseover', function() {
+        // Jouez la musique lorsque le curseur survole le titre
+        music.play();
+        });
+   </script>
 
 </body>
 <footer>

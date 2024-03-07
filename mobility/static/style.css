@@ -169,3 +169,114 @@ footer {
     margin-bottom: 5px; /* Marge inférieure */
     color: #ccc; /* Couleur du texte */
 }
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-20px);
+  }
+  60% {
+    transform: translateY(-10px);
+  }
+}
+
+.h2 {
+  animation: bounce 2s infinite;
+    color: #ff0002;
+}
+
+/* Styles pour le conteneur welcome */
+.welcome {
+    display: flex; /* Utilisation de flexbox */
+    align-items: center; /* Aligner les éléments verticalement */
+    margin-top: 20px; /* Espacement par rapport au titre */
+}
+
+/* Styles pour l'image */
+.welcome img {
+    width: 200px; /* Ajuster la largeur de l'image */
+    margin-right: 20px; /* Espacement entre l'image et le texte */
+    animation: fadeIn 15s ease forwards;
+}
+
+/* Styles pour le paragraphe */
+.welcome p {
+    font-family: 'popstarpop', sans-serif; /* Nouvelle police de caractères */
+    font-size: 16px; /* Taille du texte */
+    color: #fff; /* Couleur du texte */
+    margin-right: 40px;
+    animation: fadeIn 15s ease forwards;
+}
+
+.wrapper,
+.card{
+    height: 500px;
+    max-width: 300px;
+}
+
+.card:nth-child(4) {
+    margin-right: 0; /* Supprimer la marge droite pour la quatrième carte */
+}
+
+.wrapper {
+    perspective: 900px;
+    display: flex;
+    justify-content: center; /* Centrer horizontalement les cartes */
+    width: 80%; /* Ajustez la largeur selon vos besoins */
+}
+.card {
+    text-align: center;
+    transition: all 1.5s cubic-bezier(0.7,-.5,0.3,1.8);
+    transform-style: preserve-3d;
+    margin-right: 80px;
+
+}
+
+.wrapper:hover .card{
+    transform: rotateY(180deg);
+}
+
+.front,
+.back{
+    width: 300px;
+    position: relative;
+    top: 0;
+    backface-visibility: hidden;
+
+}
+
+.front {
+    cursor: pointer;
+    height: 100%;
+    background-image: url("po.png");
+    backface-visibility: hidden;
+    border-radius: 50px;
+    background-size: cover;
+    background-position: center center;
+}
+
+.back{
+    transform: rotateY(180deg);
+    position:  absolute;
+    border-radius: 50px;
+    height: 500px;
+    background-color: #ff99cc;
+}
+
+.text_back{
+    padding-top: 25%;
+}
+
+.text_back h2{
+    font-size: 35px;
+    margin: 0;
+    font-weight: 300;
+}
+
+.text_back h4{
+    margin: 0;
+    margin-top: 20px;
+}
+

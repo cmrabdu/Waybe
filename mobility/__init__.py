@@ -24,21 +24,15 @@ def base():
 def about():
     return render_template('about.html', HelloWorld='Hello World')
 
-@app.route('/noah')
-def noah():
-    return render_template('noah.html', noah='hello world')
+@app.route('/statisque')
+def stats():
+    return render_template('stats.html', stats='hello world')
 
-@app.route('/abdullah')
-def abdullah():
-    return render_template('abdullah.html', abdullah='hello world')
+@app.route('/request')
+def request():
+    return render_template('request.html', abdullah='hello world')
 
-@app.route('/houari')
-def houari():
-    return render_template('houari.html', houari='hello world')
 
-@app.route('/guillaume')
-def guillaume():
-    return render_template('guillaume.html', guillaume='hello world')
 
 if __name__ == "__main__":
     app.run(debug=True)
