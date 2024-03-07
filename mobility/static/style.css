@@ -37,7 +37,7 @@ nav {
 }
 
 .logo{
-    background-image: url('/static/rose4.png');
+    background-image: url('/static/rose5.png');
     background-position: center;
     background-size: 800px 800px;
     background-repeat: no-repeat;
@@ -212,8 +212,8 @@ footer {
 
 .wrapper,
 .card{
-    height: 500px;
-    max-width: 300px;
+    height: 750px;
+    max-width: 450px;
 }
 
 .card:nth-child(4) {
@@ -240,7 +240,7 @@ footer {
 
 .front,
 .back{
-    width: 300px;
+    width: 450px;
     position: relative;
     top: 0;
     backface-visibility: hidden;
@@ -250,33 +250,27 @@ footer {
 .front {
     cursor: pointer;
     height: 100%;
-    background-image: url("po.png");
+    background-image: url("cards.png");
     backface-visibility: hidden;
-    border-radius: 50px;
+
     background-size: cover;
     background-position: center center;
 }
 
-.back{
-    transform: rotateY(180deg);
-    position:  absolute;
+.back {
+    width: 450px; /* Définir la même largeur que la face avant */
+    height: 750px; /* Définir la même hauteur que la face avant */
+    position: absolute;
     border-radius: 50px;
-    height: 500px;
-    background-color: #ff99cc;
+    background-image: url("noah.png");
+    background-size: cover;
+    backface-visibility: hidden;
+    transform: rotateY(180deg);
 }
-
 .text_back{
-    padding-top: 25%;
+    width: 450px;
+    height: 750px;
 }
 
-.text_back h2{
-    font-size: 35px;
-    margin: 0;
-    font-weight: 300;
-}
 
-.text_back h4{
-    margin: 0;
-    margin-top: 20px;
-}
 

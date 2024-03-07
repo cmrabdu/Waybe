@@ -48,19 +48,21 @@
        </p>
    </div>
 
-    <audio   controls  id="music" src="/static/tk.mp3"></audio>
+    <audio     id="music" src="/static/tk.mp3"></audio>
    <script>
-       // Sélectionnez le titre
-        var title = document.querySelector('.titre');
+       document.addEventListener("DOMContentLoaded", function() {
+    var audio = document.getElementById("music");
+    var title = document.querySelector(".titre");
 
-        // Sélectionnez la balise audio
-        var music = document.getElementById('music');
-
-        // Ajoutez un écouteur d'événements pour le survol du titre
-        title.addEventListener('mouseover', function() {
-        // Jouez la musique lorsque le curseur survole le titre
-        music.play();
+    title.addEventListener("click", function() {
+        if (audio.paused) {
+            audio.play();
+        } else {
+            audio.pause();
+        }
         });
+       });
+
    </script>
 
 </body>
