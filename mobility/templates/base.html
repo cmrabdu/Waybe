@@ -2,41 +2,105 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>My App</title>
+    <title>WAY-BE</title>
     <link rel="stylesheet" href="/static/style.css">
+    <style>
+    @import url('https://fonts.cdnfonts.com/css/yagiza');
+    </style>
+    <style>
+    @import url('https://fonts.cdnfonts.com/css/popstarregular');
+    </style>
+    <link rel="shortcut icon" href="/static/favicon.ico"/>
+
 </head>
-<body>
+<body >
 
     <nav>
-        <ul>
-            <li><a href="/">Main page</a></li>
-            <li><a href="/about">About</a></li>
-            <li> <a href="/noah">Noah Moussaoui</a></li>
-            <li> <a href="/abdullah">Abdullah Camur </a></li>
-            <li> <a href="/houari">Houari Benkechida</a></li>
-            <li> <a href="/guillaume">Guillaume Sablon</a></li>
-
+        <ul class="menu">
+            <li><a href="/about">Team</a></li>
+            <li><a href="/statisque">stats</a></li>
+            <li><a href="/request">Request</a></li>
         </ul>
     </nav>
 
-    <div class="content">
-        <h1>Mobility</h1>
-
-        <h2>City list</h2>
-        <table>
-            <tr>
-                <th>Postal code</th>
-                <th>Name</th>
-                <th>Population</th>
-            </tr>
-            {% for city in cities %}
-            <tr>
-                <td>{{ city[0] }}</td>
-                <td>{{ city[1] }}</td>
-                <td>{{ city[2] }}</td>
-            </tr>
-            {% endfor %}
-        </table>
+    <div class="logo">
+        <div class="titre" >
+            WAY-BE
+        </div>
     </div>
+    <div class="h2">
+        <H2>Accès anticipé</H2>
+    </div>
+
+   <div class="welcome">
+       <img src="static/wheels.png">
+       <p class="typing-text">
+
+
+            Bienvenue sur le chantier de rénovation mobile de WAY-BE ! 🚧⚙️ Actuellement,
+           le site roule sur ses jantes comme un cascadeur dans un film d'action, mais ne
+           vous inquiétez pas, nous ajoutons de nouveaux pneus plus rapidement que Flash peut
+           traverser un carrefour ! 🏎️💨 Nos développeurs jonglent avec des lignes de code comme
+           des acrobates du cirque, prêts à vous offrir une expérience en ligne plus fluide qu'un
+           tourbillon dans une machine à laver. Alors, mettez votre casque, attachez-vous bien,
+           et préparez-vous à être ébloui(e) par notre nouvelle version, bientôt disponible sur
+           tous vos écrans mobiles ! 📱✨
+       </p>
+   </div>
+
+    <audio     id="music" src="/static/tk.mp3"></audio>
+   <script>
+       document.addEventListener("DOMContentLoaded", function() {
+    var audio = document.getElementById("music");
+    var title = document.querySelector(".titre");
+
+    title.addEventListener("click", function() {
+        if (audio.paused) {
+            audio.play();
+        } else {
+            audio.pause();
+        }
+        });
+       });
+
+   </script>
+
 </body>
+<footer>
+
+            <div class="colone">
+
+                <h3>
+                    Contacts
+                </h3>
+
+                <p>
+                    noah.moussaoui@Student.uclouvain.be
+                </p>
+
+                </div>
+
+            <div class="colone">
+
+                 <h3>
+                    Équipe
+                </h3>
+
+                <p>
+                    Noah Moussaoui
+                </p>
+
+                <p>
+                     Abdullah Camur
+                </p>
+
+                <p>
+                     Houari Benkechida
+                </p>
+
+                <p>
+                     Guillaume Sablon
+                </p>
+</footer>
+
 </html>
