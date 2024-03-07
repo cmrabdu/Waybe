@@ -1,9 +1,171 @@
-html { font-family: sans-serif; background: #eee; padding: 1rem; }
-body { max-width: 960px; margin: 0 auto; background: white; }
-h1 { font-family: serif; color: #377ba8; margin: 1rem 0; }
-a { color: #377ba8; }
-nav { background: lightgray; display: flex; align-items: center;
-padding: 0 0.5rem; }
-nav h1 { flex: auto; margin: 0; }
-nav ul { display: flex; list-style: none; margin: 0; padding: 0; }
-nav ul li a, nav ul li span, header { display: block; padding: 0.5rem; }
+/* Réinitialisation des styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Styles pour le corps de la page */
+body {
+    font-family: 'popstarpop', sans-serif; /* Nouvelle police de caractères */
+    background-image: url('/static/cp2.png'); /* Ajout de l'image de fond */
+    background-size: cover;
+    color: #fff; /* Texte blanc */
+    display: flex;
+    flex-direction: column; /* Aligner le contenu verticalement */
+    justify-content: center; /* Centrer le contenu verticalement */
+    align-items: center; /* Centrer horizontalement */
+    height: 100vh; /* Pleine hauteur de la fenêtre */
+    margin: 0; /* Annuler les marges par défaut du body */
+    padding: 0; /* Annuler les rembourrages par défaut du body */
+}
+/* Conteneur principal */
+.container {
+    text-align: center; /* Centrer le contenu */
+}
+
+/* Barre de navigation */
+nav {
+    font-family: 'popstarpop', sans-serif;
+    background-color: rgb(243,98,178); /* Nouvelle couleur de fond de la barre de navigation */
+    width: 100%; /* Largeur de la barre de navigation */
+    padding: 10px 0; /* Espacement intérieur réduit */
+    position: fixed; /* Position fixe pour rester en haut de la page */
+    top: 0; /* Aligner la barre de navigation en haut */
+    z-index: 999; /* S'assurer que la barre de navigation est au-dessus de tout le contenu */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombre douce */
+}
+
+.logo{
+    background-image: url('/static/rose4.png');
+    background-position: center;
+    background-size: 800px 800px;
+    background-repeat: no-repeat;
+    opacity: 0; /* Initialement invisible */
+    text-shadow: 8px 8px 16px rgba(0, 0, 0, 0.9);
+    animation: fadeIn 10s ease forwards;
+    transition: text-shadow 0.3s;
+}
+/* Styles pour le titre avec animation */
+.titre {
+    font-family: 'yagiza', sans-serif; /* Nouvelle police de caractères */
+    font-size: 200px; /* Taille du titre */
+    margin-top: 50px; /* Espacement par rapport à la barre de navigation */
+    margin-bottom: 20px; /* Espacement par rapport au menu */
+    text-shadow: 8px 8px 16px rgba(0, 0, 0, 0.9); /* Ombre portée pour le texte */
+    letter-spacing: 2px; /* Espacement entre les lettres */
+    opacity: 0; /* Initialement invisible */
+    animation: fadeIn 10s ease forwards; /* Appliquer l'animation de fondu */
+    transition: text-shadow 0.3s;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+.titre:hover {
+    text-shadow: 12px 12px 24px rgba(0, 0, 0, 0.9); /* Modification de l'ombre portée au survol */
+    cursor: pointer; /* Changement de curseur au survol */
+}
+/* Animation de fondu */
+@keyframes fadeIn {
+    from {
+        opacity: 0; /* Commence avec une opacité de 0 */
+    }
+    to {
+        opacity: 1; /* Termine avec une opacité de 1 */
+    }
+}
+
+/* Styles pour le titre sur les petits écrans */
+@media only screen and (max-width: 768px) {
+    .titre {
+
+        font-size: 100px; /* Taille du titre réduite pour les petits écrans */
+        margin-top: 20px; /* Espacement réduit par rapport à la barre de navigation */
+        margin-bottom: 10px; /* Espacement réduit par rapport au menu */
+    }
+}
+
+/* Styles pour le menu */
+.menu {
+    list-style-type: none;
+    padding: 10px;
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.menu li {
+    display: inline-block; /* Afficher les éléments du menu côte à côte */
+    margin-right: 15px; /* Espacement entre les éléments du menu réduit */
+}
+
+.menu li:last-child {
+    margin-right: 0; /* Pas de marge à droite pour le dernier élément */
+}
+
+.menu li a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 15px; /* Taille du texte du menu réduite */
+    transition: color 0.3s; /* Animation de transition */
+}
+
+.menu li a:hover {
+    color: #ffccff; /* Couleur du texte au survol */
+}
+
+/* Barre de navigation pour les petits écrans */
+@media only screen and (max-width: 768px) {
+    .menu {
+        display: none; /* Cacher le menu par défaut */
+        position: absolute; /* Position absolue pour se superposer sur le contenu */
+        top: 100%; /* Aligner le menu en bas de la barre de navigation */
+        left: 0; /* Aligner le menu à gauche */
+        background-color: rgb(243,98,178); /* Couleur de fond du menu */
+        width: 100%; /* Largeur du menu égale à celle de la barre de navigation */
+        padding: 10px 0; /* Espacement intérieur réduit */
+        text-align: center; /* Centrer le texte */
+    }
+
+    .menu li {
+        display: block; /* Afficher les éléments du menu en bloc */
+        margin: 10px 0; /* Espacement entre les éléments du menu */
+    }
+
+    .menu-toggle {
+        display: block; /* Afficher le bouton du menu */
+    }
+}
+
+/* Styles pour le footer */
+footer {
+    font-family: 'popstarpop', sans-serif;
+    background-color: rgb(243,98,178); /* Couleur de fond pour le footer */
+    width: 100%; /* Largeur du footer */
+    position: fixed; /* Position fixe pour rester en bas de la fenêtre */
+    bottom: 0; /* Aligner le footer en bas */
+    z-index: 999; /* S'assurer que le footer est au-dessus de tout le contenu */
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1); /* Appliquer une ombre douce */
+    padding: 10px;
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+/* Styles pour les titres dans le footer */
+.colonne h3 {
+    margin-left: 30px;
+    font-size: 20px; /* Taille du texte */
+    margin-bottom: 10px; /* Marge inférieure */
+    color: #ff99cc; /* Couleur du titre */
+}
+
+/* Styles pour les paragraphes dans le footer */
+.colonne p {
+     margin-left: 30px;
+    font-size: 16px; /* Taille du texte */
+    margin-bottom: 5px; /* Marge inférieure */
+    color: #ccc; /* Couleur du texte */
+}
