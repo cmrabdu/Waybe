@@ -1,7 +1,3 @@
-import os
-from flask import Flask, render_template
-import webbrowser
-app = Flask(__name__)
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
@@ -33,17 +29,14 @@ def create_app(test_config=None):
 
     @app.route('/about')
     def about():
-        return render_template('about.html', HelloWorld='Hello World')
+        return render_template('about.html', HelloWorld='Bonjour tout le monde')
 
     @app.route('/statistique')
     def stats():
-        return render_template('stats.html',stats='hello world')
+        return render_template('stats.html', stats='bonjour le monde')
 
     @app.route('/request')
     def request():
-        return render_template('request.html',='hello world')
+        return render_template('request.html', data='bonjour le monde')
 
-    
-
-    return app 
-
+    return app
