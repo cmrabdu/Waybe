@@ -25,11 +25,11 @@ def create_app(test_config=None):
 
     @app.route('/')
     def base():
-        return render_template('base.html')
+        return render_template('base.html',base='bonjour')
 
     @app.route('/about')
     def about():
-        return render_template('about.html', HelloWorld='Bonjour tout le monde')
+        return render_template('about.html', about='Bonjour tout le monde')
 
     @app.route('/statistique')
     def stats():
