@@ -1,8 +1,7 @@
-from flask import Flask, render_template
 import os
-
+from flask import Flask, render_template
+import webbrowser
 app = Flask(__name__)
-
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
@@ -28,23 +27,23 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-# Routes
-@app.route('/')
-def base():
-    return render_template('base.html')
+    @app.route('/')
+    def base():
+        return render_template('base.html')
 
-@app.route('/about')
-def about():
-    return render_template('about.html', HelloWorld='Hello World')
+    @app.route('/about')
+    def about():
+        return render_template('about.html', HelloWorld='Hello World')
 
-@app.route('/statisque')
-def stats():
-    return render_template('stats.html', stats='hello world')
+    @app.route('/statistique')
+    def stats():
+        return render_template('stats.html',stats='hello world')
 
-@app.route('/request')
-def request():
-    return render_template('request.html', abdullah='hello world')
+    @app.route('/request')
+    def request():
+        return render_template('request.html',='hello world')
 
+    
 
+    return app 
 
-return app
