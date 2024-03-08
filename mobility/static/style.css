@@ -272,7 +272,7 @@ footer {
 /* Styles pour la première carte arrière */
 .back1 {
     background-image: url("abdu.png");
-    background-size: cover;
+    background-size: 450px 750px;
 }
 
 /* Styles pour la deuxième carte arrière */
