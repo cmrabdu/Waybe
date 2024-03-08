@@ -204,7 +204,7 @@ footer {
 /* Styles pour le paragraphe */
 .welcome p {
     font-family: 'popstarpop', sans-serif; /* Nouvelle police de caractères */
-    font-size: 16px; /* Taille du texte */
+    font-size: 25px; /* Taille du texte */
     color: #fff; /* Couleur du texte */
     margin-right: 40px;
     animation: fadeIn 15s ease forwards;
@@ -262,15 +262,58 @@ footer {
     height: 750px; /* Définir la même hauteur que la face avant */
     position: absolute;
     border-radius: 50px;
-    background-image: url("noah.png");
-    background-size: cover;
     backface-visibility: hidden;
     transform: rotateY(180deg);
 }
-.text_back{
-    width: 450px;
-    height: 750px;
+.card:nth-child(4) {
+    margin-right: 0; /* Supprimer la marge droite pour la quatrième carte */
 }
+
+/* Styles pour la première carte arrière */
+.back1 {
+    background-image: url("abdu.png");
+    background-size: cover;
+}
+
+/* Styles pour la deuxième carte arrière */
+.back2 {
+    background-image: url("noah.png");
+    background-size: 450px 750px;
+}
+
+/* Styles pour la troisième carte arrière */
+.back3 {
+    background-image: url("wheels.png");
+    background-size: cover;/* Remplacez "back3.jpg" par le chemin de votre troisième image de fond */
+}
+
+/* Styles pour la quatrième carte arrière */
+.back4 {
+    background-image: url("wheels.png");
+    background-size: cover/* Remplacez "back4.jpg" par le chemin de votre quatrième image de fond */
+}
+
+.text-title-about {
+    margin-top: 20px;
+    font-size: xx-large;
+    font-family: 'yagiza', sans-serif;
+}
+
+.text-about {
+    font-size: 25px;
+    line-height: 1.6;
+}
+
+.text-about p {
+    margin-bottom: 20px;
+    margin-left: 70px;
+    margin-right: 70px;
+}
+
+.text-about p:last-child {
+    margin-bottom: 0;
+}
+
 
 
 
