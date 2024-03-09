@@ -27,6 +27,8 @@ body {
 
 /* Barre de navigation */
 nav {
+    background-color: #fa55f5;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     font-family: 'popstarpop', sans-serif;
     width: 100%; /* Largeur de la barre de navigation */
     padding: 10px 0; /* Espacement intérieur réduit */
@@ -158,6 +160,7 @@ footer {
 
 footer p {
     margin: 0; /* Supprime les marges par défaut */
+    font-size: 20px;
 }
 
 @keyframes bounce {
@@ -226,6 +229,7 @@ footer p {
 .card2,
 .card3,
 .card4 {
+    margin-top: 150px;
     text-align: center;
     transition: all 1.5s cubic-bezier(0.7, -.5, 0.3, 1.8);
     transform-style: preserve-3d;
@@ -271,13 +275,13 @@ footer p {
 
 /* Styles pour la première carte arrière */
 .back1 {
-    background-image: url("abdu.png");
+    background-image: url("Noah.png");
     background-size: 450px 750px;
 }
 
 /* Styles pour la deuxième carte arrière */
 .back2 {
-    background-image: url("Noah.png");
+    background-image: url("abdu.png");
     background-size: cover;
 }
 
@@ -293,34 +297,14 @@ footer p {
     background-size: cover; /* Remplacez "back4.jpg" par le chemin de votre quatrième image de fond */
 }
 
-.text-title-about {
-    margin-top: 70px;
-    font-size: xx-large;
-    font-family: 'yagiza', sans-serif;
-}
 
-.text-about {
-    font-size: 25px;
-    line-height: 1.6;
-    font-family: 'GREENLAND', sans-serif;
-}
-
-.text-about p {
-    margin-top: 30px;
-    margin-bottom: 20px;
-    margin-left: 80px;
-    margin-right: 80px;
-}
-
-.text-about p:last-child {
-    margin-bottom: 0;
-}
 
 .pokemon {
     width: 600px;
     height: 600px;
     background-size: cover;
     background-image: url("way-be-pokemon.png");
+    margin-bottom: 1px;
 }
 
 form {
