@@ -20,32 +20,44 @@ body {
     padding: 0; /* Annuler les rembourrages par défaut du body */
 }
 
-/* Conteneur principal */
-.container {
-    text-align: center; /* Centrer le contenu */
+menu-container {
+    display: flex;
+    justify-content: flex-end; /* Aligner les éléments de menu à droite */
 }
+
 
 /* Barre de navigation */
 nav {
-    background-color: #fa55f5;
+    background-color: #EC297B;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     font-family: 'popstarpop', sans-serif;
-    width: 100%; /* Largeur de la barre de navigation */
-    padding: 10px 0; /* Espacement intérieur réduit */
-    position: fixed; /* Position fixe pour rester en haut de la page */
-    top: 0; /* Aligner la barre de navigation en haut */
-    z-index: 999; /* S'assurer que la barre de navigation est au-dessus de tout le contenu */
+    width: 100%;
+    padding: 10px 0;
+    position: fixed;
+    top: 0;
+    z-index: 999;
+    display: flex; /* Utilisez flexbox pour un meilleur contrôle de l'alignement */
+    justify-content: space-between; /* Espace entre le logo et le menu */
+    align-items: center; /* Centre les éléments verticalement */
 }
 
+
+.navbar-logo {
+    max-height: 55px; /* Fixe la hauteur maximale du logo */
+    width: auto; /* Assure que la largeur du logo s'adapte pour maintenir les proportions */
+    position: relative; /* Position relative si vous n'avez pas besoin de position absolue */
+}
+
+
 .logo {
-    background-image: url('/static/rose5.png');
+    background-image: url('pink_car.png');
     margin-top: 100px;
     background-position: center;
     background-size: 800px 800px;
     background-repeat: no-repeat;
     opacity: 0; /* Initialement invisible */
     text-shadow: 8px 8px 16px rgba(0, 0, 0, 0.9);
-    animation: fadeIn 10s ease forwards;
+    animation: fadeIn 5s ease forwards;
     transition: text-shadow 0.3s;
 }
 
@@ -57,7 +69,7 @@ nav {
     margin-bottom: 20px; /* Espacement par rapport au menu */
     text-shadow: 20px 20px 30px rgba(0, 0, 0, 0.9); /* Ombre portée pour le texte */
     opacity: 0; /* Initialement invisible */
-    animation: fadeIn 10s ease forwards; /* Appliquer l'animation de fondu */
+    animation: fadeIn 3s ease forwards; /* Appliquer l'animation de fondu */
     transition: text-shadow 0.3s;
     display: flex;
     justify-content: space-around;
@@ -88,36 +100,29 @@ nav {
     }
 }
 
-/* Styles pour le menu */
 .menu {
     list-style-type: none;
-    padding: 10px;
-    text-align: center;
     display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
+    margin-left: auto; /* Pousser le menu vers la droite */
 }
 
 .menu li {
-    display: inline-block; /* Afficher les éléments du menu côte à côte */
-    margin-right: 15px; /* Espacement entre les éléments du menu réduit */
+    padding: 0 20px; /* Espacement autour de chaque élément du menu */
+    border-right: 2px solid #ffffff; /* Ajoute des séparateurs */
 }
 
 .menu li:last-child {
-    margin-right: 0; /* Pas de marge à droite pour le dernier élément */
+    border-right: none; /* Pas de bordure à droite pour le dernier élément */
 }
 
 .menu li a {
-    text-decoration: none;
     color: #fff;
-    font-size: 50px; /* Taille du texte du menu réduite */
-    transition: color 0.3s; /* Animation de transition */
-}
+    text-decoration: none;
+    font-size: 25px;
+    margin-right: 20px;
+    margin-left: 20px;
 
-.menu li a:hover {
-    color: #ffccff; /* Couleur du texte au survol */
 }
-
 /* Barre de navigation pour les petits écrans */
 @media only screen and (max-width: 768px) {
     .menu {
@@ -145,12 +150,12 @@ nav {
 footer {
     font-family: 'Montserrat', sans-serif /* Couleur de fond */
     color: #fff; /* Couleur du texte */
-    padding: 20px; /* Espacement intérieur */
+    padding: 10px; /* Espacement intérieur */
     width: 100%; /* Largeur du footer */
     position: fixed; /* Position fixe pour rester en bas de la fenêtre */
     bottom: 0; /* Aligner le footer en bas */
     z-index: 999; /* S'assurer que le footer est au-dessus de tout le contenu */
-
+    background: #EC297B;
     text-align: center;
     display: flex;
     justify-content: space-around;
@@ -160,7 +165,7 @@ footer {
 
 footer p {
     margin: 0; /* Supprime les marges par défaut */
-    font-size: 20px;
+    font-size: 10px;
 }
 
 @keyframes bounce {
@@ -193,20 +198,14 @@ footer p {
 
 /* Styles pour le paragraphe */
 .welcome p {
-    font-family: 'popstarpop', sans-serif; /* Nouvelle police de caractères */
-    font-size: 25px; /* Taille du texte */
+    font-family: 'Nouveau IBM Stretch', sans-serif; /* Nouvelle police de caractères */
+    font-size: 30px; /* Taille du texte */
     color: #fff; /* Couleur du texte */
     margin-right: 200px;
     margin-left: 200px;
-    animation: fadeIn 15s ease forwards;
+    animation: fadeIn 6s ease forwards;
 }
-.loading{
-    margin-top: 100px;
-    width: 200px;
-    height: 200px;
-    background-size: cover;
-    background-image: url("cons.gif");
-}
+
 
 .wrapper,
 .card {
@@ -229,7 +228,6 @@ footer p {
 .card2,
 .card3,
 .card4 {
-    margin-top: 150px;
     text-align: center;
     transition: all 1.5s cubic-bezier(0.7, -.5, 0.3, 1.8);
     transform-style: preserve-3d;
@@ -245,6 +243,7 @@ footer p {
 
 .front,
 .back {
+    border-radius: 20px;
     width: 450px;
     position: relative;
     top: 0;
@@ -264,7 +263,7 @@ footer p {
     width: 450px; /* Définir la même largeur que la face avant */
     height: 750px; /* Définir la même hauteur que la face avant */
     position: absolute;
-    border-radius: 50px;
+    border-radius: 20px;
     backface-visibility: hidden;
     transform: rotateY(180deg);
 }
@@ -276,7 +275,7 @@ footer p {
 /* Styles pour la première carte arrière */
 .back1 {
     background-image: url("Noah.png");
-    background-size: 450px 750px;
+    background-size: cover;
 }
 
 /* Styles pour la deuxième carte arrière */
@@ -287,25 +286,18 @@ footer p {
 
 /* Styles pour la troisième carte arrière */
 .back3 {
-    background-image: url("houari.jpg");
+    background-image: url("houari.png");
     background-size: cover; /* Remplacez "back3.jpg" par le chemin de votre troisième image de fond */
 }
 
 /* Styles pour la quatrième carte arrière */
 .back4 {
-    background-image: url("heart.png");
+    background-image: url("guigui.png");
     background-size: cover; /* Remplacez "back4.jpg" par le chemin de votre quatrième image de fond */
 }
 
 
 
-.pokemon {
-    width: 600px;
-    height: 600px;
-    background-size: cover;
-    background-image: url("way-be-pokemon.png");
-    margin-bottom: 1px;
-}
 
 form {
             margin: 50px auto;
