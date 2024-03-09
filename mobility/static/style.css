@@ -8,7 +8,7 @@
 /* Styles pour le corps de la page */
 body {
     font-family: 'popstarpop', sans-serif; /* Nouvelle police de caractères */
-    background-image: url('/static/cp2.png'); /* Ajout de l'image de fond */
+    background-image: url('/static/backg.gif'); /* Ajout de l'image de fond */
     background-size: cover;
     color: #fff; /* Texte blanc */
     display: flex;
@@ -19,6 +19,7 @@ body {
     margin: 0; /* Annuler les marges par défaut du body */
     padding: 0; /* Annuler les rembourrages par défaut du body */
 }
+
 /* Conteneur principal */
 .container {
     text-align: center; /* Centrer le contenu */
@@ -27,17 +28,16 @@ body {
 /* Barre de navigation */
 nav {
     font-family: 'popstarpop', sans-serif;
-    background-color: rgb(243,98,178); /* Nouvelle couleur de fond de la barre de navigation */
     width: 100%; /* Largeur de la barre de navigation */
     padding: 10px 0; /* Espacement intérieur réduit */
     position: fixed; /* Position fixe pour rester en haut de la page */
     top: 0; /* Aligner la barre de navigation en haut */
     z-index: 999; /* S'assurer que la barre de navigation est au-dessus de tout le contenu */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombre douce */
 }
 
-.logo{
+.logo {
     background-image: url('/static/rose5.png');
+    margin-top: 100px;
     background-position: center;
     background-size: 800px 800px;
     background-repeat: no-repeat;
@@ -46,14 +46,14 @@ nav {
     animation: fadeIn 10s ease forwards;
     transition: text-shadow 0.3s;
 }
+
 /* Styles pour le titre avec animation */
 .titre {
     font-family: 'yagiza', sans-serif; /* Nouvelle police de caractères */
     font-size: 200px; /* Taille du titre */
-    margin-top: 50px; /* Espacement par rapport à la barre de navigation */
+    margin-top: 100px; /* Espacement par rapport à la barre de navigation */
     margin-bottom: 20px; /* Espacement par rapport au menu */
-    text-shadow: 8px 8px 16px rgba(0, 0, 0, 0.9); /* Ombre portée pour le texte */
-    letter-spacing: 2px; /* Espacement entre les lettres */
+    text-shadow: 20px 20px 30px rgba(0, 0, 0, 0.9); /* Ombre portée pour le texte */
     opacity: 0; /* Initialement invisible */
     animation: fadeIn 10s ease forwards; /* Appliquer l'animation de fondu */
     transition: text-shadow 0.3s;
@@ -61,10 +61,12 @@ nav {
     justify-content: space-around;
     flex-wrap: wrap;
 }
+
 .titre:hover {
-    text-shadow: 12px 12px 24px rgba(0, 0, 0, 0.9); /* Modification de l'ombre portée au survol */
+    text-shadow: 30px 30px 60px rgba(0, 0, 0, 0.9); /* Modification de l'ombre portée au survol */
     cursor: pointer; /* Changement de curseur au survol */
 }
+
 /* Animation de fondu */
 @keyframes fadeIn {
     from {
@@ -78,9 +80,8 @@ nav {
 /* Styles pour le titre sur les petits écrans */
 @media only screen and (max-width: 768px) {
     .titre {
-
         font-size: 100px; /* Taille du titre réduite pour les petits écrans */
-        margin-top: 20px; /* Espacement réduit par rapport à la barre de navigation */
+        margin-top: 100px; /* Espacement réduit par rapport à la barre de navigation */
         margin-bottom: 10px; /* Espacement réduit par rapport au menu */
     }
 }
@@ -107,7 +108,7 @@ nav {
 .menu li a {
     text-decoration: none;
     color: #fff;
-    font-size: 15px; /* Taille du texte du menu réduite */
+    font-size: 50px; /* Taille du texte du menu réduite */
     transition: color 0.3s; /* Animation de transition */
 }
 
@@ -140,51 +141,42 @@ nav {
 
 /* Styles pour le footer */
 footer {
-    font-family: 'popstarpop', sans-serif;
-    background-color: rgb(243,98,178); /* Couleur de fond pour le footer */
+    font-family: 'Montserrat', sans-serif /* Couleur de fond */
+    color: #fff; /* Couleur du texte */
+    padding: 20px; /* Espacement intérieur */
     width: 100%; /* Largeur du footer */
     position: fixed; /* Position fixe pour rester en bas de la fenêtre */
     bottom: 0; /* Aligner le footer en bas */
     z-index: 999; /* S'assurer que le footer est au-dessus de tout le contenu */
-    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1); /* Appliquer une ombre douce */
-    padding: 10px;
+
     text-align: center;
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
 }
 
-/* Styles pour les titres dans le footer */
-.colonne h3 {
-    margin-left: 30px;
-    font-size: 20px; /* Taille du texte */
-    margin-bottom: 10px; /* Marge inférieure */
-    color: #ff99cc; /* Couleur du titre */
-}
 
-/* Styles pour les paragraphes dans le footer */
-.colonne p {
-     margin-left: 30px;
-    font-size: 16px; /* Taille du texte */
-    margin-bottom: 5px; /* Marge inférieure */
-    color: #ccc; /* Couleur du texte */
+footer p {
+    margin: 0; /* Supprime les marges par défaut */
 }
 
 @keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-20px);
-  }
-  60% {
-    transform: translateY(-10px);
-  }
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-20px);
+    }
+    60% {
+        transform: translateY(-10px);
+    }
 }
 
 .h2 {
-  animation: bounce 2s infinite;
+    margin-top: 20PX;
+    animation: bounce 2s infinite;
     color: #ff0002;
+    font-size: 30px;
 }
 
 /* Styles pour le conteneur welcome */
@@ -194,24 +186,27 @@ footer {
     margin-top: 20px; /* Espacement par rapport au titre */
 }
 
-/* Styles pour l'image */
-.welcome img {
-    width: 200px; /* Ajuster la largeur de l'image */
-    margin-right: 20px; /* Espacement entre l'image et le texte */
-    animation: fadeIn 15s ease forwards;
-}
+
 
 /* Styles pour le paragraphe */
 .welcome p {
     font-family: 'popstarpop', sans-serif; /* Nouvelle police de caractères */
     font-size: 25px; /* Taille du texte */
     color: #fff; /* Couleur du texte */
-    margin-right: 40px;
+    margin-right: 200px;
+    margin-left: 200px;
     animation: fadeIn 15s ease forwards;
+}
+.loading{
+    margin-top: 100px;
+    width: 200px;
+    height: 200px;
+    background-size: cover;
+    background-image: url("cons.gif");
 }
 
 .wrapper,
-.card{
+.card {
     height: 750px;
     max-width: 450px;
 }
@@ -226,25 +221,30 @@ footer {
     justify-content: center; /* Centrer horizontalement les cartes */
     width: 80%; /* Ajustez la largeur selon vos besoins */
 }
-.card {
+
+.card1,
+.card2,
+.card3,
+.card4 {
     text-align: center;
-    transition: all 1.5s cubic-bezier(0.7,-.5,0.3,1.8);
+    transition: all 1.5s cubic-bezier(0.7, -.5, 0.3, 1.8);
     transform-style: preserve-3d;
     margin-right: 80px;
-
 }
 
-.wrapper:hover .card{
+.wrapper:hover .card1,
+.wrapper:hover .card2,
+.wrapper:hover .card3,
+.wrapper:hover .card4 {
     transform: rotateY(180deg);
 }
 
 .front,
-.back{
+.back {
     width: 450px;
     position: relative;
     top: 0;
     backface-visibility: hidden;
-
 }
 
 .front {
@@ -252,7 +252,6 @@ footer {
     height: 100%;
     background-image: url("cards.png");
     backface-visibility: hidden;
-
     background-size: cover;
     background-position: center center;
 }
@@ -265,6 +264,7 @@ footer {
     backface-visibility: hidden;
     transform: rotateY(180deg);
 }
+
 .card:nth-child(4) {
     margin-right: 0; /* Supprimer la marge droite pour la quatrième carte */
 }
@@ -278,23 +278,23 @@ footer {
 /* Styles pour la deuxième carte arrière */
 .back2 {
     background-image: url("noah.png");
-    background-size: 450px 750px;
+    background-size: cover;
 }
 
 /* Styles pour la troisième carte arrière */
 .back3 {
-    background-image: url("wheels.png");
-    background-size: cover;/* Remplacez "back3.jpg" par le chemin de votre troisième image de fond */
+    background-image: url("houari.jpg");
+    background-size: cover; /* Remplacez "back3.jpg" par le chemin de votre troisième image de fond */
 }
 
 /* Styles pour la quatrième carte arrière */
 .back4 {
-    background-image: url("wheels.png");
-    background-size: cover/* Remplacez "back4.jpg" par le chemin de votre quatrième image de fond */
+    background-image: url("heart.png");
+    background-size: cover; /* Remplacez "back4.jpg" par le chemin de votre quatrième image de fond */
 }
 
 .text-title-about {
-    margin-top: 20px;
+    margin-top: 70px;
     font-size: xx-large;
     font-family: 'yagiza', sans-serif;
 }
@@ -302,18 +302,27 @@ footer {
 .text-about {
     font-size: 25px;
     line-height: 1.6;
+    font-family: 'GREENLAND', sans-serif;
 }
 
 .text-about p {
+    margin-top: 30px;
     margin-bottom: 20px;
-    margin-left: 70px;
-    margin-right: 70px;
+    margin-left: 80px;
+    margin-right: 80px;
 }
 
 .text-about p:last-child {
     margin-bottom: 0;
 }
 
+.pokemon {
+    width: 600px;
+    height: 600px;
+    background-size: cover;
+    background-image: url("way-be-pokemon.png");
+}
 
+/* Styles pour la mise en page
 
 

@@ -24,7 +24,7 @@ def base():
 def about():
     return render_template('about.html', HelloWorld='Hello World')
 
-@app.route('/statisque')
+@app.route('/stats')
 def stats():
     return render_template('stats.html', stats='hello world')
 
