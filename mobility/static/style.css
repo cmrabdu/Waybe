@@ -8,7 +8,7 @@
 /* Styles pour le corps de la page */
 body {
     font-family: 'popstarpop', sans-serif; /* Nouvelle police de caractères */
-    background-image: url('/static/backg.gif'); /* Ajout de l'image de fond */
+    background-image: url('/static/cp2.png'); /* Ajout de l'image de fond */
     background-size: cover;
     color: #fff; /* Texte blanc */
     display: flex;
@@ -277,7 +277,7 @@ footer p {
 
 /* Styles pour la deuxième carte arrière */
 .back2 {
-    background-image: url("noah.png");
+    background-image: url("Noah.png");
     background-size: cover;
 }
 
@@ -323,6 +323,26 @@ footer p {
     background-image: url("way-be-pokemon.png");
 }
 
-/* Styles pour la mise en page
+form {
+            margin: 50px auto;
+            width: 800px;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+input[type="submit"] {
+    background-color: #fa55f5;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+input[type="submit"]:hover {
+    background-color: #6bfa55;
+}
 
 
