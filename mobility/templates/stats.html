@@ -7,17 +7,32 @@
     <style>
     @import url('https://fonts.cdnfonts.com/css/popstarregular');
     </style>
-    <script src="https://kit.fontawesome.com/3747c4eab5.js" crossorigin="anonymous"></script>
     <link rel="shortcut icon" href="/static/favicon.ico"/>
 </head>
 <body>
     <nav>
+        <img src="/static/heart.png" alt="Image" class="image-left">
+         <a href="/"> <img src="/static/titre.png" alt="Logo" class="navbar-logo"></a>
         <ul class="menu">
             <li><a href="/">Home</a></li>
             <li><a href="/about">Team </a></li>
             <li><a href="/request">Request</a></li>
         </ul>
     </nav>
+    <table>
+        <tr>
+            <th>Code Postal</th>
+            <th>Nom</th>
+            <th>Population</th>
+        </tr>
+        {% for ville in ville %}
+        <tr>
+            <td>{{ ville[0]}}</td>
+            <td>{{ ville[1] }}</td>
+            <td>{{ ville[2] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 </body>
 <footer>
 

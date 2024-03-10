@@ -15,23 +15,26 @@ try:
 except OSError:
     pass
 
+
 # Routes
 @app.route('/')
 def base():
     return render_template('base.html')
 
+
 @app.route('/about')
 def about():
     return render_template('about.html', HelloWorld='Hello World')
+
 
 @app.route('/stats')
 def stats():
     return render_template('stats.html', stats='hello world')
 
+
 @app.route('/request')
 def request():
     return render_template('request.html', abdullah='hello world')
-
 
 
 if __name__ == "__main__":

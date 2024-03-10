@@ -20,10 +20,7 @@ body {
     padding: 0; /* Annuler les rembourrages par défaut du body */
 }
 
-menu-container {
-    display: flex;
-    justify-content: flex-end; /* Aligner les éléments de menu à droite */
-}
+
 
 
 /* Barre de navigation */
@@ -32,21 +29,45 @@ nav {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     font-family: 'popstarpop', sans-serif;
     width: 100%;
-    padding: 10px 0;
+    padding: 0px ;
     position: fixed;
     top: 0;
     z-index: 999;
     display: flex; /* Utilisez flexbox pour un meilleur contrôle de l'alignement */
-    justify-content: space-between; /* Espace entre le logo et le menu */
-    align-items: center; /* Centre les éléments verticalement */
+    justify-content: space-between; /* Espace entre les éléments */
+    align-items: center; /* Centrer verticalement les éléments */
 }
+
+
 
 
 .navbar-logo {
-    max-height: 55px; /* Fixe la hauteur maximale du logo */
+    max-height: 70px; /* Fixe la hauteur maximale du logo */
     width: auto; /* Assure que la largeur du logo s'adapte pour maintenir les proportions */
-    position: relative; /* Position relative si vous n'avez pas besoin de position absolue */
+    position: absolute; /* Position absolue pour le centrage */
+    left: 50%; /* Aligner le logo à 50% de la largeur de son conteneur parent */
+    transform: translateX(-50%); /* Déplacer le logo de moitié de sa propre largeur vers la gauche */
+    top: 0; /* Aligner le logo en haut de son conteneur parent */
+    transition: text-shadow 0.3s;
 }
+
+.navbar-logo:hover {
+    text-shadow: 30px 30px 60px rgba(0, 0, 0, 0.9); /* Modification de l'ombre portée au survol */
+    cursor: pointer; /* Changement de curseur au survol */
+}
+
+
+
+
+
+.image-left {
+    max-height: 70px; /* Fixe la hauteur maximale de l'image */
+    width: auto; /* Assure que la largeur de l'image s'adapte pour maintenir les proportions */
+
+}
+
+
+
 
 
 .logo {
@@ -102,26 +123,34 @@ nav {
 
 .menu {
     list-style-type: none;
-    display: flex;
-    margin-left: auto; /* Pousser le menu vers la droite */
+    display: flex; /* Pousser le menu vers la droite */
+    margin-right: 20px;
 }
 
-.menu li {
-    padding: 0 20px; /* Espacement autour de chaque élément du menu */
-    border-right: 2px solid #ffffff; /* Ajoute des séparateurs */
-}
-
-.menu li:last-child {
-    border-right: none; /* Pas de bordure à droite pour le dernier élément */
+.menu li {;
+    padding: 0 5px; /* Espacement autour de chaque élément du menu */
+    border: 2px solid #ffffff; /* Bordure autour de chaque élément */
+    border-radius: 5px; /* Coins arrondis */
+    display: inline-block; /* Afficher en ligne pour que les éléments ne soient pas empilés */
+    background-color: transparent; /* Couleur de fond */
+    color: #333; /* Couleur du texte */
+    text-decoration: none; /* Supprime les soulignements par défaut */
+    cursor: pointer;
+    margin-right: 20px;/* Curseur indiquant qu'il s'agit d'un élément cliquable */ /* Espacement entre les éléments du menu */
 }
 
 .menu li a {
+    margin-right: 20px;
     color: #fff;
     text-decoration: none;
     font-size: 25px;
-    margin-right: 20px;
     margin-left: 20px;
+    transition: text-shadow 0.3s;
 
+}
+.menu li a:hover {
+    text-shadow: 30px 30px 60px rgba(0, 0, 0, 0.9); /* Modification de l'ombre portée au survol */
+    cursor: pointer; /* Changement de curseur au survol */
 }
 /* Barre de navigation pour les petits écrans */
 @media only screen and (max-width: 768px) {
@@ -137,6 +166,8 @@ nav {
     }
 
     .menu li {
+        background-color: white;
+        background-size: cover;
         display: block; /* Afficher les éléments du menu en bloc */
         margin: 10px 0; /* Espacement entre les éléments du menu */
     }
@@ -319,6 +350,19 @@ input[type="submit"] {
 
 input[type="submit"]:hover {
     background-color: #6bfa55;
+}
+
+table {
+    width: 40%;
+    border-collapse: collapse;
+    margin-top: 0px;
+    margin-bottom: 500px;
+    position: relative; /* Ajout de la position relative */
+    z-index: 0; /* Assure que la table est au-dessus des autres éléments */
+}
+
+table th, table td {
+    border: 2px solid #fa55f5;
 }
 
 
