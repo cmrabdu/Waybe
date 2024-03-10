@@ -19,20 +19,11 @@
             <li><a href="/request">Request</a></li>
         </ul>
     </nav>
-    <table>
-        <tr>
-            <th>Code Postal</th>
-            <th>Nom</th>
-            <th>Population</th>
-        </tr>
-        {% for ville in ville %}
-        <tr>
-            <td>{{ ville[0]}}</td>
-            <td>{{ ville[1] }}</td>
-            <td>{{ ville[2] }}</td>
-        </tr>
+   <ul>
+        {% for nom_ville in noms_des_villes %}
+            <li>{{ nom_ville[0] }}</li>
         {% endfor %}
-    </table>
+    </ul>
 </body>
 <footer>
 

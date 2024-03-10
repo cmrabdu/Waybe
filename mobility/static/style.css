@@ -93,37 +93,30 @@ nav {
 
 
 
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    top: -10; /* Ajuster la marge vers le haut selon vos besoins */
+}
+
 .logo {
-    background-image: url('pink_car.png');
-    margin-top: 100px;
-    background-position: center;
-    background-size: 500px 500px;
-    background-repeat: no-repeat;
     opacity: 0; /* Initialement invisible */
     text-shadow: 8px 8px 16px rgba(0, 0, 0, 0.9);
     animation: fadeIn 5s ease forwards;
     transition: text-shadow 0.3s;
+    max-width: 100%; /* Pour que le logo ne dépasse pas la taille du cadre */
+    max-height: 100%; /* Pour que le logo ne dépasse pas la taille du cadre */
+    margin-top: -250px; /* Ajuster la marge vers le haut selon vos besoins */
+    margin-left: 50px; /* Ajuster la marge vers la gauche selon vos besoins */
 }
 
-/* Styles pour le titre avec animation */
-.titre {
-    font-family: 'yagiza', sans-serif; /* Nouvelle police de caractères */
-    font-size: 150px; /* Taille du titre */
-    margin-top: 100px; /* Espacement par rapport à la barre de navigation */
-    margin-bottom: 20px; /* Espacement par rapport au menu */
-    text-shadow: 20px 20px 30px rgba(0, 0, 0, 0.9); /* Ombre portée pour le texte */
-    opacity: 0; /* Initialement invisible */
-    animation: fadeIn 3s ease forwards; /* Appliquer l'animation de fondu */
-    transition: text-shadow 0.3s;
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-}
 
-.titre:hover {
-    text-shadow: 30px 30px 60px rgba(0, 0, 0, 0.9); /* Modification de l'ombre portée au survol */
-    cursor: pointer; /* Changement de curseur au survol */
-}
+
+
+
 
 /* Animation de fondu */
 @keyframes fadeIn {
