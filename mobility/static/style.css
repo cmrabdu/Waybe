@@ -67,6 +67,29 @@ nav {
 }
 
 
+.cadre {
+    position: absolute; /* Position absolue */
+    top: 100px; /* Hauteur de la barre de navigation */
+
+    width: 90%;
+    height: 50%;
+    border: 4px solid #000;
+    border-radius: 5px;
+
+}
+.cadre::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fc78f7;
+    opacity: 0.75; /* Opacité de l'image de fond */
+    z-index: -1; /* Assure que le pseudo-élément est placé en dessous du contenu */
+}
+
+
 
 
 
@@ -74,7 +97,7 @@ nav {
     background-image: url('pink_car.png');
     margin-top: 100px;
     background-position: center;
-    background-size: 800px 800px;
+    background-size: 500px 500px;
     background-repeat: no-repeat;
     opacity: 0; /* Initialement invisible */
     text-shadow: 8px 8px 16px rgba(0, 0, 0, 0.9);
@@ -85,7 +108,7 @@ nav {
 /* Styles pour le titre avec animation */
 .titre {
     font-family: 'yagiza', sans-serif; /* Nouvelle police de caractères */
-    font-size: 200px; /* Taille du titre */
+    font-size: 150px; /* Taille du titre */
     margin-top: 100px; /* Espacement par rapport à la barre de navigation */
     margin-bottom: 20px; /* Espacement par rapport au menu */
     text-shadow: 20px 20px 30px rgba(0, 0, 0, 0.9); /* Ombre portée pour le texte */
@@ -212,30 +235,62 @@ footer p {
 }
 
 .h2 {
+    align-items: center;
     margin-top: 20PX;
     animation: bounce 2s infinite;
     color: #ff0002;
     font-size: 30px;
+    margin-left: 30%;
 }
 
 /* Styles pour le conteneur welcome */
 .welcome {
     display: flex; /* Utilisation de flexbox */
     align-items: center; /* Aligner les éléments verticalement */
-    margin-top: 20px; /* Espacement par rapport au titre */
+    justify-content: center; /* Centrer horizontalement */
+    margin: 0; /* Supprimer les marges */
 }
-
-
-
-/* Styles pour le paragraphe */
 .welcome p {
     font-family: 'Nouveau IBM Stretch', sans-serif; /* Nouvelle police de caractères */
     font-size: 30px; /* Taille du texte */
     color: #fff; /* Couleur du texte */
-    margin-right: 200px;
-    margin-left: 200px;
+    margin: 0 50px; /* Ajuster les marges horizontales */
     animation: fadeIn 6s ease forwards;
+    overflow-wrap: break-word; /* Permettre le passage à la ligne */
 }
+
+
+
+
+
+
+.cadre2 {
+    position: fixed;
+    bottom: 50px;
+    left: 80px;
+    width: 40%;
+    height: 30%;
+    border: 4px solid #000; /* Bordure */
+    border-radius: 5px; /* Coins arrondis */
+    padding: 20px; /* Espacement intérieur */
+    display: flex; /* Utilisation de flexbox */
+    align-items: center; /* Aligner les éléments verticalement */
+    justify-content: center; /* Centrer horizontalement */
+}
+
+.cadre2::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fc78f7;
+    opacity: 0.75; /* Opacité de l'image de fond */
+    z-index: -1; /* Assure que le pseudo-élément est placé en dessous du contenu */
+}
+
+
 
 
 .wrapper,
