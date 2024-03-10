@@ -73,7 +73,7 @@ nav {
 
     width: 90%;
     height: 50%;
-    border: 4px solid #000;
+    border: 7px solid #000;
     border-radius: 5px;
 
 }
@@ -267,10 +267,10 @@ footer p {
 .cadre2 {
     position: fixed;
     bottom: 50px;
-    left: 80px;
+    left: 110px;
     width: 40%;
     height: 30%;
-    border: 4px solid #000; /* Bordure */
+    border: 7px solid #000; /* Bordure */
     border-radius: 5px; /* Coins arrondis */
     padding: 20px; /* Espacement intérieur */
     display: flex; /* Utilisation de flexbox */
