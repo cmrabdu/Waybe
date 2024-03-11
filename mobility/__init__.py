@@ -1,8 +1,7 @@
 from flask import Flask, render_template
 import os
 import sqlite3
-from .table import nb_rues , entreVitesse ,entreVitesse, entreV85 , entreTraffic,entreRue
-
+from .table import nb_rues, entreVitesse, entreVitesse, entreV85, entreTraffic, entreRue, qtt_velo
 
 app = Flask(__name__)
 
@@ -17,6 +16,7 @@ try:
     os.makedirs(app.instance_path)
 except OSError:
     pass
+
 
 def obtenir_stats_villes():
     # Connexion à la base de données SQLite
@@ -36,6 +36,8 @@ def obtenir_stats_villes():
 
     # Retourne les données récupérées
     return nombre_de_villes, noms_des_villes
+
+
 # Routes
 @app.route('/')
 def base():
@@ -50,7 +52,8 @@ def about():
 @app.route('/stats')
 def stats():
     return render_template('stats.html', x=nb_rues
-                    ,entreVille=entreVitesse,entreVitesse=entreVitesse , entreV85=entreV85,entreTraffic=entreTraffic,entreRue=entreRue)
+                           , entreVille=entreVitesse, entreVitesse=entreVitesse, entreV85=entreV85,
+                           entreTraffic=entreTraffic, entreRue=entreRue, qtt_velo=qtt_velo)
 
 
 @app.route('/request')

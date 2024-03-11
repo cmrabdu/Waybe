@@ -4,43 +4,68 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/static/style.css">
     <title>Statistique</title>
-    <link rel="shortcut icon" href="/static/favicon.ico"/>
+    <!-- Importation de la police de caractères popstarregular -->
+    <style>
+    @import url('https://fonts.cdnfonts.com/css/popstarregular');
+    </style>
+    <!-- Importation de la police de caractères nouveau-ibm -->
     <style>
         @import url('https://fonts.cdnfonts.com/css/nouveau-ibm');
     </style>
+    <!-- Définition de l'icône de raccourci -->
+    <link rel="shortcut icon" href="/static/favicon.ico"/>
 </head>
 <body>
+    <!-- Barre de navigation -->
     <nav>
+        <!-- Image à gauche de la barre de navigation -->
         <img src="/static/heart.png" alt="Image" class="image-left">
+        <!-- Logo -->
          <a href="/"> <img src="/static/titre.png" alt="Logo" class="navbar-logo"></a>
+        <!-- Menu -->
         <ul class="menu">
             <li><a href="/">Home</a></li>
             <li><a href="/about">Team </a></li>
             <li><a href="/request">Request</a></li>
         </ul>
     </nav>
-    <div class="nbr_rue">
-   <ul>
-        {% for nbre_rue in x %}
-            <li>{{ nbre_rue[0]}}:{{ nbre_rue[1]}}</li>
-        {% endfor %}
-    </ul>
-    </div>
+   <!-- Contenu de la page -->
+   <div class="nbr_rue-container">
+        <!-- Première partie de la statistique -->
+        <div class="nbr_rue">
+            <ul>
+                <!-- Utilisation d'une boucle for pour afficher les données -->
+                {% for nbre_rue in x %}
+                    <li>{{ nbre_rue[0]}}:{{ nbre_rue[1]}}</li>
+                {% endfor %}
+            </ul>
+        </div>
 
-<div class="nbr_rue">
-   <ul>
-            <li>Entre Ville :{{ entreVille[0]}}</li>
-            <li>Entre Vitesse :{{ entreVitesse[0]}}</li>
-            <li>Entre V85 :{{ entreV85[0]}}</li>
-            <li>Entre Traffic :{{ entreTraffic[0]}}</li>
-            <li>Entre Rue :{{ entreRue[0]}}</li>
+        <!-- Deuxième partie de la statistique -->
+        <div class="nbr_rue">
+            <ul>
+                <!-- Affichage des données -->
+                <li>Entre Ville :{{ entreVille[0]}}</li>
+                <li>Entre Vitesse :{{ entreVitesse[0]}}</li>
+                <li>Entre V85 :{{ entreV85[0]}}</li>
+                <li>Entre Traffic :{{ entreTraffic[0]}}</li>
+                <li>Entre Rue :{{ entreRue[0]}}</li>
+            </ul>
+        </div>
 
-
-    </ul>
+        <!-- Troisième partie de la statistique -->
+        <div class="nbr_rue">
+            <ul>
+                <!-- Utilisation d'une boucle for pour afficher les données -->
+                 {% for nbre_rue in qtt_velo %}
+                    <li>{{ nbre_rue[0]}}: {{ nbre_rue[2]}}</li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 </body>
 <footer>
-
+    <!-- Pied de page -->
     <p>© 2024 Groupe C02. Tous droits réservés</p>
 </footer>
 </html>

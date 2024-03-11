@@ -1,11 +1,12 @@
 import sqlite3
 import ast
+import csv
 
+# Connexion à la base de données SQLite
 connexion = sqlite3.connect('test2.db')
 db = connexion.cursor()
 
-
-#Table ville
+# Création de la table "ville" dans la base de données
 db.execute("DROP TABLE IF EXISTS ville;")
 db.execute(""" CREATE TABLE IF NOT EXISTS ville (
            code_postal INTEGER NOT NULL PRIMARY KEY ,
@@ -13,8 +14,7 @@ db.execute(""" CREATE TABLE IF NOT EXISTS ville (
            population INTEGER NOT NULL
            );""")
 
-
-#Table rue
+# Création de la table "rue" dans la base de données
 db.execute("DROP TABLE IF EXISTS rue;")
 db.execute("""CREATE TABLE IF NOT EXISTS rue (
     rue_id INTEGER NOT NULL PRIMARY KEY,
@@ -23,7 +23,7 @@ db.execute("""CREATE TABLE IF NOT EXISTS rue (
     FOREIGN KEY (code_postal) REFERENCES ville(code_postal)
 );""")
 
-#Table vitesse
+# Création de la table "vitesse" dans la base de données
 db.execute("DROP TABLE IF EXISTS vitesse;")
 db.execute("""CREATE TABLE IF NOT EXISTS vitesse (
     rue_id INTEGER NOT NULL,
@@ -34,7 +34,7 @@ db.execute("""CREATE TABLE IF NOT EXISTS vitesse (
     FOREIGN KEY(rue_id) REFERENCES rue(rue_id)
 );""")
 
-#Table v85
+# Création de la table "v85" dans la base de données
 db.execute("DROP TABLE IF EXISTS v85;")
 db.execute("""CREATE TABLE IF NOT EXISTS v85 (
     rue_id INTEGER NOT NULL,
@@ -44,6 +44,7 @@ db.execute("""CREATE TABLE IF NOT EXISTS v85 (
     FOREIGN KEY (rue_id) REFERENCES rue(rue_id)
 );""")
 
+# Création de la table "traffic" dans la base de données
 db.execute("DROP TABLE IF EXISTS traffic;")
 db.execute("""CREATE TABLE IF NOT EXISTS traffic (
     rue_id INTEGER NOT NULL,
@@ -54,10 +55,14 @@ db.execute("""CREATE TABLE IF NOT EXISTS traffic (
     PRIMARY KEY (rue_id,type_vehicule,date)
 );""")
 
-filename = "/Users/noahmoussaoui/Desktop/NOAH-UCL/WAY-BE/website/mobility/ugly_csv(1).csv"
+# Chemin vers le fichier CSV contenant les données
+filename = "/Users/noahmoussaoui/Desktop/NOAH-UCL/WAY-BE/website/mobility/ugly.csv"
 start = 0
+
+# Ouverture et traitement du fichier CSV
 with open(filename) as fichier:
-    populationdico = {"Liege": 197325, "Bruxelles": 1208542, "Namur": 113174, "Charleroi": 203845, "Grobbendonk": 11442, "Herzele": 19000, "Jambes": 20125, "Courtrai": 78841, "beveren": 48000}
+    populationdico = {"Liege": 197325, "Bruxelles": 1208542, "Namur": 113174, "Charleroi": 203845, "Grobbendonk": 11442,
+                      "Herzele": 19000, "Jambes": 20125, "Courtrai": 78841, "beveren": 48000}
     tranches_par_5 = [
         "0-5", "5-10", "10-15", "15-20", "20-25",
         "25-30", "30-35", "35-40", "40-45", "45-50",
@@ -71,67 +76,123 @@ with open(filename) as fichier:
             histoliste = list[18:42]
             histoliste[-1] = histoliste[-1].strip("""""[']""")
             population = populationdico[list[0]]
+
+            # Vérification de l'existence de la rue dans la base de données et insertion si elle n'existe pas
             db.execute("SELECT rue_id FROM rue WHERE rue_id = ?", (list[3],))
             existing_rue = db.fetchone()
             if existing_rue is None:
                 db.execute("""INSERT INTO rue('rue_id','nom','code_postal')
-                VALUES(?,?,?);""",(list[3], list[2], list[1]))
+                VALUES(?,?,?);""", (list[3], list[2], list[1]))
+
+            # Vérification de l'existence de la ville dans la base de données et insertion si elle n'existe pas
             db.execute("SELECT code_postal FROM ville WHERE code_postal = ?", (list[1],))
             existing_ville = db.fetchone()
             if existing_ville is None:
                 db.execute("""INSERT INTO ville('code_postal','nom','population')
                             VALUES(?,?,?);""", (list[1], list[0], population))
 
-            for tranche in range(0,24):
-                db.execute("SELECT rue_id AND date AND tranche_de_vitesse FROM vitesse WHERE rue_id = ? AND date = ? AND tranche_de_vitesse = ?", (list[3], list[4], tranches_par_5[tranche]))
+            # Insertion des données de vitesse dans la table "vitesse"
+            for tranche in range(0, 24):
+                db.execute(
+                    "SELECT rue_id AND date AND tranche_de_vitesse FROM vitesse WHERE rue_id = ? AND date = ? AND tranche_de_vitesse = ?",
+                    (list[3], list[4], tranches_par_5[tranche]))
                 existing_vitesse = db.fetchone()
                 if existing_vitesse is None:
                     db.execute("""INSERT INTO vitesse('rue_id','date','tranche_de_vitesse', 'proportion')
                     VALUES(?,?,?,?);""", (list[3], list[4], tranches_par_5[tranche], float(histoliste[tranche])))
 
-            db.execute("SELECT rue_id AND date FROM v85 WHERE rue_id = ? AND date = ?",(list[3], list[4]))
+            # Insertion des données de v85 dans la table "v85"
+            db.execute("SELECT rue_id AND date FROM v85 WHERE rue_id = ? AND date = ?", (list[3], list[4]))
             existing_v85 = db.fetchone()
             if existing_v85 is None:
                 db.execute("""INSERT INTO v85('rue_id','date','v85')
-                VALUES(?,?,?);""",(list[3], list[4], list[-1]))
+                VALUES(?,?,?);""", (list[3], list[4], list[-1]))
+
+            # Insertion des données de trafic dans la table "traffic"
             types_vehicules = ["lourd", "voiture", "velo", "pieton"]
             valeur_vehicules = list[5:9]
             for select in range(0, 4):
-                db.execute("SELECT rue_id AND date AND type_vehicule FROM traffic WHERE rue_id = ? AND date = ? AND type_vehicule = ?", (list[3], list[4], types_vehicules[select]))
+                db.execute(
+                    "SELECT rue_id AND date AND type_vehicule FROM traffic WHERE rue_id = ? AND date = ? AND type_vehicule = ?",
+                    (list[3], list[4], types_vehicules[select]))
                 existing_traffic = db.fetchone()
                 if existing_traffic is None:
                     db.execute("""INSERT INTO traffic('rue_id','date','type_vehicule', 'nb_vehicules')
                     VALUES(?,?,?,?);""", (list[3], list[4], types_vehicules[select], valeur_vehicules[select]))
         start = 1
+
+
 def nb_rues_par_ville():
-    db.execute("""SELECT ville.nom, COUNT(rue.rue_id) FROM ville JOIN rue on ville.code_postal = rue.code_postal GROUP BY ville.nom""")
+    db.execute(
+        """SELECT ville.nom, COUNT(rue.rue_id) FROM ville JOIN rue on ville.code_postal = rue.code_postal GROUP BY ville.nom""")
     nb_rues = db.fetchall()
     return nb_rues
+
+
 nb_rues = nb_rues_par_ville()
+
+
 def nbr_entreVille():
     db.execute("""SELECT COUNT(*) FROM ville""")
     entreVille = db.fetchall()
     return entreVille
+
+
 entreVille = nbr_entreVille()
+
+
 def nbr_entreVitesse():
     db.execute("""SELECT COUNT(*) FROM vitesse""")
     entreVitesse = db.fetchall()
     return entreVitesse
+
+
 entreVitesse = nbr_entreVitesse()
+
+
 def nbr_entreV85():
     db.execute("""SELECT COUNT(*) FROM v85""")
     entreV85 = db.fetchall()
     return entreV85
+
+
 entreV85 = nbr_entreV85()
+
+
 def nbr_entreTraffic():
     db.execute("""SELECT COUNT(*) FROM traffic""")
     entreTraffic = db.fetchall()
     return entreTraffic
+
+
 entreTraffic = nbr_entreTraffic()
+
+
 def nbr_entreRue():
     db.execute("""SELECT COUNT(*) FROM rue""")
     entreRue = db.fetchall()
     return entreRue
+
+
 entreRue = nbr_entreRue()
 
+
+def nb_rues_par_ville():
+    db.execute(
+        """SELECT ville.nom, COUNT(rue.rue_id) FROM ville JOIN rue on ville.code_postal = rue.code_postal GROUP BY ville.nom""")
+    nb_rues = db.fetchall()
+    return nb_rues
+
+
+nb_rues = nb_rues_par_ville()
+
+
+def cyclable():
+    db.execute(
+        """SELECT ville.nom, ville.population, SUM(nb_vehicules)/population FROM traffic JOIN rue on traffic.rue_id = rue.rue_id JOIN ville on rue.code_postal = ville.code_postal WHERE type_vehicule = 'velo' GROUP BY ville.nom""")
+    qtt_velo = db.fetchall()
+    return qtt_velo
+
+
+qtt_velo = cyclable()
 connexion.commit()

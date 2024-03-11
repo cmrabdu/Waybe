@@ -183,14 +183,17 @@ nav {
 }
 
 /* Styles pour le footer */
+/* Styles pour le footer */
 footer {
-    font-family: 'Montserrat', sans-serif /* Couleur de fond */
-    color: #fff; /* Couleur du texte */
-    padding: 10px; /* Espacement intérieur */
-    width: 100%; /* Largeur du footer */
-    position: fixed; /* Position fixe pour rester en bas de la fenêtre */
-    bottom: 0; /* Aligner le footer en bas */
-    z-index: 999; /* S'assurer que le footer est au-dessus de tout le contenu */
+    font-family: 'Montserrat', sans-serif;
+    color: #fff;
+    padding: 10px;
+    width: 100vw; /* Largeur du footer sur toute la largeur de la fenêtre */
+    position: fixed;
+    bottom: 0;
+    left: 0; /* Aligner le footer tout à gauche */
+    right: 0; /* Aligner le footer tout à droite */
+    z-index: 999;
     background: #EC297B;
     text-align: center;
     display: flex;
@@ -241,6 +244,8 @@ footer p {
     animation: fadeIn 6s ease forwards;
     overflow-wrap: break-word; /* Permettre le passage à la ligne */
 }
+
+
 
 
 .cadre2 {
@@ -305,7 +310,23 @@ footer p {
 .card:nth-child(4) {
     margin-right: 0; /* Supprimer la marge droite pour la quatrième carte */
 }
+/* Pour ajuster la taille des cartes sur les petits écrans */
+@media only screen and (max-width: 768px) {
+    .wrapper {
+        flex-direction: column; /* Afficher les cartes en colonne sur les petits écrans */
+        align-items: center; /* Centrer les cartes horizontalement sur les petits écrans */
+    }
 
+    .card {
+        margin-right: 0; /* Supprimer la marge droite des cartes sur les petits écrans */
+        margin-bottom: 20px; /* Ajouter un espacement entre les cartes sur les petits écrans */
+    }
+
+    .front, .back {
+        width: 100%; /* Utiliser toute la largeur de l'écran pour les cartes sur les petits écrans */
+        height: auto; /* Ajuster automatiquement la hauteur des cartes sur les petits écrans */
+    }
+}
 .wrapper {
     perspective: 900px;
     display: flex;
@@ -384,6 +405,7 @@ footer p {
     background-image: url("guigui.png");
     background-size: cover; /* Remplacez "back4.jpg" par le chemin de votre quatrième image de fond */
 }
+
 
 
 form {
@@ -510,10 +532,16 @@ table th, table td {
     z-index: 3; /* Assure que le calque est au-dessus du fond */
 }
 
-.nbr_rue {
-    background-color: #fa55f5;
-    font-family: 'Nouveau IBM Stretch', sans-serif;
-    font-size: 30px;
-    margin-left: 0;
-    text-align: left;
-}
+
+        .nbr_rue-container {
+            margin-left: 30px;
+            font-size: 30px;
+            display: flex;
+        }
+
+        /* Pour espacer légèrement les divs */
+        .nbr_rue {
+            background-color: #fa55f5;
+            background-size: cover;
+            margin-right: 100px;
+        }

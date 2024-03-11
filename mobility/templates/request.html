@@ -2,46 +2,58 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!-- Inclusion de la feuille de style -->
     <link rel="stylesheet" href="/static/style.css">
-    <title>Request</title>
+    <!-- Importation de la police de caractères popstarregular -->
     <style>
-    @import url('https://fonts.cdnfonts.com/css/popstarregular');
+        @import url('https://fonts.cdnfonts.com/css/popstarregular');
     </style>
+    <!-- Définition de l'icône de raccourci -->
     <link rel="shortcut icon" href="/static/favicon.ico"/>
+    <!-- Titre de la page -->
+    <title>Request</title>
 </head>
 <body>
+    <!-- Barre de navigation -->
     <nav>
+        <!-- Image à gauche de la barre de navigation -->
         <img src="/static/heart.png" alt="Image" class="image-left">
-         <a href="/"> <img src="/static/titre.png" alt="Logo" class="navbar-logo"></a>
+        <!-- Logo -->
+        <a href="/"> <img src="/static/titre.png" alt="Logo" class="navbar-logo"></a>
+        <!-- Menu -->
         <ul class="menu">
             <li><a href="/">Home</a></li>
             <li><a href="/about">Team</a></li>
             <li><a href="/stats">Stats </a></li>
         </ul>
     </nav>
+    <!-- Formulaire -->
     <form id="myForm">
-    <label for="ville">Ville:</label>
-    <select id="ville" name="ville">
-        <option value="None" selected>Choisir une ville</option>
-        <option value="Charleroi">Charleroi</option>
-        <option value="Bruxelles">Bruxelles</option>
-        <option value="Liege">Liege</option>
-        <option value="Grobbendonk">Grobbendonk</option>
-        <option value="Namur">Namur</option>
-        <option value="Beveren">Beveren</option>
-        <option value="Courtrai">Courtrai</option>
-        <option value="Jambes">Jambes</option>
-        <option value="Herzele">Herzele</option>
-
-
-
-        <!-- Ajoutez plus d'options ici selon vos besoins -->
-    </select>
-    <input type="submit" value="Chercher">
-</form>
+        <!-- Label pour la sélection de la ville -->
+        <label for="ville">Ville:</label>
+        <!-- Sélecteur de ville -->
+        <select id="ville" name="ville">
+            <!-- Option par défaut -->
+            <option value="None" selected>Choisir une ville</option>
+            <!-- Options pour les différentes villes -->
+            <option value="Charleroi">Charleroi</option>
+            <option value="Bruxelles">Bruxelles</option>
+            <option value="Liege">Liege</option>
+            <option value="Grobbendonk">Grobbendonk</option>
+            <option value="Namur">Namur</option>
+            <option value="Beveren">Beveren</option>
+            <option value="Courtrai">Courtrai</option>
+            <option value="Jambes">Jambes</option>
+            <option value="Herzele">Herzele</option>
+            <!-- Ajoutez plus d'options ici selon vos besoins -->
+        </select>
+        <!-- Bouton de soumission -->
+        <input type="submit" value="Chercher">
+    </form>
+    <!-- Footer -->
+    <footer>
+        <!-- Texte de copyright -->
+        <p>© 2024 Groupe C02. Tous droits réservés</p>
+    </footer>
 </body>
-<footer>
-
-    <p>© 2024 Groupe C02. Tous droits réservés</p>
-</footer>
 </html>
