@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/static/style.css">
     <title>Statistique</title>
     <link rel="shortcut icon" href="/static/favicon.ico"/>
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/nouveau-ibm');
+    </style>
 </head>
 <body>
     <nav>
@@ -16,11 +19,25 @@
             <li><a href="/request">Request</a></li>
         </ul>
     </nav>
+    <div class="nbr_rue">
    <ul>
         {% for nbre_rue in x %}
-            <li>{{ nbre_rue }}</li>
+            <li>{{ nbre_rue[0]}}:{{ nbre_rue[1]}}</li>
         {% endfor %}
     </ul>
+    </div>
+
+<div class="nbr_rue">
+   <ul>
+            <li>Entre Ville :{{ entreVille[0]}}</li>
+            <li>Entre Vitesse :{{ entreVitesse[0]}}</li>
+            <li>Entre V85 :{{ entreV85[0]}}</li>
+            <li>Entre Traffic :{{ entreTraffic[0]}}</li>
+            <li>Entre Rue :{{ entreRue[0]}}</li>
+
+
+    </ul>
+    </div>
 </body>
 <footer>
 

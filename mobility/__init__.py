@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 import os
 import sqlite3
-from .table import nb_rues_par_ville
+from .table import nb_rues , entreVitesse ,entreVitesse, entreV85 , entreTraffic,entreRue
 
 
 app = Flask(__name__)
@@ -49,7 +49,8 @@ def about():
 
 @app.route('/stats')
 def stats():
-    return render_template('stats.html', x=nb_rues_par_ville)
+    return render_template('stats.html', x=nb_rues
+                    ,entreVille=entreVitesse,entreVitesse=entreVitesse , entreV85=entreV85,entreTraffic=entreTraffic,entreRue=entreRue)
 
 
 @app.route('/request')

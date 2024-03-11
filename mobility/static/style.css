@@ -509,3 +509,11 @@ table th, table td {
     left: 0; /* Ajustez si vous souhaitez déplacer le calque */
     z-index: 3; /* Assure que le calque est au-dessus du fond */
 }
+
+.nbr_rue {
+    background-color: #fa55f5;
+    font-family: 'Nouveau IBM Stretch', sans-serif;
+    font-size: 30px;
+    margin-left: 0;
+    text-align: left;
+}

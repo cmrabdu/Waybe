@@ -54,7 +54,7 @@ db.execute("""CREATE TABLE IF NOT EXISTS traffic (
     PRIMARY KEY (rue_id,type_vehicule,date)
 );""")
 
-filename = "//Users/noahmoussaoui/Desktop/NOAH-UCL/WAY-BE/website/mobility/ugly_csv(1).csv"
+filename = "/Users/noahmoussaoui/Desktop/NOAH-UCL/WAY-BE/website/mobility/ugly_csv(1).csv"
 start = 0
 with open(filename) as fichier:
     populationdico = {"Liege": 197325, "Bruxelles": 1208542, "Namur": 113174, "Charleroi": 203845, "Grobbendonk": 11442, "Herzele": 19000, "Jambes": 20125, "Courtrai": 78841, "beveren": 48000}
@@ -107,6 +107,31 @@ def nb_rues_par_ville():
     db.execute("""SELECT ville.nom, COUNT(rue.rue_id) FROM ville JOIN rue on ville.code_postal = rue.code_postal GROUP BY ville.nom""")
     nb_rues = db.fetchall()
     return nb_rues
-nb_rues_par_ville = nb_rues_par_ville()
-print(nb_rues_par_ville)
+nb_rues = nb_rues_par_ville()
+def nbr_entreVille():
+    db.execute("""SELECT COUNT(*) FROM ville""")
+    entreVille = db.fetchall()
+    return entreVille
+entreVille = nbr_entreVille()
+def nbr_entreVitesse():
+    db.execute("""SELECT COUNT(*) FROM vitesse""")
+    entreVitesse = db.fetchall()
+    return entreVitesse
+entreVitesse = nbr_entreVitesse()
+def nbr_entreV85():
+    db.execute("""SELECT COUNT(*) FROM v85""")
+    entreV85 = db.fetchall()
+    return entreV85
+entreV85 = nbr_entreV85()
+def nbr_entreTraffic():
+    db.execute("""SELECT COUNT(*) FROM traffic""")
+    entreTraffic = db.fetchall()
+    return entreTraffic
+entreTraffic = nbr_entreTraffic()
+def nbr_entreRue():
+    db.execute("""SELECT COUNT(*) FROM rue""")
+    entreRue = db.fetchall()
+    return entreRue
+entreRue = nbr_entreRue()
+
 connexion.commit()
