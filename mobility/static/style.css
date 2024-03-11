@@ -19,52 +19,92 @@ body {
     margin: 0; /* Annuler les marges par défaut du body */
     padding: 0; /* Annuler les rembourrages par défaut du body */
 }
-/* Conteneur principal */
-.container {
-    text-align: center; /* Centrer le contenu */
-}
+
 
 /* Barre de navigation */
 nav {
+    background-color: #EC297B;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     font-family: 'popstarpop', sans-serif;
-    background-color: rgb(243,98,178); /* Nouvelle couleur de fond de la barre de navigation */
-    width: 100%; /* Largeur de la barre de navigation */
-    padding: 10px 0; /* Espacement intérieur réduit */
-    position: fixed; /* Position fixe pour rester en haut de la page */
-    top: 0; /* Aligner la barre de navigation en haut */
-    z-index: 999; /* S'assurer que la barre de navigation est au-dessus de tout le contenu */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombre douce */
+    width: 100%;
+    padding: 0px;
+    position: fixed;
+    top: 0;
+    z-index: 999;
+    display: flex; /* Utilisez flexbox pour un meilleur contrôle de l'alignement */
+    justify-content: space-between; /* Espace entre les éléments */
+    align-items: center; /* Centrer verticalement les éléments */
 }
 
-.logo{
-    background-image: url('/static/rose5.png');
-    background-position: center;
-    background-size: 800px 800px;
-    background-repeat: no-repeat;
-    opacity: 0; /* Initialement invisible */
-    text-shadow: 8px 8px 16px rgba(0, 0, 0, 0.9);
-    animation: fadeIn 10s ease forwards;
+
+.navbar-logo {
+    max-height: 70px; /* Fixe la hauteur maximale du logo */
+    width: auto; /* Assure que la largeur du logo s'adapte pour maintenir les proportions */
+    position: absolute; /* Position absolue pour le centrage */
+    left: 50%; /* Aligner le logo à 50% de la largeur de son conteneur parent */
+    transform: translateX(-50%); /* Déplacer le logo de moitié de sa propre largeur vers la gauche */
+    top: 0; /* Aligner le logo en haut de son conteneur parent */
     transition: text-shadow 0.3s;
 }
-/* Styles pour le titre avec animation */
-.titre {
-    font-family: 'yagiza', sans-serif; /* Nouvelle police de caractères */
-    font-size: 200px; /* Taille du titre */
-    margin-top: 50px; /* Espacement par rapport à la barre de navigation */
-    margin-bottom: 20px; /* Espacement par rapport au menu */
-    text-shadow: 8px 8px 16px rgba(0, 0, 0, 0.9); /* Ombre portée pour le texte */
-    letter-spacing: 2px; /* Espacement entre les lettres */
-    opacity: 0; /* Initialement invisible */
-    animation: fadeIn 10s ease forwards; /* Appliquer l'animation de fondu */
-    transition: text-shadow 0.3s;
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-}
-.titre:hover {
-    text-shadow: 12px 12px 24px rgba(0, 0, 0, 0.9); /* Modification de l'ombre portée au survol */
+
+.navbar-logo:hover {
+    text-shadow: 30px 30px 60px rgba(0, 0, 0, 0.9); /* Modification de l'ombre portée au survol */
     cursor: pointer; /* Changement de curseur au survol */
 }
+
+
+.image-left {
+    max-height: 70px; /* Fixe la hauteur maximale de l'image */
+    width: auto; /* Assure que la largeur de l'image s'adapte pour maintenir les proportions */
+
+}
+
+
+.cadre {
+    position: absolute; /* Position absolue */
+    top: 100px; /* Hauteur de la barre de navigation */
+
+    width: 90%;
+    height: 50%;
+    border: 7px solid #000;
+    border-radius: 5px;
+
+}
+
+.cadre::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fc78f7;
+    opacity: 0.75; /* Opacité de l'image de fond */
+    z-index: -1; /* Assure que le pseudo-élément est placé en dessous du contenu */
+}
+
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    top: -10; /* Ajuster la marge vers le haut selon vos besoins */
+}
+
+.logo {
+    opacity: 0; /* Initialement invisible */
+    text-shadow: 8px 8px 16px rgba(0, 0, 0, 0.9);
+    animation: fadeIn 5s ease forwards;
+    transition: text-shadow 0.3s;
+    max-width: 100%; /* Pour que le logo ne dépasse pas la taille du cadre */
+    max-height: 100%; /* Pour que le logo ne dépasse pas la taille du cadre */
+    margin-top: -250px; /* Ajuster la marge vers le haut selon vos besoins */
+    margin-left: 50px; /* Ajuster la marge vers la gauche selon vos besoins */
+}
+
+
 /* Animation de fondu */
 @keyframes fadeIn {
     from {
@@ -78,41 +118,43 @@ nav {
 /* Styles pour le titre sur les petits écrans */
 @media only screen and (max-width: 768px) {
     .titre {
-
         font-size: 100px; /* Taille du titre réduite pour les petits écrans */
-        margin-top: 20px; /* Espacement réduit par rapport à la barre de navigation */
+        margin-top: 100px; /* Espacement réduit par rapport à la barre de navigation */
         margin-bottom: 10px; /* Espacement réduit par rapport au menu */
     }
 }
 
-/* Styles pour le menu */
 .menu {
     list-style-type: none;
-    padding: 10px;
-    text-align: center;
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
+    display: flex; /* Pousser le menu vers la droite */
+    margin-right: 20px;
 }
 
-.menu li {
-    display: inline-block; /* Afficher les éléments du menu côte à côte */
-    margin-right: 15px; /* Espacement entre les éléments du menu réduit */
-}
-
-.menu li:last-child {
-    margin-right: 0; /* Pas de marge à droite pour le dernier élément */
+.menu li {;
+    padding: 0 5px; /* Espacement autour de chaque élément du menu */
+    border: 2px solid #ffffff; /* Bordure autour de chaque élément */
+    border-radius: 5px; /* Coins arrondis */
+    display: inline-block; /* Afficher en ligne pour que les éléments ne soient pas empilés */
+    background-color: transparent; /* Couleur de fond */
+    color: #333; /* Couleur du texte */
+    text-decoration: none; /* Supprime les soulignements par défaut */
+    cursor: pointer;
+    margin-right: 20px; /* Curseur indiquant qu'il s'agit d'un élément cliquable */ /* Espacement entre les éléments du menu */
 }
 
 .menu li a {
-    text-decoration: none;
+    margin-right: 20px;
     color: #fff;
-    font-size: 15px; /* Taille du texte du menu réduite */
-    transition: color 0.3s; /* Animation de transition */
+    text-decoration: none;
+    font-size: 25px;
+    margin-left: 20px;
+    transition: text-shadow 0.3s;
+
 }
 
 .menu li a:hover {
-    color: #ffccff; /* Couleur du texte au survol */
+    text-shadow: 30px 30px 60px rgba(0, 0, 0, 0.9); /* Modification de l'ombre portée au survol */
+    cursor: pointer; /* Changement de curseur au survol */
 }
 
 /* Barre de navigation pour les petits écrans */
@@ -122,13 +164,15 @@ nav {
         position: absolute; /* Position absolue pour se superposer sur le contenu */
         top: 100%; /* Aligner le menu en bas de la barre de navigation */
         left: 0; /* Aligner le menu à gauche */
-        background-color: rgb(243,98,178); /* Couleur de fond du menu */
+        background-color: rgb(243, 98, 178); /* Couleur de fond du menu */
         width: 100%; /* Largeur du menu égale à celle de la barre de navigation */
         padding: 10px 0; /* Espacement intérieur réduit */
         text-align: center; /* Centrer le texte */
     }
 
     .menu li {
+        background-color: white;
+        background-size: cover;
         display: block; /* Afficher les éléments du menu en bloc */
         margin: 10px 0; /* Espacement entre les éléments du menu */
     }
@@ -140,78 +184,120 @@ nav {
 
 /* Styles pour le footer */
 footer {
-    font-family: 'popstarpop', sans-serif;
-    background-color: rgb(243,98,178); /* Couleur de fond pour le footer */
+    font-family: 'Montserrat', sans-serif /* Couleur de fond */
+    color: #fff; /* Couleur du texte */
+    padding: 10px; /* Espacement intérieur */
     width: 100%; /* Largeur du footer */
     position: fixed; /* Position fixe pour rester en bas de la fenêtre */
     bottom: 0; /* Aligner le footer en bas */
     z-index: 999; /* S'assurer que le footer est au-dessus de tout le contenu */
-    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1); /* Appliquer une ombre douce */
-    padding: 10px;
+    background: #EC297B;
     text-align: center;
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
 }
 
-/* Styles pour les titres dans le footer */
-.colonne h3 {
-    margin-left: 30px;
-    font-size: 20px; /* Taille du texte */
-    margin-bottom: 10px; /* Marge inférieure */
-    color: #ff99cc; /* Couleur du titre */
-}
 
-/* Styles pour les paragraphes dans le footer */
-.colonne p {
-     margin-left: 30px;
-    font-size: 16px; /* Taille du texte */
-    margin-bottom: 5px; /* Marge inférieure */
-    color: #ccc; /* Couleur du texte */
+footer p {
+    margin: 0; /* Supprime les marges par défaut */
+    font-size: 10px;
 }
 
 @keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-20px);
-  }
-  60% {
-    transform: translateY(-10px);
-  }
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-20px);
+    }
+    60% {
+        transform: translateY(-10px);
+    }
 }
 
 .h2 {
-  animation: bounce 2s infinite;
+    align-items: center;
+    margin-top: 20PX;
+    animation: bounce 2s infinite;
     color: #ff0002;
+    font-size: 30px;
+    margin-left: 30%;
 }
 
 /* Styles pour le conteneur welcome */
 .welcome {
     display: flex; /* Utilisation de flexbox */
     align-items: center; /* Aligner les éléments verticalement */
-    margin-top: 20px; /* Espacement par rapport au titre */
+    justify-content: center; /* Centrer horizontalement */
+    margin: 0; /* Supprimer les marges */
 }
 
-/* Styles pour l'image */
-.welcome img {
-    width: 200px; /* Ajuster la largeur de l'image */
-    margin-right: 20px; /* Espacement entre l'image et le texte */
-    animation: fadeIn 15s ease forwards;
-}
-
-/* Styles pour le paragraphe */
 .welcome p {
-    font-family: 'popstarpop', sans-serif; /* Nouvelle police de caractères */
-    font-size: 16px; /* Taille du texte */
+    font-family: 'Nouveau IBM Stretch', sans-serif; /* Nouvelle police de caractères */
+    font-size: 30px; /* Taille du texte */
     color: #fff; /* Couleur du texte */
-    margin-right: 40px;
-    animation: fadeIn 15s ease forwards;
+    margin: 0 50px; /* Ajuster les marges horizontales */
+    animation: fadeIn 6s ease forwards;
+    overflow-wrap: break-word; /* Permettre le passage à la ligne */
 }
+
+
+.cadre2 {
+    position: fixed;
+    bottom: 50px;
+    left: 90px;
+    width: 40%;
+    height: 30%;
+    border: 7px solid #000; /* Bordure */
+    border-radius: 5px; /* Coins arrondis */
+    padding: 20px; /* Espacement intérieur */
+    display: flex; /* Utilisation de flexbox */
+    align-items: center; /* Aligner les éléments verticalement */
+    justify-content: center; /* Centrer horizontalement */
+}
+
+.cadre2::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fc78f7;
+    opacity: 0.75; /* Opacité de l'image de fond */
+    z-index: -1; /* Assure que le pseudo-élément est placé en dessous du contenu */
+}
+
+.cadre3 {
+    position: fixed;
+    bottom: 50px;
+    left: 900px;
+    width: 40%;
+    height: 30%;
+    border: 7px solid #000; /* Bordure */
+    border-radius: 5px; /* Coins arrondis */
+    padding: 20px; /* Espacement intérieur */
+    display: flex; /* Utilisation de flexbox */
+    align-items: center; /* Aligner les éléments verticalement */
+    justify-content: center; /* Centrer horizontalement */
+}
+
+.cadre3::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fc78f7;
+    opacity: 0.75; /* Opacité de l'image de fond */
+    z-index: -1; /* Assure que le pseudo-élément est placé en dessous du contenu */
+}
+
 
 .wrapper,
-.card{
+.card {
     height: 750px;
     max-width: 450px;
 }
@@ -226,25 +312,31 @@ footer {
     justify-content: center; /* Centrer horizontalement les cartes */
     width: 80%; /* Ajustez la largeur selon vos besoins */
 }
-.card {
+
+.card1,
+.card2,
+.card3,
+.card4 {
     text-align: center;
-    transition: all 1.5s cubic-bezier(0.7,-.5,0.3,1.8);
+    transition: all 1.5s cubic-bezier(0.7, -.5, 0.3, 1.8);
     transform-style: preserve-3d;
     margin-right: 80px;
-
 }
 
-.wrapper:hover .card{
+.wrapper:hover .card1,
+.wrapper:hover .card2,
+.wrapper:hover .card3,
+.wrapper:hover .card4 {
     transform: rotateY(180deg);
 }
 
 .front,
-.back{
+.back {
+    border-radius: 20px;
     width: 450px;
     position: relative;
     top: 0;
     backface-visibility: hidden;
-
 }
 
 .front {
@@ -252,7 +344,6 @@ footer {
     height: 100%;
     background-image: url("cards.png");
     backface-visibility: hidden;
-
     background-size: cover;
     background-position: center center;
 }
@@ -261,16 +352,160 @@ footer {
     width: 450px; /* Définir la même largeur que la face avant */
     height: 750px; /* Définir la même hauteur que la face avant */
     position: absolute;
-    border-radius: 50px;
-    background-image: url("noah.png");
-    background-size: cover;
+    border-radius: 20px;
     backface-visibility: hidden;
     transform: rotateY(180deg);
 }
-.text_back{
-    width: 450px;
-    height: 750px;
+
+.card:nth-child(4) {
+    margin-right: 0; /* Supprimer la marge droite pour la quatrième carte */
+}
+
+/* Styles pour la première carte arrière */
+.back1 {
+    background-image: url("Noah.png");
+    background-size: cover;
+}
+
+/* Styles pour la deuxième carte arrière */
+.back2 {
+    background-image: url("abdu.png");
+    background-size: cover;
+}
+
+/* Styles pour la troisième carte arrière */
+.back3 {
+    background-image: url("houari.png");
+    background-size: cover; /* Remplacez "back3.jpg" par le chemin de votre troisième image de fond */
+}
+
+/* Styles pour la quatrième carte arrière */
+.back4 {
+    background-image: url("guigui.png");
+    background-size: cover; /* Remplacez "back4.jpg" par le chemin de votre quatrième image de fond */
 }
 
 
+form {
+    margin: 50px auto;
+    width: 800px;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
+input[type="submit"] {
+    background-color: #fa55f5;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+input[type="submit"]:hover {
+    background-color: #6bfa55;
+}
+
+table {
+    width: 40%;
+    border-collapse: collapse;
+    margin-top: 0px;
+    margin-bottom: 500px;
+    position: relative; /* Ajout de la position relative */
+    z-index: 0; /* Assure que la table est au-dessus des autres éléments */
+}
+
+table th, table td {
+    border: 2px solid #fa55f5;
+}
+
+
+.mp3-player {
+    position: relative;
+    width: 640px; /* Largeur de l'image de fond */
+    height: 360px; /* Hauteur de l'image de fond */
+}
+
+.music-info {
+    position: absolute;
+    padding-left: 120px;
+    top: 130px; /* Position verticale de la zone de texte - ajustez ce chiffre */
+    left: 180px; /* Position horizontale de la zone de texte - ajustez ce chiffre */
+    width: 400px; /* Largeur de l'écran de l'image */
+    height: 100px; /* Hauteur de l'écran de l'image */
+    overflow: hidden;
+    white-space: nowrap;
+    background-image: url('/deco/your-overlay.png'); /* Assurez-vous que le chemin est correct */
+    background-repeat: no-repeat;
+    background-size: cover; /* 'cover' ou 'contain' ou dimension spécifique */
+    line-height: 50px; /* Hauteur de la ligne pour centrer le texte verticalement */
+    z-index: 2;
+}
+
+#scrolling-text {
+    display: inline-block;
+    color: antiquewhite;
+    font-size: larger;
+    position: relative;
+    will-change: transform;
+    animation: scrollText 9s linear infinite; /* Enlevé 'paused' pour que l'animation démarre */
+    z-index: 2;
+
+}
+
+.music-info::before, .music-info::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100px; /* Largeur des dégradés - ajustez en fonction de la taille de votre zone de défilement */
+    z-index: 2;
+}
+
+.music-info::before {
+    left: 0;
+    background: linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+}
+
+.music-info::after {
+    right: 0;
+    background: linear-gradient(to left, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+}
+
+@keyframes scrollText {
+    from { transform: translateX(100%); }
+    to { transform: translateX(-100%); }
+}
+
+#play-button, #pause-button {
+    position: absolute;
+    top: 135px; /* Ajustez cette valeur pour positionner verticalement */
+    left: 60px; /* Ajustez cette valeur pour positionner horizontalement */
+    width: 20x; /* Ajustez la taille du bouton si nécessaire */
+    height: 90px; /* Assurez-vous que la hauteur correspond à la taille de l'image */
+    cursor: pointer; /* Change le curseur au survol */
+    z-index: 5; /* Assurez-vous que les boutons sont au-dessus des autres éléments */
+}
+
+.container {
+    position: relative;
+    width: 640px; /* Ajustez à la largeur de votre image de fond si différente */
+    height: 360px; /* Ajustez à la hauteur de votre image de fond si différente */
+}
+
+.background-image, .overlay-image {
+    display: block; /* Elimine l'espace en bas des images inline */
+    width: 100%;
+    height: auto;
+    z-index: 3;
+
+}
+
+.overlay-image {
+    position: absolute;
+    top: 0; /* Ajustez si vous souhaitez déplacer le calque */
+    left: 0; /* Ajustez si vous souhaitez déplacer le calque */
+    z-index: 3; /* Assure que le calque est au-dessus du fond */
+}
