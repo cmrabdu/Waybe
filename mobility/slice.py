@@ -108,5 +108,5 @@ def nb_rues_par_ville():
     nb_rues = db.fetchall()
     return nb_rues
 nb_rues_par_ville = nb_rues_par_ville()
-
+print(nb_rues_par_ville)
 connexion.commit()
