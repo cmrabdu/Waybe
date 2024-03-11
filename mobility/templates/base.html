@@ -5,7 +5,7 @@
     <title>WAY-BE</title>
     <link rel="stylesheet" href="/static/style.css">
     <style>
-    @import url('https://fonts.cdnfonts.com/css/yagiza');
+        @import url('https://fonts.cdnfonts.com/css/yagiza');
     </style>
     <style>
         @import url('https://fonts.cdnfonts.com/css/nouveau-ibm');
@@ -17,7 +17,7 @@
     <link rel="shortcut icon" href="/static/favicon.ico"/>
 
 </head>
-<body >
+<body>
 
 
 <nav>
@@ -34,39 +34,56 @@
 
 <div class="cadre">
     <div class="logo-container">
-    <div class="logo">
-        <img src="/static/logo_main_page.png"
+        <div class="logo">
+            <img src="/static/logo_main_page.png"
+        </div>
     </div>
 </div>
-</div>
 <div class="cadre2">
-   <div class="welcome">
+    <div class="welcome">
 
-       <p >
+        <p>
             WAY-BE se métamorphose à la vitesse de l'éclair, façonnant une expérience
-           en ligne fluide et éblouissante, bientôt disponible sur tous vos appareils !
-       </p>
-   </div>
+            en ligne fluide et éblouissante, bientôt disponible sur tous vos appareils !
+        </p>
+
+
+    </div>
 </div>
 
+<div class="cadre3">
+<div class="mp3-player">
+    <img src="/static/mp3_lecteur_background.png" alt="Image de Fond" class="background-image">
+    <img src="/static/mp3_lecteur_background_calque.png" alt="Calque" class="overlay-image">
+    <div class="music-info">
+        <div id="scrolling-text">Savestate / Boy 2000</div>
+    </div>
+    <img src="/static/play_button.png.png" id="play-button" alt="Play" style="display: inline;">
+    <img src="/static/pause_button.png.png" id="pause-button" alt="Pause" style="display: none;">
+    <!-- Votre range input pour le volume si nécessaire -->
+</div>
+<audio id="music" src="/static/tk.mp3"></audio>
+<script>
+    var music = document.getElementById("music");
+var playButton = document.getElementById("play-button");
+var pauseButton = document.getElementById("pause-button");
+var scrollingText = document.getElementById('scrolling-text');
 
-    <audio     id="music" src="/static/tk.mp3"></audio>
-   <script>
-       document.addEventListener("DOMContentLoaded", function() {
-    var audio = document.getElementById("music");
-    var title = document.querySelector(".titre");
+playButton.addEventListener('click', function() {
+    music.play();
+    scrollingText.style.animationPlayState = 'running';
+    playButton.style.display = 'none';
+    pauseButton.style.display = 'inline';
+});
 
-    title.addEventListener("click", function() {
-        if (audio.paused) {
-            audio.play();
-        } else {
-            audio.pause();
-        }
-        });
-       });
+pauseButton.addEventListener('click', function() {
+    music.pause();
+    scrollingText.style.animationPlayState = 'paused';
+    playButton.style.display = 'inline';
+    pauseButton.style.display = 'none';
+});
+</script>
 
-
-   </script>
 <footer>
 
     <p>© 2024 Groupe C02. Tous droits réservés</p>

@@ -21,15 +21,13 @@ body {
 }
 
 
-
-
 /* Barre de navigation */
 nav {
     background-color: #EC297B;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     font-family: 'popstarpop', sans-serif;
     width: 100%;
-    padding: 0px ;
+    padding: 0px;
     position: fixed;
     top: 0;
     z-index: 999;
@@ -37,8 +35,6 @@ nav {
     justify-content: space-between; /* Espace entre les éléments */
     align-items: center; /* Centrer verticalement les éléments */
 }
-
-
 
 
 .navbar-logo {
@@ -55,9 +51,6 @@ nav {
     text-shadow: 30px 30px 60px rgba(0, 0, 0, 0.9); /* Modification de l'ombre portée au survol */
     cursor: pointer; /* Changement de curseur au survol */
 }
-
-
-
 
 
 .image-left {
@@ -77,6 +70,7 @@ nav {
     border-radius: 5px;
 
 }
+
 .cadre::before {
     content: "";
     position: absolute;
@@ -88,9 +82,6 @@ nav {
     opacity: 0.75; /* Opacité de l'image de fond */
     z-index: -1; /* Assure que le pseudo-élément est placé en dessous du contenu */
 }
-
-
-
 
 
 .logo-container {
@@ -112,10 +103,6 @@ nav {
     margin-top: -250px; /* Ajuster la marge vers le haut selon vos besoins */
     margin-left: 50px; /* Ajuster la marge vers la gauche selon vos besoins */
 }
-
-
-
-
 
 
 /* Animation de fondu */
@@ -152,7 +139,7 @@ nav {
     color: #333; /* Couleur du texte */
     text-decoration: none; /* Supprime les soulignements par défaut */
     cursor: pointer;
-    margin-right: 20px;/* Curseur indiquant qu'il s'agit d'un élément cliquable */ /* Espacement entre les éléments du menu */
+    margin-right: 20px; /* Curseur indiquant qu'il s'agit d'un élément cliquable */ /* Espacement entre les éléments du menu */
 }
 
 .menu li a {
@@ -164,10 +151,12 @@ nav {
     transition: text-shadow 0.3s;
 
 }
+
 .menu li a:hover {
     text-shadow: 30px 30px 60px rgba(0, 0, 0, 0.9); /* Modification de l'ombre portée au survol */
     cursor: pointer; /* Changement de curseur au survol */
 }
+
 /* Barre de navigation pour les petits écrans */
 @media only screen and (max-width: 768px) {
     .menu {
@@ -175,7 +164,7 @@ nav {
         position: absolute; /* Position absolue pour se superposer sur le contenu */
         top: 100%; /* Aligner le menu en bas de la barre de navigation */
         left: 0; /* Aligner le menu à gauche */
-        background-color: rgb(243,98,178); /* Couleur de fond du menu */
+        background-color: rgb(243, 98, 178); /* Couleur de fond du menu */
         width: 100%; /* Largeur du menu égale à celle de la barre de navigation */
         padding: 10px 0; /* Espacement intérieur réduit */
         text-align: center; /* Centrer le texte */
@@ -243,6 +232,7 @@ footer p {
     justify-content: center; /* Centrer horizontalement */
     margin: 0; /* Supprimer les marges */
 }
+
 .welcome p {
     font-family: 'Nouveau IBM Stretch', sans-serif; /* Nouvelle police de caractères */
     font-size: 30px; /* Taille du texte */
@@ -253,14 +243,10 @@ footer p {
 }
 
 
-
-
-
-
 .cadre2 {
     position: fixed;
     bottom: 50px;
-    left: 110px;
+    left: 90px;
     width: 40%;
     height: 30%;
     border: 7px solid #000; /* Bordure */
@@ -283,7 +269,31 @@ footer p {
     z-index: -1; /* Assure que le pseudo-élément est placé en dessous du contenu */
 }
 
+.cadre3 {
+    position: fixed;
+    bottom: 50px;
+    left: 900px;
+    width: 40%;
+    height: 30%;
+    border: 7px solid #000; /* Bordure */
+    border-radius: 5px; /* Coins arrondis */
+    padding: 20px; /* Espacement intérieur */
+    display: flex; /* Utilisation de flexbox */
+    align-items: center; /* Aligner les éléments verticalement */
+    justify-content: center; /* Centrer horizontalement */
+}
 
+.cadre3::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fc78f7;
+    opacity: 0.75; /* Opacité de l'image de fond */
+    z-index: -1; /* Assure que le pseudo-élément est placé en dessous du contenu */
+}
 
 
 .wrapper,
@@ -376,15 +386,13 @@ footer p {
 }
 
 
-
-
 form {
-            margin: 50px auto;
-            width: 800px;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+    margin: 50px auto;
+    width: 800px;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 
 input[type="submit"] {
     background-color: #fa55f5;
@@ -414,3 +422,90 @@ table th, table td {
 }
 
 
+.mp3-player {
+    position: relative;
+    width: 640px; /* Largeur de l'image de fond */
+    height: 360px; /* Hauteur de l'image de fond */
+}
+
+.music-info {
+    position: absolute;
+    padding-left: 120px;
+    top: 130px; /* Position verticale de la zone de texte - ajustez ce chiffre */
+    left: 180px; /* Position horizontale de la zone de texte - ajustez ce chiffre */
+    width: 400px; /* Largeur de l'écran de l'image */
+    height: 100px; /* Hauteur de l'écran de l'image */
+    overflow: hidden;
+    white-space: nowrap;
+    background-image: url('/deco/your-overlay.png'); /* Assurez-vous que le chemin est correct */
+    background-repeat: no-repeat;
+    background-size: cover; /* 'cover' ou 'contain' ou dimension spécifique */
+    line-height: 50px; /* Hauteur de la ligne pour centrer le texte verticalement */
+    z-index: 2;
+}
+
+#scrolling-text {
+    display: inline-block;
+    color: antiquewhite;
+    font-size: larger;
+    position: relative;
+    will-change: transform;
+    animation: scrollText 9s linear infinite; /* Enlevé 'paused' pour que l'animation démarre */
+    z-index: 2;
+
+}
+
+.music-info::before, .music-info::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100px; /* Largeur des dégradés - ajustez en fonction de la taille de votre zone de défilement */
+    z-index: 2;
+}
+
+.music-info::before {
+    left: 0;
+    background: linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+}
+
+.music-info::after {
+    right: 0;
+    background: linear-gradient(to left, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+}
+
+@keyframes scrollText {
+    from { transform: translateX(100%); }
+    to { transform: translateX(-100%); }
+}
+
+#play-button, #pause-button {
+    position: absolute;
+    top: 135px; /* Ajustez cette valeur pour positionner verticalement */
+    left: 60px; /* Ajustez cette valeur pour positionner horizontalement */
+    width: 20x; /* Ajustez la taille du bouton si nécessaire */
+    height: 90px; /* Assurez-vous que la hauteur correspond à la taille de l'image */
+    cursor: pointer; /* Change le curseur au survol */
+    z-index: 5; /* Assurez-vous que les boutons sont au-dessus des autres éléments */
+}
+
+.container {
+    position: relative;
+    width: 640px; /* Ajustez à la largeur de votre image de fond si différente */
+    height: 360px; /* Ajustez à la hauteur de votre image de fond si différente */
+}
+
+.background-image, .overlay-image {
+    display: block; /* Elimine l'espace en bas des images inline */
+    width: 100%;
+    height: auto;
+    z-index: 3;
+
+}
+
+.overlay-image {
+    position: absolute;
+    top: 0; /* Ajustez si vous souhaitez déplacer le calque */
+    left: 0; /* Ajustez si vous souhaitez déplacer le calque */
+    z-index: 3; /* Assure que le calque est au-dessus du fond */
+}
