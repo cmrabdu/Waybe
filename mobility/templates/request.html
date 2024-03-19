@@ -1,18 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <!-- Inclusion de la feuille de style -->
-    <link rel="stylesheet" href="/static/style.css">
-    <!-- Importation de la police de caractères popstarregular -->
-    <style>
-        @import url('https://fonts.cdnfonts.com/css/popstarregular');
-    </style>
-    <!-- Définition de l'icône de raccourci -->
-    <link rel="shortcut icon" href="/static/favicon.ico"/>
-    <!-- Titre de la page -->
-    <title>Request</title>
-</head>
+
+{% extends "base.html" %}
+
+{% block header %}
+{% endblock   %}
+
+{% block body %}
 <body>
     <!-- Barre de navigation -->
     <nav>
@@ -50,10 +42,8 @@
         <!-- Bouton de soumission -->
         <input type="submit" value="Chercher">
     </form>
-    <!-- Footer -->
-    <footer>
-        <!-- Texte de copyright -->
-        <p>© 2024 Groupe C02. Tous droits réservés</p>
-    </footer>
+
 </body>
-</html>
+{% endblock  %}
+{% block footer %}
+{% endblock %}

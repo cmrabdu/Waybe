@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block header %}
+    <title>WAY-BE</title>
+{% endblock  %}
+
+{% block body %}
+<body>
+    <!-- Barre de navigation -->
+    <nav>
+        <!-- Image à gauche de la barre de navigation -->
+        <img src="/static/heart.png" alt="Image" class="image-left">
+        <!-- Logo -->
+        <a href="/"> <img src="/static/titre.png" alt="Logo" class="navbar-logo"></a>
+        <!-- Conteneur du menu -->
+        <div class="menu-container">
+            <!-- Menu -->
+            <ul class="menu">
+                <li><a href="/request">Request</a></li>
+                <li><a href="/stats">Stats</a></li>
+                <li><a href="/about">Team</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Cadre avec logo -->
+    <div class="cadre">
+        <div class="logo-container">
+            <div class="logo">
+                <img src="/static/logo_main_page.png" alt="Logo principal">
+            </div>
+        </div>
+    </div>
+
+    <!-- Cadre de bienvenue -->
+    <div class="cadre2">
+        <div class="welcome">
+            <p>
+                WAY-BE se métamorphose à la vitesse de l'éclair, façonnant une expérience
+                en ligne fluide et éblouissante, bientôt disponible sur tous vos appareils !
+            </p>
+        </div>
+    </div>
+
+    <!-- Cadre du lecteur MP3 -->
+    <div class="cadre3">
+        <div class="mp3-player">
+            <!-- Image de fond du lecteur MP3 -->
+            <img src="/static/mp3_lecteur_background.png" alt="Image de Fond" class="background-image">
+            <!-- Calque du lecteur MP3 -->
+            <img src="/static/mp3_lecteur_background_calque.png" alt="Calque" class="overlay-image">
+            <!-- Informations sur la musique -->
+            <div class="music-info">
+                <div id="scrolling-text">Savestate / Boy 2000</div>
+            </div>
+            <!-- Bouton de lecture -->
+            <img src="/static/play_button.png.png" id="play-button" alt="Play" style="display: inline;">
+            <!-- Bouton de pause -->
+            <img src="/static/pause_button.png.png" id="pause-button" alt="Pause" style="display: none;">
+            <!-- Élément audio pour la musique -->
+            <audio id="music" src="/static/tk.mp3"></audio>
+        </div>
+    </div>
+
+    <!-- Script JavaScript pour contrôler la lecture de la musique -->
+    <script>
+        var music = document.getElementById("music");
+        var playButton = document.getElementById("play-button");
+        var pauseButton = document.getElementById("pause-button");
+        var scrollingText = document.getElementById('scrolling-text');
+
+        playButton.addEventListener('click', function() {
+            music.play();
+            scrollingText.style.animationPlayState = 'running';
+            playButton.style.display = 'none';
+            pauseButton.style.display = 'inline';
+        });
+
+        pauseButton.addEventListener('click', function() {
+            music.pause();
+            scrollingText.style.animationPlayState = 'paused';
+            playButton.style.display = 'inline';
+            pauseButton.style.display = 'none';
+        });
+    </script>
+ </body>
+{% endblock  %}
+
+{% block footer %}
+    <!-- Contenu du pied de page ici -->
+{% endblock  %}

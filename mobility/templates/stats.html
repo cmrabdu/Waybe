@@ -1,21 +1,13 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="/static/style.css">
-    <title>Statistique</title>
-    <!-- Importation de la police de caractères popstarregular -->
-    <style>
-    @import url('https://fonts.cdnfonts.com/css/popstarregular');
-    </style>
-    <!-- Importation de la police de caractères nouveau-ibm -->
-    <style>
-        @import url('https://fonts.cdnfonts.com/css/nouveau-ibm');
-    </style>
-    <!-- Définition de l'icône de raccourci -->
-    <link rel="shortcut icon" href="/static/favicon.ico"/>
-</head>
-<body>
+
+{% extends "base.html" %}
+
+{% block  header%}
+{% endblock   %}
+
+
+
+{% block  body %}
+    <body>
     <!-- Barre de navigation -->
     <nav>
         <!-- Image à gauche de la barre de navigation -->
@@ -64,8 +56,7 @@
         </div>
     </div>
 </body>
-<footer>
-    <!-- Pied de page -->
-    <p>© 2024 Groupe C02. Tous droits réservés</p>
-</footer>
-</html>
+{% endblock  %}
+{% block footer %}
+    <!-- Contenu du pied de page ici -->
+{% endblock  %}

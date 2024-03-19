@@ -40,9 +40,8 @@ def obtenir_stats_villes():
 
 # Routes
 @app.route('/')
-def base():
-    return render_template('base.html')
-
+def home ():
+    return render_template('home.html')
 
 @app.route('/about')
 def about():

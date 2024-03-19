@@ -56,7 +56,7 @@ db.execute("""CREATE TABLE IF NOT EXISTS traffic (
 );""")
 
 # Chemin vers le fichier CSV contenant les données
-filename = "/Users/noahmoussaoui/Desktop/NOAH-UCL/WAY-BE/website/mobility/ugly.csv"
+filename = "mobility/ugly.csv"
 start = 0
 
 # Ouverture et traitement du fichier CSV
