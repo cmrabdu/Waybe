@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block header  %}
+    <link rel="stylesheet" href="static/style.css">
+{% endblock   %}
+{% block body %}
+    <nav>
+        <!-- Image à gauche de la barre de navigation -->
+        <img src="/static/heart.png" alt="Image" class="image-left">
+        <!-- Logo -->
+         <a href="/"> <img src="/static/titre.png" alt="Logo" class="navbar-logo"></a>
+        <!-- Menu -->
+        <ul class="menu">
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">Team </a></li>
+            <li><a href="/request">Request</a></li>
+            <li><a href="/stats">Stats</a></li>
+            <li><a href="/moon">Moon</a></li>
+
+        </ul>
+    </nav>
+{% endblock  %}
+{% block footer  %}
+{% endblock   %}

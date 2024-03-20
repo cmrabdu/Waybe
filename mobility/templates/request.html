@@ -3,6 +3,7 @@
 
 {% block header %}
     <link rel="stylesheet" href="static/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 {% endblock   %}
 
 {% block body %}
@@ -44,6 +45,16 @@
         <!-- Bouton de soumission -->
         <input type="submit" value="Chercher">
     </form>
+
+
+ <div class="nbr_rue">
+        <ul>
+            {% for item in ville_request %}
+                <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
 
 </body>
 {% endblock  %}

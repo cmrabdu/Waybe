@@ -1,7 +1,7 @@
-from flask import Flask, render_template
+from flask import Flask, render_template , request
 import os
 import sqlite3
-from .table import all
+from .table import all ,requestsville
 
 
 app = Flask(__name__)
@@ -47,7 +47,8 @@ def about():
 
 @app.route('/stats')
 def stats():
-    result1 = all("nb_rues_par_ville")
+    print("cc")
+    result1  = all("nb_rues_par_ville")
     result2 = all("nbr_entreVille")
     result3 = all("nbr_entreVitesse")
     result4 = all("nbr_entreV85")
@@ -59,9 +60,18 @@ def stats():
                            entreTraffic=result5, entreRue=result6, qtt_velo=result7)
 
 
-@app.route('/request')
-def request():
-    return render_template('request.html', noah='hello world')
+@app.route('/request', methods=['GET', 'POST'])
+def request_handler():
+    if request.method == 'POST':
+        # Récupérer la valeur sélectionnée dans le sélecteur de ville
+        ville = request.form['ville']
+        # Faire quelque chose avec la valeur sélectionnée, comme l'afficher
+        x = requestsville(ville)
+        return render_template('request.html', ville_request=x)
+    else:
+        # Afficher le formulaire
+        return render_template('request.html')
+
 
 
 @app.route('/moon')
