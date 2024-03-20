@@ -1,9 +1,10 @@
+{% block head %}
 <!DOCTYPE html>
 <html lang="en">
-{% block head  %}
+ <head>
     <meta charset="UTF-8">
     <!-- Inclusion de la feuille de style -->
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="static/style.css">
     <!-- Importation de la police de caractères yagiza -->
     <style>
         @import url('https://fonts.cdnfonts.com/css/yagiza');
@@ -18,15 +19,19 @@
     </style>
     <!-- Définition de l'icône de raccourci -->
     <link rel="shortcut icon" href="/static/favicon.ico">
-{% endblock   %}
-{% block body %}
-{% endblock  %}
+</head>
+{% endblock %}
 
-{% block footer  %}
+{% block body %}
+<body>
+</body>
+{% endblock %}
+
+{% block footerer %}
     <!-- Footer -->
     <footer>
         <!-- Texte de copyright -->
         <p>© 2024 Groupe C02. Tous droits réservés</p>
     </footer>
-</html>
-{% endblock   %}
+    </html>
+{% endblock %}

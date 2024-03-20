@@ -1,15 +1,12 @@
 from flask import Flask, render_template
 import os
 import sqlite3
-from .table import nb_rues, entreVitesse, entreVitesse, entreV85, entreTraffic, entreRue, qtt_velo
+from .table import all
+
 
 app = Flask(__name__)
 
-# Configuration
-app.config.from_mapping(
-    SECRET_KEY='dev',
-    DATABASE=os.path.join(app.root_path, 'poudlard.sqlite'),
-)
+
 
 # Ensure the instance folder exists
 try:
@@ -50,14 +47,31 @@ def about():
 
 @app.route('/stats')
 def stats():
-    return render_template('stats.html', x=nb_rues
-                           , entreVille=entreVitesse, entreVitesse=entreVitesse, entreV85=entreV85,
-                           entreTraffic=entreTraffic, entreRue=entreRue, qtt_velo=qtt_velo)
+    result1 = all("nb_rues_par_ville")
+    result2 = all("nbr_entreVille")
+    result3 = all("nbr_entreVitesse")
+    result4 = all("nbr_entreV85")
+    result5 = all("nbr_entreTraffic")
+    result6 = all("nbr_entreRue")
+    result7 = all("cyclable")
+    return render_template('stats.html', x=result1
+                           , entreVille=result2, entreVitesse=result3, entreV85=result4,
+                           entreTraffic=result5, entreRue=result6, qtt_velo=result7)
 
 
 @app.route('/request')
 def request():
-    return render_template('request.html', abdullah='hello world')
+    return render_template('request.html', noah='hello world')
+
+
+@app.route('/moon')
+def moon():
+    return render_template('moon.html', noah='hello world')
+
+@app.route('/base')
+def base():
+    return render_template('base.html.html', noah='hello world')
+
 
 
 if __name__ == "__main__":

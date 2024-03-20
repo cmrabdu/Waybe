@@ -112,8 +112,7 @@ with open(filename) as fichier:
             types_vehicules = ["lourd", "voiture", "velo", "pieton"]
             valeur_vehicules = list[5:9]
             for select in range(0, 4):
-                db.execute(
-                    "SELECT rue_id AND date AND type_vehicule FROM traffic WHERE rue_id = ? AND date = ? AND type_vehicule = ?",
+                db.execute("SELECT rue_id AND date AND type_vehicule FROM traffic WHERE rue_id = ? AND date = ? AND type_vehicule = ?",
                     (list[3], list[4], types_vehicules[select]))
                 existing_traffic = db.fetchone()
                 if existing_traffic is None:
@@ -122,77 +121,30 @@ with open(filename) as fichier:
         start = 1
 
 
-def nb_rues_par_ville():
-    db.execute(
-        """SELECT ville.nom, COUNT(rue.rue_id) FROM ville JOIN rue on ville.code_postal = rue.code_postal GROUP BY ville.nom""")
-    nb_rues = db.fetchall()
-    return nb_rues
+def all(x):
+    if x == "nb_rues_par_ville":
+        db.execute("""SELECT ville.nom, COUNT(rue.rue_id) FROM ville JOIN rue on ville.code_postal = rue.code_postal GROUP BY ville.nom""")
+        return db.fetchall()
+    if x == "nbr_entreVille":
+        db.execute("""SELECT COUNT(*) FROM ville""")
+        return db.fetchall()
+    if x == "nbr_entreVitesse":
+        db.execute("""SELECT COUNT(*) FROM vitesse""")
+        return db.fetchall()
+    if x == "nbr_entreV85":
+        db.execute("""SELECT COUNT(*) FROM v85""")
+        return db.fetchall()
+    if x == "nbr_entreTraffic":
+        db.execute("""SELECT COUNT(*) FROM traffic""")
+        return db.fetchall()
+    if x == "nbr_entreRue":
+        db.execute("""SELECT COUNT(*) FROM rue""")
+        return db.fetchall()
+    if x == "nb_rues_par_ville":
+        db.execute("""SELECT ville.nom, COUNT(rue.rue_id) FROM ville JOIN rue on ville.code_postal = rue.code_postal GROUP BY ville.nom""")
+        return db.fetchall()
+    if x == "cyclable":
+        db.execute("""SELECT ville.nom, ville.population, SUM(nb_vehicules)/population FROM traffic JOIN rue on traffic.rue_id = rue.rue_id JOIN ville on rue.code_postal = ville.code_postal WHERE type_vehicule = 'velo' GROUP BY ville.nom""")
+        return db.fetchall()
 
-
-nb_rues = nb_rues_par_ville()
-
-
-def nbr_entreVille():
-    db.execute("""SELECT COUNT(*) FROM ville""")
-    entreVille = db.fetchall()
-    return entreVille
-
-
-entreVille = nbr_entreVille()
-
-
-def nbr_entreVitesse():
-    db.execute("""SELECT COUNT(*) FROM vitesse""")
-    entreVitesse = db.fetchall()
-    return entreVitesse
-
-
-entreVitesse = nbr_entreVitesse()
-
-
-def nbr_entreV85():
-    db.execute("""SELECT COUNT(*) FROM v85""")
-    entreV85 = db.fetchall()
-    return entreV85
-
-
-entreV85 = nbr_entreV85()
-
-
-def nbr_entreTraffic():
-    db.execute("""SELECT COUNT(*) FROM traffic""")
-    entreTraffic = db.fetchall()
-    return entreTraffic
-
-
-entreTraffic = nbr_entreTraffic()
-
-
-def nbr_entreRue():
-    db.execute("""SELECT COUNT(*) FROM rue""")
-    entreRue = db.fetchall()
-    return entreRue
-
-
-entreRue = nbr_entreRue()
-
-
-def nb_rues_par_ville():
-    db.execute(
-        """SELECT ville.nom, COUNT(rue.rue_id) FROM ville JOIN rue on ville.code_postal = rue.code_postal GROUP BY ville.nom""")
-    nb_rues = db.fetchall()
-    return nb_rues
-
-
-nb_rues = nb_rues_par_ville()
-
-
-def cyclable():
-    db.execute(
-        """SELECT ville.nom, ville.population, SUM(nb_vehicules)/population FROM traffic JOIN rue on traffic.rue_id = rue.rue_id JOIN ville on rue.code_postal = ville.code_postal WHERE type_vehicule = 'velo' GROUP BY ville.nom""")
-    qtt_velo = db.fetchall()
-    return qtt_velo
-
-
-qtt_velo = cyclable()
 connexion.commit()
