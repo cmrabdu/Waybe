@@ -123,7 +123,7 @@ with open(filename) as fichier:
 
 def all(x):
     if x == "nb_rues_par_ville":
-        db.execute("""SELECT ville.nom, COUNT(rue_id) FROM rue JOIN ville on ville.code_postal = rue.code_postal""")
+        db.execute("""SELECT ville.nom, COUNT(rue_id) FROM rue JOIN ville on ville.code_postal = rue.code_postal GROUP BY ville.nom""")
         return db.fetchall()
     if x == "nbr_entreVille":
         db.execute("""SELECT COUNT(*) FROM ville""")
@@ -170,12 +170,12 @@ def requestsville(x):
         x = db.fetchall()
         totalvelo = totalvelo + x[0][0]
     total = totalvelo + totallourd + totalpieton + totalvoiture
-    totallourd = (totallourd/total)*100
-    totalpieton = (totalpieton / total) * 100
-    totalvoiture = (totalvoiture / total) * 100
-    totalvelo = (totalvelo / total) * 100
-    return totallourd, totalpieton, totalvoiture, totalvelo
-'''def requestsrue(x):
+    totallourd = round((totallourd/total)*100, 2)
+    totalpieton = round((totalpieton / total) * 100, 2)
+    totalvoiture = round((totalvoiture / total) * 100, 2)
+    totalvelo = round((totalvelo / total) * 100, 2)
+    return "totallourd", totallourd, "totalpieton", totalpieton, "totalvoiture", totalvoiture, "totalvelo", totalvelo
+def requestsrue(x):
     type = ['lourd', 'pieton', 'voiture', 'velo']
     db.execute("""SELECT rue_id FROM rue WHERE nom = ?""",(x,))
     IDderue = db.fetchall()[0][0]
@@ -183,7 +183,7 @@ def requestsville(x):
         db.execute("""SELECT date FROM traffic WHERE rue_id = ? AND CAST(strftime('%w', date) AS INTEGER) = ?""",(IDderue, i))
         for j in db.fetchall():
             for r in type:
-            db.execute("""SELECT total(nb_vehicules) FROM traffic WHERE rue_id = ? AND date = j[0]) = ?""",(IDderue,))'''
+                db.execute("""SELECT total(nb_vehicules) FROM traffic WHERE rue_id = ? AND date = j[0]) = ?""",(IDderue,))
 
 print(all("nb_rues_par_ville"))
 connexion.commit()

@@ -59,7 +59,9 @@ def stats():
                            , entreVille=result2, entreVitesse=result3, entreV85=result4,
                            entreTraffic=result5, entreRue=result6, qtt_velo=result7)
 
-
+@app.route('/nextrequest')
+def nextrequest():
+   return  render_template ('nextrequest.html')
 @app.route('/request', methods=['GET', 'POST'])
 def request_handler():
     if request.method == 'POST':
@@ -67,9 +69,10 @@ def request_handler():
         ville = request.form['ville']
         # Faire quelque chose avec la valeur sélectionnée, comme l'afficher
         x = requestsville(ville)
-        return render_template('request.html', ville_request=x)
+        print (x)
+        return render_template('nextrequest.html', ville_request=x)
+
     else:
-        # Afficher le formulaire
         return render_template('request.html')
 
 

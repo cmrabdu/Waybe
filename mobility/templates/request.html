@@ -23,7 +23,7 @@
         </ul>
     </nav>
     <!-- Formulaire -->
-    <form id="myForm">
+    <form id="myForm" action="/request" method="POST">
         <!-- Label pour la sélection de la ville -->
         <label for="ville">Ville:</label>
         <!-- Sélecteur de ville -->
@@ -43,17 +43,8 @@
             <!-- Ajoutez plus d'options ici selon vos besoins -->
         </select>
         <!-- Bouton de soumission -->
-        <input type="submit" value="Chercher">
+        <input type="submit" value="Valider">
     </form>
-
-
- <div class="nbr_rue">
-        <ul>
-            {% for item in ville_request %}
-                <li>{{ item }}</li>
-            {% endfor %}
-        </ul>
-    </div>
 
 
 </body>
