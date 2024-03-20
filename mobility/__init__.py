@@ -33,14 +33,18 @@ def create_app(test_config=None):
         pass
 
 
-def obtenir_stats_villes():
-    # Connexion à la base de données SQLite
-    connexion = sqlite3.connect('test2.db')
-    db = connexion.cursor()
+    if test_config is None:
+        # load the instance config, if it exists, when not testing
+        app.config.from_pyfile('config.py', silent=True)
+    else:
+        # load the test config if passed in
+        app.config.from_mapping(test_config)
 
-    # Exécutez une requête pour sélectionner toutes les villes
-    db.execute("SELECT COUNT(*) FROM ville;")
-    nombre_de_villes = db.fetchone()[0]
+    # ensure the instance folder exists
+    try:
+        os.makedirs(app.instance_path)
+    except OSError:
+        pass
 
     # Exécutez une autre requête pour obtenir les noms de toutes les villes
     db.execute("SELECT nom FROM ville;")
@@ -58,10 +62,13 @@ def obtenir_stats_villes():
 def home ():
     return render_template('home.html')
 
-@app.route('/about')
-def about():
-    return render_template('about.html', HelloWorld='Hello World')
+    @app.route('/')
+    def base():
+        return render_template('base.html',base='bonjour')
 
+    @app.route('/about')
+    def about():
+        return render_template('about.html', about='Bonjour tout le monde')
 
 @app.route('/stats')
 def stats():
@@ -93,6 +100,9 @@ def request_handler():
     else:
         return render_template('request.html')
 
+    @app.route('/request')
+    def request():
+        return render_template('request.html', data='bonjour le monde')
 
 
 @app.route('/moon')
