@@ -1,32 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="/static/style.css">
-    <title>Request</title>
-    <style>
-    @import url('https://fonts.cdnfonts.com/css/popstarregular');
-    </style>
-    <link rel="shortcut icon" href="/static/favicon.ico"/>
-</head>
+
+{% extends "base.html" %}
+
+{% block header %}
+    <link rel="stylesheet" href="static/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock   %}
+
+{% block body %}
 <body>
+    <!-- Barre de navigation -->
     <nav>
+        <!-- Image à gauche de la barre de navigation -->
         <img src="/static/heart.png" alt="Image" class="image-left">
-         <a href="/"> <img src="/static/titre.png" alt="Logo" class="navbar-logo"></a>
+        <!-- Logo -->
+        <a href="/"> <img src="/static/titre.png" alt="Logo" class="navbar-logo"></a>
+        <!-- Menu -->
         <ul class="menu">
             <li><a href="/">Home</a></li>
             <li><a href="/about">Team</a></li>
             <li><a href="/stats">Stats </a></li>
+            <li><a href="/moon">Moon</a></li>
         </ul>
     </nav>
-    <form id="myForm">
+    <!-- Formulaire -->
+    <form id="myForm" action="/request" method="POST">
+        <!-- Label pour la sélection de la ville -->
         <label for="ville">Ville:</label>
-        <input type="text" id="ville" name="ville" value="None">
-        <input type="submit" value="Chercher">
+        <!-- Sélecteur de ville -->
+        <select id="ville" name="ville">
+            <!-- Option par défaut -->
+            <option value="None" selected>Choisir une ville</option>
+            <!-- Options pour les différentes villes -->
+            <option value="Charleroi">Charleroi</option>
+            <option value="Bruxelles">Bruxelles</option>
+            <option value="Liege">Liege</option>
+            <option value="Grobbendonk">Grobbendonk</option>
+            <option value="Namur">Namur</option>
+            <option value="Beveren">Beveren</option>
+            <option value="Courtrai">Courtrai</option>
+            <option value="Jambes">Jambes</option>
+            <option value="Herzele">Herzele</option>
+            <!-- Ajoutez plus d'options ici selon vos besoins -->
+        </select>
+        <!-- Bouton de soumission -->
+        <input type="submit" value="Valider">
     </form>
-</body>
-<footer>
 
-    <p>© 2024 Groupe C02. Tous droits réservés</p>
-</footer>
-</html>
+
+</body>
+{% endblock  %}
+{% block footer %}
+{% endblock %}

@@ -1,59 +1,56 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>About</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <style>
-        @import url('https://fonts.cdnfonts.com/css/popstarregular');
-    </style>
-    <style>
-    @import url('https://fonts.cdnfonts.com/css/yagiza');
-    </style>
-    <link rel="shortcut icon" href="/static/favicon.ico"/>
-    <style>
-        @import url('https://fonts.cdnfonts.com/css/greenland');
-    </style>
-</head>
+
+{% extends "base.html" %}
+ {% block header %}
+     <link rel="stylesheet" href="static/style.css">
+ {% endblock   %}
+{% block body %}
 <body>
+    <!-- Barre de navigation -->
     <nav>
+        <!-- Image à gauche de la barre de navigation -->
         <img src="/static/heart.png" alt="Image" class="image-left">
+        <!-- Logo -->
          <a href="/"> <img src="/static/titre.png" alt="Logo" class="navbar-logo"></a>
+        <!-- Menu -->
         <ul class="menu">
             <li><a href="/">Home</a></li>
             <li><a href="/stats">Stats</a></li>
-             <li><a href="/request">Request </a></li>
+            <li><a href="/request">Request</a></li>
+            <li><a href="/moon">Moon</a></li>
+
         </ul>
     </nav>
 
-<div class="wrapper">
-    <div class="card1">
-         <div class="front"></div>
-        <div class="back back1"></div> <!-- Utilisez la classe "back1" pour la première carte -->
+    <!-- Conteneur pour les cartes -->
+    <div class="wrapper">
+        <!-- Première carte -->
+        <div class="card1">
+            <div class="front"></div>
+            <div class="back back1"></div> <!-- Utilisez la classe "back1" pour la première carte -->
+        </div>
+        <!-- Deuxième carte -->
+        <div class="card2">
+            <div class="front"></div>
+            <div class="back back2"></div> <!-- Utilisez la classe "back2" pour la deuxième carte -->
+        </div>
+        <!-- Troisième carte -->
+        <div class="card3">
+            <div class="front"></div>
+            <div class="back back3"></div> <!-- Utilisez la classe "back3" pour la troisième carte -->
+        </div>
+        <!-- Quatrième carte -->
+        <div class="card4">
+            <div class="front"></div>
+            <div class="back back4"></div> <!-- Utilisez la classe "back4" pour la quatrième carte -->
+        </div>
     </div>
 
-    <div class="card2">
-        <div class="front"></div>
-        <div class="back back2"></div> <!-- Utilisez la classe "back2" pour la deuxième carte -->
+    <!-- Conteneur pour les informations sur les Pokémon -->
+    <div class="pokemon">
+        <!-- Ajoutez ici du contenu concernant les Pokémon si nécessaire -->
     </div>
 
-    <div class="card3">
-
-        <div class="front"></div>
-        <div class="back back3"></div> <!-- Utilisez la classe "back3" pour la troisième carte -->
-    </div>
-
-    <div class="card4">
-        <div class="front"></div>
-        <div class="back back4"></div> <!-- Utilisez la classe "back4" pour la quatrième carte -->
-    </div>
-
-</div>
-<div class="pokemon">
-</div>
-<footer>
-    <p>© 2024 Groupe C02. Tous droits réservés</p>
-</footer>
 </body>
-
-</html>
+ {% endblock   %}
+{% block footer  %}
+{% endblock  %}
