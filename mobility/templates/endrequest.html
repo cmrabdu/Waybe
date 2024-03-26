@@ -72,20 +72,14 @@
         <!-- Bouton de soumission -->
         <input type="submit" value="Valider">
     </form>
-    <div class="nbr_rue">
+    <div class="cadre2">
+     <div class="nbr_rue">
         <ul>
-            {% for item in ville_request %}
+            {% for item in x %}
                 <li>{{ item }}</li>
             {% endfor %}
         </ul>
-    </div>
-
-    <div class="nbr_rue">
-        <ul>
-            {% for item in rue_request %}
-                <li>{{ item }}</li>
-            {% endfor %}
-        </ul>
+     </div>
     </div>
 {% endblock  %}
 {% block footer  %}

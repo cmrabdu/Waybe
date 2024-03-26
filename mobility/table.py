@@ -175,8 +175,10 @@ def requestsville(x):
     totalvelo = round((totalvelo / total) * 100, 2)
     return "totallourd", totallourd, "totalpieton", totalpieton, "totalvoiture", totalvoiture, "totalvelo", totalvelo
 def requestsrue(x, y):
+    y = str(y)
     type = ['lourd', 'pieton', 'voiture', 'velo']
     db.execute("""SELECT code_postal FROM ville WHERE nom = ?""",(y,))
+    #print(db.fetchall()[0][0])
     CP = db.fetchall()[0][0]
     db.execute("""SELECT rue_id FROM rue WHERE nom = ? AND code_postal = ?""",(x,CP))
     IDderue = db.fetchall()[0][0]
@@ -197,5 +199,11 @@ def requestsrue(x, y):
             total.append(yo)
     return total
 
+def selectrequest():
+    db.execute("""SELECT nom FROM ville""")
+    return db.fetchall()
 
+def selectruerequest(ville):
+    db.execute("""SELECT rue.nom FROM rue JOIN ville ON rue.code_postal = ville.code_postal WHERE ville.nom = ?""",(ville,))
+    return db.fetchall()
 connexion.commit()
