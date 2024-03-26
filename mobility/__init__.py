@@ -1,8 +1,7 @@
+from flask import Flask, render_template , request
 import os
 import sqlite3
 from .table import all ,requestsville,requestsrue,selectrequest,selectruerequest
-from flask import Flask, render_template
-import webbrowser
 
 
 app = Flask(__name__)
@@ -18,33 +17,7 @@ def create_app(test_config=None):
         )
 
 
-    from . import city
-    app.register_blueprint(city.bp)
 
-    app.add_url_rule('/', endpoint='index')
-
-    if test_config is None:
-        # load the instance config, if it exists, when not testing
-        app.config.from_pyfile('config.py', silent=True)
-    else:
-        # load the test config if passed in
-        app.config.from_mapping(test_config)
-
-    # ensure the instance folder exists
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
-
-
-    if test_config is None:
-        # load the instance config, if it exists, when not testing
-        app.config.from_pyfile('config.py', silent=True)
-    else:
-        # load the test config if passed in
-        app.config.from_mapping(test_config)
-
-<<<<<<< mobility/__init__.py
 # Ensure the instance folder exists
 try:
     os.makedirs(app.instance_path)
@@ -52,23 +25,6 @@ except OSError:
     pass
 
 
-=======
-    # ensure the instance folder exists
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
-
-    # Exécutez une autre requête pour obtenir les noms de toutes les villes
-    db.execute("SELECT nom FROM ville;")
-    noms_des_villes = db.fetchall()
-
-    # Fermer la connexion à la base de données
-    connexion.close()
-
-    # Retourne les données récupérées
-    return nombre_de_villes, noms_des_villes
->>>>>>> mobility/__init__.py
 
 
 # Routes
@@ -76,13 +32,10 @@ except OSError:
 def home():
     return render_template('home.html')
 
-    @app.route('/')
-    def base():
-        return render_template('base.html',base='bonjour')
+@app.route('/about')
+def about():
+    return render_template('about.html', HelloWorld='Hello World')
 
-    @app.route('/about')
-    def about():
-        return render_template('about.html', about='Bonjour tout le monde')
 
 @app.route('/stats')
 def stats():
@@ -135,9 +88,6 @@ def nextrequest():
         return render_template('nextrequest.html', rue=rue )
 
 
-    @app.route('/request')
-    def request():
-        return render_template('request.html', data='bonjour le monde')
 
 
 @app.route('/moon')
