@@ -1,7 +1,7 @@
 from flask import Flask, render_template , request
 import os
 import sqlite3
-from table import *
+from .table  import *
 
 
 app = Flask(__name__)
