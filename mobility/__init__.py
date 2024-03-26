@@ -5,6 +5,16 @@ from .table import all ,requestsville,requestsrue
 
 
 app = Flask(__name__)
+def create_app(test_config=None):
+    # create and configure the app
+    app = Flask(__name__, instance_relative_config=True)
+    if test_config:
+        app.config.from_mapping(test_config)
+    else:
+        app.config.from_mapping(
+            SECRET_KEY='dev',
+            DATABASE=os.path.join(app.root_path, 'poudlard.sqlite'),
+        )
 
 
 
@@ -15,24 +25,6 @@ except OSError:
     pass
 
 
-def obtenir_stats_villes():
-    # Connexion à la base de données SQLite
-    connexion = sqlite3.connect('test2.db')
-    db = connexion.cursor()
-
-    # Exécutez une requête pour sélectionner toutes les villes
-    db.execute("SELECT COUNT(*) FROM ville;")
-    nombre_de_villes = db.fetchone()[0]
-
-    # Exécutez une autre requête pour obtenir les noms de toutes les villes
-    db.execute("SELECT nom FROM ville;")
-    noms_des_villes = db.fetchall()
-
-    # Fermer la connexion à la base de données
-    connexion.close()
-
-    # Retourne les données récupérées
-    return nombre_de_villes, noms_des_villes
 
 
 # Routes
