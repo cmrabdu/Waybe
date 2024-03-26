@@ -23,10 +23,12 @@
             <li><a href="/moon">Moon</a></li>
         </ul>
     </nav>
+    <div class="cadre">
    <!-- Contenu de la page -->
    <div class="nbr_rue-container">
         <!-- Première partie de la statistique -->
         <div class="nbr_rue">
+             <p>Nombres de rues par villes</p>
             <ul>
 
                 {% for nbre_rue in x %}
@@ -34,9 +36,12 @@
                 {% endfor %}
             </ul>
         </div>
-
+   </div>
+     <div class="cadre2">
+         <div class="nbr_rue-container">
         <!-- Deuxième partie de la statistique -->
         <div class="nbr_rue">
+            <p>Nombres d'entrées par villes</p>
             <ul>
                 <!-- Affichage des données -->
                 <li>Entre Ville :{{ entreVille[0]}}</li>
@@ -46,9 +51,13 @@
                 <li>Entre Rue :{{ entreRue[0]}}</li>
             </ul>
         </div>
-
+         </div>
+     </div>
+    <div class="cadre3">
+     <div class="nbr_rue-container2">
         <!-- Troisième partie de la statistique -->
         <div class="nbr_rue">
+            <p>Classement des villes les plus cyclistes</p>
             <ul>
                 <!-- Utilisation d'une boucle for pour afficher les données -->
                  {% for nbre_rue in qtt_velo %}
@@ -56,6 +65,7 @@
                 {% endfor %}
             </ul>
         </div>
+     </div>
     </div>
 </body>
 {% endblock  %}

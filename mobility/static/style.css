@@ -533,15 +533,15 @@ table th, table td {
 }
 
 
-        .nbr_rue-container {
-            margin-left: 30px;
-            font-size: 30px;
-            display: flex;
+.nbr_rue-container {
+    margin-left: 30px;
+    font-family: 'Nouveau IBM Stretch', sans-serif;
+    font-size: 50px;
+    display: flex;
+        }
+.nbr_rue-container2 {
+    font-family: 'Nouveau IBM Stretch', sans-serif;
+    font-size: 30px;
+    display: flex;
         }
 
-        /* Pour espacer légèrement les divs */
-        .nbr_rue {
-            background-color: #fa55f5;
-            background-size: cover;
-            margin-right: 100px;
-        }
