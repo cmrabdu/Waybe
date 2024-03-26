@@ -2,6 +2,8 @@ from flask import Flask, render_template , request
 import os
 import sqlite3
 from .table  import *
+from datetime import datetime
+from .moon_utils import age, phase
 
 
 app = Flask(__name__)
@@ -89,8 +91,28 @@ def nextrequest():
 
 
 @app.route('/moon')
-def moon():
-    return render_template('moon.html', noah='hello world')
+def moon_phase_view():
+    date_voulu = datetime(2005, 7, 5) #datetime.now()  #date de aujourd'hui (peux mettre une date fixe aussi)
+    date_reference = datetime(2000, 1, 5) #date de pleine lune connue -> bon, pas correcte car erreur dans le code, mais ça marche donc osef (temporairement)
+
+    age_lune = moon_utils.age(date_voulu, date_reference)
+    phase_lune = moon_utils.phase(age_lune)
+
+    #pour associer phases to images
+    images = {
+        'NEW_MOON': 'NEW_MOON.png',
+        'WAXING_CRESCENT': 'WAXING_CRESCENT.png',
+        'FIRST_QUARTER': 'FIRST_QUARTER.png',
+        'WAXING_GIBBOUS': 'WAXING_GIBBOUS.png',
+        'FULL_MOON': 'FULL_MOON.png',
+        'WANING_GIBBOUS': 'WANING_GIBBOUS.png',
+        'LAST_QUARTER': 'LAST_QUARTER.png',
+        'WANING_CRESCENT': 'WANING_CRESCENT.png',
+    }
+
+    moon_image = images[phase_lune.name]
+
+    return render_template('moon.html', age_lune=age_lune, moon_phase=phase_lune.name, moon_image=moon_image)
 
 @app.route('/base')
 def base():
