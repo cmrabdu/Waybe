@@ -1,7 +1,7 @@
 from flask import Flask, render_template , request
 import os
 import sqlite3
-from .table import all ,requestsville,requestsrue,selectrequest,selectruerequest
+from table import *
 
 
 app = Flask(__name__)
@@ -50,19 +50,18 @@ def stats():
                            , entreVille=result2, entreVitesse=result3, entreV85=result4,
                            entreTraffic=result5, entreRue=result6, qtt_velo=result7)
 
-
+ville_info=None
 @app.route('/endrequest')
 def endrequest():
-    return render_template('endrequest.html')
+    return render_template('endrequest.html',)
 
-ville_info=None
+
 @app.route('/request', methods=['GET', 'POST'])
 def request_handler():
     global ville_info
     if request.method == 'POST':
         # Récupérer la valeur sélectionnée dans le sélecteur de ville
         ville_info = request.form['ville']
-        #print(request.form['ville'])
         # Faire quelque chose avec la valeur sélectionnée, comme l'afficher
         x = requestsville(ville_info)
         rue = selectruerequest(ville_info)
@@ -80,7 +79,6 @@ def nextrequest():
     rue = selectruerequest(ville_info)
     if request.method == 'POST':
         rue_info = request.form.get('rue')
-        #print(rue_info)
         # Faire quelque chose avec la valeur sélectionnée, comme l'afficher
         x = requestsrue(rue_info,ville_info)
         return render_template('endrequest.html',x=x)

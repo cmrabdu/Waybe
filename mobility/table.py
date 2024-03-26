@@ -1,8 +1,8 @@
 import sqlite3
 
-
+DATABASE_PATH = 'test2.db'
 # Connexion à la base de données SQLite
-connexion = sqlite3.connect('test2.db', check_same_thread=False)
+connexion = sqlite3.connect(DATABASE_PATH, check_same_thread=False)
 db = connexion.cursor()
 
 # Création de la table "ville" dans la base de données
@@ -55,7 +55,7 @@ db.execute("""CREATE TABLE IF NOT EXISTS traffic (
 );""")
 
 # Chemin vers le fichier CSV contenant les données
-filename = "mobility/ugly.csv"
+filename = "ugly.csv"
 start = 0
 
 # Ouverture et traitement du fichier CSV
@@ -206,4 +206,5 @@ def selectrequest():
 def selectruerequest(ville):
     db.execute("""SELECT rue.nom FROM rue JOIN ville ON rue.code_postal = ville.code_postal WHERE ville.nom = ?""",(ville,))
     return db.fetchall()
+
 connexion.commit()
