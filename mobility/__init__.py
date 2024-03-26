@@ -1,7 +1,7 @@
 from flask import Flask, render_template , request
 import os
 import sqlite3
-from .table import all ,requestsville
+from .table import all ,requestsville,requestsrue
 
 
 app = Flask(__name__)
@@ -37,7 +37,7 @@ def obtenir_stats_villes():
 
 # Routes
 @app.route('/')
-def home ():
+def home():
     return render_template('home.html')
 
 @app.route('/about')
@@ -47,8 +47,7 @@ def about():
 
 @app.route('/stats')
 def stats():
-    print("cc")
-    result1  = all("nb_rues_par_ville")
+    result1 = all("nb_rues_par_ville")
     result2 = all("nbr_entreVille")
     result3 = all("nbr_entreVitesse")
     result4 = all("nbr_entreV85")
@@ -59,21 +58,38 @@ def stats():
                            , entreVille=result2, entreVitesse=result3, entreV85=result4,
                            entreTraffic=result5, entreRue=result6, qtt_velo=result7)
 
-@app.route('/nextrequest')
-def nextrequest():
-   return  render_template ('nextrequest.html')
+
+@app.route('/endrequest')
+def endrequest():
+    return render_template('endrequest.html')
+
+ville=None
 @app.route('/request', methods=['GET', 'POST'])
 def request_handler():
+    global ville
     if request.method == 'POST':
         # Récupérer la valeur sélectionnée dans le sélecteur de ville
         ville = request.form['ville']
         # Faire quelque chose avec la valeur sélectionnée, comme l'afficher
         x = requestsville(ville)
-        print (x)
         return render_template('nextrequest.html', ville_request=x)
 
     else:
         return render_template('request.html')
+
+
+
+
+@app.route('/nextrequest', methods=['GET', 'POST'])
+def nextrequest():
+    if request.method == 'POST':
+        rue = request.form['rue']
+        # Faire quelque chose avec la valeur sélectionnée, comme l'afficher
+        x = requestsrue(rue,ville)
+        return render_template('endrequest.html', rue_request=x)
+    else:
+        return render_template('nextrequest.html')
+
 
 
 

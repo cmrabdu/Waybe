@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block header  %}
+    <link rel="stylesheet" href="static/style.css">
+{% endblock   %}
+{% block body %}
+    <nav>
+        <!-- Image à gauche de la barre de navigation -->
+        <img src="/static/heart.png" alt="Image" class="image-left">
+        <!-- Logo -->
+         <a href="/"> <img src="/static/titre.png" alt="Logo" class="navbar-logo"></a>
+        <!-- Menu -->
+        <ul class="menu">
+            <li><a href="/about">Team </a></li>
+            <li><a href="/request">Request</a></li>
+            <li><a href="/stats">Stats</a></li>
+            <li><a href="/moon">Moon</a></li>
+
+        </ul>
+    </nav>
+    <form id="myForm" action="/request" method="POST">
+        <!-- Label pour la sélection de la ville -->
+        <label for="ville">Ville:</label>
+        <!-- Sélecteur de ville -->
+        <select id="ville" name="ville">
+            <!-- Option par défaut -->
+            <option value="None" selected>Choisir une ville</option>
+            <!-- Options pour les différentes villes -->
+            <option value="Charleroi">Charleroi</option>
+            <option value="Bruxelles">Bruxelles</option>
+            <option value="Liege">Liege</option>
+            <option value="Grobbendonk">Grobbendonk</option>
+            <option value="Namur">Namur</option>
+            <option value="Beveren">Beveren</option>
+            <option value="Courtrai">Courtrai</option>
+            <option value="Jambes">Jambes</option>
+            <option value="Herzele">Herzele</option>
+            <!-- Ajoutez plus d'options ici selon vos besoins -->
+        </select>
+        <!-- Bouton de soumission -->
+        <input type="submit" value="Valider">
+    </form>
+
+    <form id="myForm" action="/request" method="POST">
+        <!-- Label pour la sélection de la ville -->
+        <label for="rue">Rue:</label>
+        <!-- Sélecteur de ville -->
+        <select id="rue" name="rue">
+            <!-- Option par défaut -->
+            <option value="None" selected>Choisir la rue</option>
+            <!-- Options pour les différentes villes -->
+            <option value="Eikenlei">Eikenlei</option>
+            <option value="Rue de Campine">Rue de Campine</option>
+            <option value="Condereef">Condereef</option>
+            <option value="Avenue Albert 1er">Avenue Albert 1er</option>
+            <option value="Boulevard de la Meuse">Boulevard de la Meuse</option>
+            <option value="Montagne SainteBarbe">Montagne SainteBarbe</option>
+            <option value="Paleizenstraat">Paleizenstraat</option>
+            <option value="Avenue Rogier">Avenue Rogier</option>
+            <option value="Lakensestraat">Lakensestraat</option>
+            <option value="Avenue prince de Liege">Avenue prince de Liege</option>
+            <option value="Rue Godefroid">Rue Godefroid</option>
+            <option value="Bogaardenstraat">Bogaardenstraat</option>
+            <option value="Boulevard Audent">Boulevard Audent</option>
+            <option value="Avenue Rogier">Avenue Rogier</option>
+            <option value="Boerderijstraat">Boerderijstraat</option>
+            <option value="Halfdreef">Halfdreef</option>
+            <option value="Graaf du Parclaan">Graaf du Parclaan</option>
+            <option value="Markt">Markt</option>
+            <option value="Stationsstraat">Stationsstraat</option>
+            <!-- Ajoutez plus d'options ici selon vos besoins -->
+        </select>
+        <!-- Bouton de soumission -->
+        <input type="submit" value="Valider">
+    </form>
+    <div class="nbr_rue">
+        <ul>
+            {% for item in ville_request %}
+                <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="nbr_rue">
+        <ul>
+            {% for item in rue_request %}
+                <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock  %}
+{% block footer  %}
+{% endblock   %}
