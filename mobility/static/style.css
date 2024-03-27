@@ -503,13 +503,14 @@ table th, table td {
 
 #play-button, #pause-button {
     position: absolute;
-    top: 135px; /* Ajustez cette valeur pour positionner verticalement */
-    left: 60px; /* Ajustez cette valeur pour positionner horizontalement */
-    width: 20x; /* Ajustez la taille du bouton si nécessaire */
-    height: 90px; /* Assurez-vous que la hauteur correspond à la taille de l'image */
+    top: 102px; /* Ajustez cette valeur pour positionner verticalement */
+    left: 27px; /* Ajustez cette valeur pour positionner horizontalement */
+    width: 100x; /* Ajustez la taille du bouton si nÃ©cessaire */
+    height: 150px; /* Assurez-vous que la hauteur correspond Ã  la taille de l'image */
     cursor: pointer; /* Change le curseur au survol */
-    z-index: 5; /* Assurez-vous que les boutons sont au-dessus des autres éléments */
+    z-index: 5; /* Assurez-vous que les boutons sont au-dessus des autres Ã©lÃ©ments */
 }
+
 
 .container {
     position: relative;
@@ -536,12 +537,12 @@ table th, table td {
 .nbr_rue-container {
     margin-left: 30px;
     font-family: 'Nouveau IBM Stretch', sans-serif;
-    font-size: 50px;
+    font-size: 35px;
     display: flex;
         }
 .nbr_rue-container2 {
     font-family: 'Nouveau IBM Stretch', sans-serif;
-    font-size: 30px;
+    font-size: 25px;
     display: flex;
         }
 
