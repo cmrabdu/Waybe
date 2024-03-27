@@ -1,10 +1,9 @@
 from flask import Flask, render_template , request
 import os
 import sqlite3
-from .table  import *
+from .table import all ,requestsville,requestsrue,selectrequest,selectruerequest
 from datetime import datetime
-from .moon_utils import age, phase
-
+from .moon_utils import age , phase , sumr ,sump
 
 app = Flask(__name__)
 def create_app(test_config=None):
@@ -92,8 +91,8 @@ def nextrequest():
 
 @app.route('/moon')
 def moon_phase_view():
-    date_voulu = datetime(2005, 7, 5) #datetime.now()  #date de aujourd'hui (peux mettre une date fixe aussi)
-    date_reference = datetime(2000, 1, 5) #date de pleine lune connue -> bon, pas correcte car erreur dans le code, mais ça marche donc osef (temporairement)
+    date_voulu = datetime(2005, 7, 5)  # datetime.now()  #date de aujourd'hui (peux mettre une date fixe aussi)
+    date_reference = datetime(2000, 1, 5)
 
     age_lune = moon_utils.age(date_voulu, date_reference)
     phase_lune = moon_utils.phase(age_lune)
@@ -112,7 +111,7 @@ def moon_phase_view():
 
     moon_image = images[phase_lune.name]
 
-    return render_template('moon.html', age_lune=age_lune, moon_phase=phase_lune.name, moon_image=moon_image)
+    return render_template('moon.html', age_lune=age_lune, moon_phase=phase_lune.name, moon_image=moon_image,smur=sumr,sump=sump)
 
 @app.route('/base')
 def base():
@@ -122,3 +121,4 @@ def base():
 
 if __name__ == "__main__":
     app.run(debug=True)
+

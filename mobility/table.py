@@ -119,6 +119,9 @@ with open(filename) as fichier:
                     VALUES(?,?,?,?);""", (list1[3], list1[4], types_vehicules[select], valeur_vehicules[select]))
         start = 1
 
+def abdu():
+    db.execute("""SELECT DISTINCT strftime('%Y-%m-%d', date), SUM(nb_vehicules) FROM traffic GROUP BY strftime('%Y-%m-%d', date)""")
+    return db.fetchall()
 
 def all(x):
     if x == "nb_rues_par_ville":

@@ -23,6 +23,30 @@
     <p>Phase actuelle : {{ moon_phase }}</p>
     <!-- Affichage de l'image de la phase de la lune -->
     <img src="{{ url_for('static', filename='images/' + moon_image) }}" alt="Phase de la Lune">
+
+    <div class="cadre2">
+         <div class="nbr_rue-container">
+        <!-- Deuxième partie de la statistique -->
+        <div class="nbr_rue">
+            <ul>
+                <!-- Affichage des données -->
+                <li>Jours de pleine lune  :{{ sump}}</li>
+
+            </ul>
+        </div>
+         </div>
+        <div class="cadre3">
+     <div class="nbr_rue-container2">
+        <!-- Troisième partie de la statistique -->
+       <div class="nbr_rue">
+
+            <ul>
+                <!-- Affichage des données -->
+                <li>Jours normal  :{{ smur}}</li>
+
+            </ul>
+        </div>
+         </div>
 </body>
 
 {% endblock  %}

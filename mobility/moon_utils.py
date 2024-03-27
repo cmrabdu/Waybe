@@ -1,5 +1,6 @@
 from datetime import datetime
 from enum import Enum
+from .table import abdu
 
 
 class MoonPhase(Enum): #classe Moon Phase, cours chap 9
@@ -12,6 +13,7 @@ class MoonPhase(Enum): #classe Moon Phase, cours chap 9
     LAST_QUARTER = 6
     WANING_CRESCENT = 7
 
+date_reference = datetime(2000, 1, 5)
 
 def age(date_voulu, date_reference):
     diff_jour = (date_voulu - date_reference).days #jour demandé - jour de pleine lune connue
@@ -36,4 +38,44 @@ def phase(age_lune): #7.38 --> différence de jours entre chaque cycle, mais a a
 #5 ---> #faire les testes.. (sah jsp, j'vais voir avec la team)
 #6 ---> #toujours rester bg car je le suis en sah (vrmt trop bgggg)
 
+
+###################
+
+
+
+data=abdu()
+
+# Initialisation des listes
+pleine_lune = []
+pas_pleine_lune = []
+
+# Parcourir les données et classer en fonction de la pleine lune
+for date, velo in data:
+    year, month, day = date.split('-')
+    date_voulu= datetime(int(year), int(month), int(day))
+
+    ager=age(date_voulu,date_reference)
+    phase_lune = phase(ager)
+    if phase_lune == MoonPhase.FULL_MOON:
+        pleine_lune.append((date, velo))
+
+    else:
+        pas_pleine_lune.append((date, velo))
+
+
+#jour ou y a la lune
+sump = 0
+for date, velo in pleine_lune:
+    sump = sump + velo
+
+sump= sump / len(pleine_lune)
+print(sump)
+
+sumr=0
+for date, velo in pas_pleine_lune:
+    sumr = sumr + velo
+
+sumr= sumr / len(pas_pleine_lune)
+
+print(sumr)
 
