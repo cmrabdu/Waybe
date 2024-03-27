@@ -56,8 +56,9 @@ db.execute("""CREATE TABLE IF NOT EXISTS traffic (
 
 # Chemin vers le fichier CSV contenant les données
 filename = "mobility/ugly.csv"
-start = 0
 
+
+start = 0
 # Ouverture et traitement du fichier CSV
 with open(filename) as fichier:
     populationdico = {"Liege": 197325, "Bruxelles": 1208542, "Namur": 113174, "Charleroi": 203845, "Grobbendonk": 11442,
@@ -111,7 +112,8 @@ with open(filename) as fichier:
             types_vehicules = ["lourd", "voiture", "velo", "pieton"]
             valeur_vehicules = list1[5:9]
             for select in range(0, 4):
-                db.execute("SELECT rue_id AND date AND type_vehicule FROM traffic WHERE rue_id = ? AND date = ? AND type_vehicule = ?",
+                db.execute(
+                    "SELECT rue_id AND date AND type_vehicule FROM traffic WHERE rue_id = ? AND date = ? AND type_vehicule = ?",
                     (list1[3], list1[4], types_vehicules[select]))
                 existing_traffic = db.fetchone()
                 if existing_traffic is None:
@@ -119,9 +121,11 @@ with open(filename) as fichier:
                     VALUES(?,?,?,?);""", (list1[3], list1[4], types_vehicules[select], valeur_vehicules[select]))
         start = 1
 
+
 def abdu():
     db.execute("""SELECT DISTINCT strftime('%Y-%m-%d', date), SUM(nb_vehicules) FROM traffic GROUP BY strftime('%Y-%m-%d', date)""")
     return db.fetchall()
+
 
 def all(x):
     if x == "nb_rues_par_ville":
@@ -143,71 +147,95 @@ def all(x):
         db.execute("""SELECT COUNT(*) FROM rue""")
         return db.fetchall()
     if x == "nb_rues_par_ville":
-        db.execute("""SELECT ville.nom, COUNT(rue.rue_id) FROM ville JOIN rue on ville.code_postal = rue.code_postal GROUP BY ville.nom""")
+        db.execute(
+            """SELECT ville.nom, COUNT(rue.rue_id) FROM ville JOIN rue on ville.code_postal = rue.code_postal GROUP BY ville.nom""")
         return db.fetchall()
     if x == "cyclable":
-        db.execute("""SELECT ville.nom, ville.population, SUM(nb_vehicules)/population FROM traffic JOIN rue on traffic.rue_id = rue.rue_id JOIN ville on rue.code_postal = ville.code_postal WHERE type_vehicule = 'velo' GROUP BY ville.nom ORDER BY SUM(nb_vehicules) DESC;""")
+        db.execute(
+            """SELECT ville.nom, ville.population, round(SUM(nb_vehicules)/population, 2) FROM traffic JOIN rue on traffic.rue_id = rue.rue_id JOIN ville on rue.code_postal = ville.code_postal WHERE type_vehicule = 'velo' GROUP BY ville.nom ORDER BY SUM(nb_vehicules) DESC;""")
         return db.fetchall()
+
+
 def requestsville(x):
     db.execute("""SELECT code_postal FROM ville WHERE nom = ?""", (x,))
     cprequest = db.fetchall()
     cprequest = cprequest[0][0]
-    db.execute("""SELECT rue_id FROM rue WHERE rue.code_postal = ?""",(cprequest,))
+    db.execute("""SELECT rue_id FROM rue WHERE rue.code_postal = ?""", (cprequest,))
     totallourd = 0
     totalvelo = 0
     totalpieton = 0
     totalvoiture = 0
     listeRI = db.fetchall()
     for i in range(len(listeRI)):
-        db.execute("""SELECT SUM(nb_vehicules) FROM traffic WHERE traffic.rue_id = ? AND traffic.type_vehicule = 'lourd'""",(listeRI[i][0],))
+        db.execute(
+            """SELECT SUM(nb_vehicules) FROM traffic WHERE traffic.rue_id = ? AND traffic.type_vehicule = 'lourd'""",
+            (listeRI[i][0],))
         x = db.fetchall()
         totallourd = totallourd + x[0][0]
-        db.execute("""SELECT SUM(nb_vehicules) FROM traffic WHERE traffic.rue_id = ? AND traffic.type_vehicule = 'pieton'""",(listeRI[i][0],))
+        db.execute(
+            """SELECT SUM(nb_vehicules) FROM traffic WHERE traffic.rue_id = ? AND traffic.type_vehicule = 'pieton'""",
+            (listeRI[i][0],))
         x = db.fetchall()
         totalpieton = totalpieton + x[0][0]
-        db.execute("""SELECT SUM(nb_vehicules) FROM traffic WHERE traffic.rue_id = ? AND traffic.type_vehicule = 'voiture'""",(listeRI[i][0],))
+        db.execute(
+            """SELECT SUM(nb_vehicules) FROM traffic WHERE traffic.rue_id = ? AND traffic.type_vehicule = 'voiture'""",
+            (listeRI[i][0],))
         x = db.fetchall()
         totalvoiture = totalvoiture + x[0][0]
-        db.execute("""SELECT SUM(nb_vehicules) FROM traffic WHERE traffic.rue_id = ? AND traffic.type_vehicule = 'velo'""",(listeRI[i][0],))
+        db.execute(
+            """SELECT SUM(nb_vehicules) FROM traffic WHERE traffic.rue_id = ? AND traffic.type_vehicule = 'velo'""",
+            (listeRI[i][0],))
         x = db.fetchall()
         totalvelo = totalvelo + x[0][0]
     total = totalvelo + totallourd + totalpieton + totalvoiture
-    totallourd = round((totallourd/total)*100, 2)
+    totallourd = round((totallourd / total) * 100, 2)
     totalpieton = round((totalpieton / total) * 100, 2)
     totalvoiture = round((totalvoiture / total) * 100, 2)
     totalvelo = round((totalvelo / total) * 100, 2)
     return "totallourd", totallourd, "totalpieton", totalpieton, "totalvoiture", totalvoiture, "totalvelo", totalvelo
+
+
 def requestsrue(x, y):
     y = str(y)
     type = ['lourd', 'pieton', 'voiture', 'velo']
-    db.execute("""SELECT code_postal FROM ville WHERE nom = ?""",(y,))
-    #print(db.fetchall()[0][0])
+    db.execute("""SELECT code_postal FROM ville WHERE nom = ?""", (y,))
+    # print(db.fetchall()[0][0])
     CP = db.fetchall()[0][0]
-    db.execute("""SELECT rue_id FROM rue WHERE nom = ? AND code_postal = ?""",(x,CP))
+    db.execute("""SELECT rue_id FROM rue WHERE nom = ? AND code_postal = ?""", (x, CP))
     IDderue = db.fetchall()[0][0]
     stock = []
     total = []
     for i in range(7):
         for j in type:
-            db.execute(f"""SELECT '{i}', type_vehicule, SUM(nb_vehicules) FROM traffic WHERE rue_id = ? AND CAST(strftime('%w', date) AS INTEGER) = ? AND type_vehicule = '{j}' """,(IDderue, i))
+            db.execute(
+                f"""SELECT '{i}', type_vehicule, SUM(nb_vehicules) FROM traffic WHERE rue_id = ? AND CAST(strftime('%w', date) AS INTEGER) = ? AND type_vehicule = '{j}' """,
+                (IDderue, i))
             stock.append(db.fetchall())
+
     for i in range(0, 28, 4):
-        groupe = stock[i:i+4]
+        groupe = stock[i:i + 4]
         x = 0
         for j in groupe:
             x = x + j[0][2]
-        for j in groupe:
-            yo = list(j[0])
-            yo[2] = round(((yo[2] / x)*100), 2)
-            total.append(yo)
+        if x == 0:
+            total.append(list(j[0]))
+        else:
+            for j in groupe:
+                yo = list(j[0])
+                yo[2] = round(((yo[2] / x) * 100), 2)
+                total.append(yo)
     return total
+
 
 def selectrequest():
     db.execute("""SELECT nom FROM ville""")
     return db.fetchall()
 
+
 def selectruerequest(ville):
-    db.execute("""SELECT rue.nom FROM rue JOIN ville ON rue.code_postal = ville.code_postal WHERE ville.nom = ?""",(ville,))
+    db.execute("""SELECT rue.nom FROM rue JOIN ville ON rue.code_postal = ville.code_postal WHERE ville.nom = ?""",
+               (ville,))
     return db.fetchall()
+
 
 connexion.commit()

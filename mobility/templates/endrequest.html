@@ -18,33 +18,18 @@
         </ul>
     </nav>
             <!-- Option par défaut -->
-         <form id="myForm" action="/request" method="POST">
-        <!-- Label pour la sélection de la ville -->
-        <label for="ville">Ville:</label>
-        <!-- Sélecteur de ville -->
-        <select id="ville" name="ville">
-            <!-- Option par défaut -->
-            <option value="None" selected>Choisir une ville</option>
-            <!-- Options pour les différentes villes -->
-            <ul>
-            {% for item in ville %}
-                <option>{{ item[0] }}</option>
-            {% endfor %}
-            </ul>
-        </select>
-        <!-- Bouton de soumission -->
-        <input type="submit" value="Valider">
-    </form>
-
     <div class="cadre2">
      <div class="nbr_rue">
+     <p>Nombre de véhicules/passants par jour</p>
+
         <ul>
             {% for item in x %}
-                <li>{{ item }}</li>
+                <th>{{ item[1]}} : {{item[2] }}</th>
             {% endfor %}
         </ul>
      </div>
     </div>
+
 {% endblock  %}
 {% block footer  %}
 {% endblock   %}
