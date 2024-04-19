@@ -1,7 +1,7 @@
 import sqlite3
 
 from flask import current_app, g
-
+from .table import init_data
 
 def get_db():
     """Returns the database connection. Create the connection if needed.
@@ -22,6 +22,10 @@ def get_db():
         # Instead of getting "tuple" out of queries, we'll get dictionaries of column->value
         g.db.row_factory = sqlite3.Row
 
+        init_data(g.db)
+
+
+
     return g.db
 
 
@@ -36,12 +40,13 @@ def close_db(e=None):
     if db is not None:
         db.close()
 
-
-def init_app(app):
+db=get_db()
+def init_app(app,db):
     """To be called when an app is initialized
 
     Asks to call close_db when the app is closed
     Args:
         app: the application context
     """
+    init_data(db)
     app.teardown_appcontext(close_db)

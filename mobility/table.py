@@ -1,9 +1,13 @@
-import sqlite3
 
+import sqlite3
 DATABASE_PATH = 'test2.db'
 # Connexion à la base de données SQLite
-connexion = sqlite3.connect(DATABASE_PATH, check_same_thread=False)
-db = connexion.cursor()
+
+def init_data(db):
+    db.execute
+    return db
+
+
 
 # Création de la table "ville" dans la base de données
 db.execute("DROP TABLE IF EXISTS ville;")
