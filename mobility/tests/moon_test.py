@@ -1,5 +1,5 @@
 import unittest
-from mobility.moon_utils import age, phase, MoonPhase
+from .moon_utils import age, phase, MoonPhase
 from datetime import datetime
 
 class MoonUtilsTestCase(unittest.TestCase):

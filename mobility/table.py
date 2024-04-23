@@ -124,14 +124,13 @@ def selectrequest():
     db = get_db()
     cursor = db.cursor()
     cursor.execute("""SELECT nom FROM ville""")
-    return db.fetchall()
+    return cursor.fetchall()
 
 
 def selectruerequest(ville):
     db = get_db()
     cursor = db.cursor()
-    cursor.execute("""SELECT rue.nom FROM rue JOIN ville ON rue.code_postal = ville.code_postal WHERE ville.nom = ?""",
-               (ville,))
-    return db.fetchall()
+    cursor.execute("""SELECT rue.nom FROM rue JOIN ville ON rue.code_postal = ville.code_postal WHERE ville.nom = ?""", (ville,))
+    return cursor.fetchall()
 
 

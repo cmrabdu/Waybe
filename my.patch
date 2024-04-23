@@ -1,0 +1,1748 @@
+diff --git a/.DS_Store b/.DS_Store
+old mode 100644
+new mode 100755
+index 606e71c..d3294a4
+Binary files a/.DS_Store and b/.DS_Store differ
+diff --git a/.gitignore b/.gitignore
+old mode 100644
+new mode 100755
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+old mode 100644
+new mode 100755
+diff --git a/.idea/.gitignore b/.idea/.gitignore
+old mode 100644
+new mode 100755
+diff --git a/.idea/dataSources.xml b/.idea/dataSources.xml
+new file mode 100644
+index 0000000..a665bd6
+--- /dev/null
++++ b/.idea/dataSources.xml
+@@ -0,0 +1,12 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
++    <data-source source="LOCAL" name="test2" uuid="7c918d2f-6e88-4540-a445-de323ed13158">
++      <driver-ref>sqlite.xerial</driver-ref>
++      <synchronize>true</synchronize>
++      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
++      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/mobility/test2.db</jdbc-url>
++      <working-dir>$ProjectFileDir$</working-dir>
++    </data-source>
++  </component>
++</project>
+\ No newline at end of file
+diff --git a/.idea/inspectionProfiles/profiles_settings.xml b/.idea/inspectionProfiles/profiles_settings.xml
+old mode 100644
+new mode 100755
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+old mode 100644
+new mode 100755
+index d735adf..7baa273
+--- a/.idea/misc.xml
++++ b/.idea/misc.xml
+@@ -3,5 +3,8 @@
+   <component name="Black">
+     <option name="sdkName" value="Python 3.12 (website)" />
+   </component>
+-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.12 (website)" project-jdk-type="Python SDK" />
++  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.11 (website)" project-jdk-type="Python SDK" />
++  <component name="PythonCompatibilityInspectionAdvertiser">
++    <option name="version" value="3" />
++  </component>
+ </project>
+\ No newline at end of file
+diff --git a/.idea/modules.xml b/.idea/modules.xml
+old mode 100644
+new mode 100755
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+old mode 100644
+new mode 100755
+diff --git a/.idea/website.iml b/.idea/website.iml
+old mode 100644
+new mode 100755
+index a5162c1..c5a18f1
+--- a/.idea/website.iml
++++ b/.idea/website.iml
+@@ -4,7 +4,7 @@
+     <content url="file://$MODULE_DIR$">
+       <excludeFolder url="file://$MODULE_DIR$/venv" />
+     </content>
+-    <orderEntry type="inheritedJdk" />
++    <orderEntry type="jdk" jdkName="Python 3.11 (website)" jdkType="Python SDK" />
+     <orderEntry type="sourceFolder" forTests="false" />
+   </component>
+   <component name="TemplatesService">
+diff --git a/README.md b/README.md
+old mode 100644
+new mode 100755
+diff --git a/__init__.py b/__init__.py
+new file mode 100755
+index 0000000..e69de29
+diff --git a/docs/image1.png b/docs/image1.png
+old mode 100644
+new mode 100755
+diff --git a/mobility/.DS_Store b/mobility/.DS_Store
+old mode 100644
+new mode 100755
+index 059ffdf..f3d821a
+Binary files a/mobility/.DS_Store and b/mobility/.DS_Store differ
+diff --git a/mobility/__init__.py b/mobility/__init__.py
+index 9e1d3eb..5f89e47 100755
+--- a/mobility/__init__.py
++++ b/mobility/__init__.py
+@@ -1,87 +1,128 @@
+-from flask import Flask, render_template , request
+-import os
+-import sqlite3
+-from .table import all ,requestsville
++from datetime import datetime
++from .db import *
++from flask import Flask, render_template, request
+ 
++from .moon_utils import age, phase, calcul_moonpahse
++from .table import all, requestsville, requestsrue, selectrequest, selectruerequest
+ 
+ app = Flask(__name__)
+ 
+ 
++def create_app(test_config=None):
++    # create and configure the app
++    app = Flask(__name__, instance_relative_config=True)
++    app.config.from_mapping(
++        SECRET_KEY='dev',
++        DATABASE=os.path.join(app.root_path, 'test2.db'),
++    )
+ 
+-# Ensure the instance folder exists
+-try:
+-    os.makedirs(app.instance_path)
+-except OSError:
+-    pass
+-
+-
+-def obtenir_stats_villes():
+-    # Connexion à la base de données SQLite
+-    connexion = sqlite3.connect('test2.db')
+-    db = connexion.cursor()
+-
+-    # Exécutez une requête pour sélectionner toutes les villes
+-    db.execute("SELECT COUNT(*) FROM ville;")
+-    nombre_de_villes = db.fetchone()[0]
+-
+-    # Exécutez une autre requête pour obtenir les noms de toutes les villes
+-    db.execute("SELECT nom FROM ville;")
+-    noms_des_villes = db.fetchall()
+-
+-    # Fermer la connexion à la base de données
+-    connexion.close()
+-
+-    # Retourne les données récupérées
+-    return nombre_de_villes, noms_des_villes
+-
+-
+-# Routes
+-@app.route('/')
+-def home ():
+-    return render_template('home.html')
+-
+-@app.route('/about')
+-def about():
+-    return render_template('about.html', HelloWorld='Hello World')
+-
+-
+-@app.route('/stats')
+-def stats():
+-    print("cc")
+-    result1  = all("nb_rues_par_ville")
+-    result2 = all("nbr_entreVille")
+-    result3 = all("nbr_entreVitesse")
+-    result4 = all("nbr_entreV85")
+-    result5 = all("nbr_entreTraffic")
+-    result6 = all("nbr_entreRue")
+-    result7 = all("cyclable")
+-    return render_template('stats.html', x=result1
+-                           , entreVille=result2, entreVitesse=result3, entreV85=result4,
+-                           entreTraffic=result5, entreRue=result6, qtt_velo=result7)
+-
+-
+-@app.route('/request', methods=['GET', 'POST'])
+-def request_handler():
+-    if request.method == 'POST':
+-        # Récupérer la valeur sélectionnée dans le sélecteur de ville
+-        ville = request.form['ville']
+-        # Faire quelque chose avec la valeur sélectionnée, comme l'afficher
+-        x = requestsville(ville)
+-        return render_template('request.html', ville_request=x)
++    if test_config is None:
++        app.config.from_pyfile("config.py", silent=True)
+     else:
+-        # Afficher le formulaire
+-        return render_template('request.html')
++        app.config.from_mapping(test_config)
++    try:
++        os.makedirs(app.instance_path)
++    except OSError:
++        pass
++    try:
++        with app.app_context():
++            init_data()
++    except database_is_locked:
++        pass
++# Ensure the instance folder exists
++
++
++
++    # Routes
++    @app.route('/')
++    def home():
++        return render_template('home.html')
++
++
++    @app.route('/about')
++    def about():
++        return render_template('about.html', HelloWorld='Hello World')
++
++
++    @app.route('/stats')
++    def stats():
++        result1 = all("nb_rues_par_ville")
++        result2 = all("nbr_entreVille")
++        result3 = all("nbr_entreVitesse")
++        result4 = all("nbr_entreV85")
++        result5 = all("nbr_entreTraffic")
++        result6 = all("nbr_entreRue")
++        result7 = all("cyclable")
++        return render_template('stats.html', x=result1, entreVille=result2, entreVitesse=result3, entreV85=result4,
++                               entreTraffic=result5, entreRue=result6, qtt_velo=result7)
++
++
++    ville_info = None
++
++
++    @app.route('/endrequest')
++    def endrequest():
++        return render_template('endrequest.html', )
++
++
++    @app.route('/request', methods=['GET', 'POST'])
++    def request_handler():
++        global ville_info
++        if request.method == 'POST':
++            # Récupérer la valeur sélectionnée dans le sélecteur de ville
++            ville_info = request.form['ville']
++            # Faire quelque chose avec la valeur sélectionnée, comme l'afficher
++            x = requestsville(ville_info)
++            rue = selectruerequest(ville_info)
++            return render_template('nextrequest.html', ville_request=x, rue=rue)
++
++        else:
++            ville = selectrequest()
++            return render_template('request.html', ville=ville)
++
++
++    @app.route('/nextrequest', methods=['GET', 'POST'])
++    def nextrequest():
++        rue = selectruerequest(ville_info)
++        if request.method == 'POST':
++            rue_info = request.form.get('rue')
++            # Faire quelque chose avec la valeur sélectionnée, comme l'afficher
++            x = requestsrue(rue_info, ville_info)
++            return render_template('endrequest.html', x=x)
++        else:
++            return render_template('nextrequest.html', rue=rue)
++
++
++    @app.route('/moon')
++    def moon_phase_view():
++        date_voulu = datetime(2004, 4, 23)  # datetime.now()  #date de aujourd'hui (peux mettre une date fixe aussi)
++        date_reference = datetime(2000, 1, 5)
++
++        age_lune = moon_utils.age(date_voulu, date_reference)
++        phase_lune = moon_utils.phase(age_lune)
+ 
++        # pour associer phases to images
++        images = {
++            'NEW_MOON': 'NEW_MOON.png',
++            'WAXING_CRESCENT': 'WAXING_CRESCENT.png',
++            'FIRST_QUARTER': 'FIRST_QUARTER.png',
++            'WAXING_GIBBOUS': 'WAXING_GIBBOUS.png',
++            'FULL_MOON': 'FULL_MOON.png',
++            'WANING_GIBBOUS': 'WANING_GIBBOUS.png',
++            'LAST_QUARTER': 'LAST_QUARTER.png',
++            'WANING_CRESCENT': 'WANING_CRESCENT.png',
++        }
+ 
++        moon_image = images[phase_lune.name]
+ 
+-@app.route('/moon')
+-def moon():
+-    return render_template('moon.html', noah='hello world')
++        return render_template('moon.html', age_lune=age_lune, moon_phase=phase_lune.name, moon_image=moon_image, smur=calcul_moonpahse()[1],
++                               sump=calcul_moonpahse()[0])
+ 
+-@app.route('/base')
+-def base():
+-    return render_template('base.html.html', noah='hello world')
+ 
++    @app.route('/base')
++    def base():
++        return render_template('base.html', noah='hello world')
++    return app
+ 
+ 
+ if __name__ == "__main__":
+diff --git a/mobility/city.py b/mobility/city.py
+deleted file mode 100644
+index f2b98a4..0000000
+--- a/mobility/city.py
++++ /dev/null
+@@ -1,12 +0,0 @@
+-from flask import (
+-    Blueprint, render_template
+-)
+-
+-bp = Blueprint('city', __name__)
+-
+-
+-# Define the routes code
+-@bp.route('/')
+-def city_list():
+-    cities = [(5000, "Namur", 496891), (1000, "Bruxelles", 1290000)]
+-    return render_template("base.html", cities=cities)
+diff --git a/mobility/database-sql/tableaux.sql b/mobility/database-sql/tableaux.sql
+old mode 100644
+new mode 100755
+diff --git a/mobility/db.py b/mobility/db.py
+old mode 100644
+new mode 100755
+index 73ac7ea..3f2cbbc
+--- a/mobility/db.py
++++ b/mobility/db.py
+@@ -1,45 +1,158 @@
+ import sqlite3
++import os
+ from flask import current_app, g
+-
++filename = os.path.join('ugly.csv')
+ def get_db():
++
+     """Returns the database connection. Create the connection if needed.
+ 
+     Returns:
+         db: The db connection to be used for SQL functions
+     """
+-
+-    #g is the shorthand for "globals" and allows registering available in the whole Flask app
++    # g is the shorthand for "globals" and allows registering available in the whole Flask app
+     if 'db' not in g:
+-        #If it's not there, let's create the db connection
++        # If it's not there, let's create the db connection
+         g.db = sqlite3.connect(
+             current_app.config['DATABASE'],
+-            detect_types=sqlite3.PARSE_DECLTYPES
+-        )
+-        print(current_app.config['DATABASE'])
+-
++            detect_types=sqlite3.PARSE_DECLTYPES)
+         # Instead of getting "tuple" out of queries, we'll get dictionaries of column->value
+         g.db.row_factory = sqlite3.Row
+-
+-
++    print("db")
+     return g.db
+ 
+ def close_db(e=None):
+-    """Close the database
+-
+-    Args:
+-        e: unused
+-    """
+     db = g.pop('db', None)
+-
+     if db is not None:
+         db.close()
+ 
+-def init_app(app):
+-    """To be called when an app is initialized
+ 
+-    Asks to call close_db when the app is closed
+-    Args:
+-        app: the application context
+-    """
+-    app.teardown_appcontext(close_db)
++
++
++
++
++def init_data():
++    db = get_db()
++    cursor = db.cursor()
++    print("test1")
++    try:
++        print("testok")
++        # Création de la table "ville" dans la base de données
++        cursor.execute("DROP TABLE IF EXISTS ville;")
++        cursor.execute(""" CREATE TABLE IF NOT EXISTS ville (
++                   code_postal INTEGER NOT NULL PRIMARY KEY ,
++                   nom TEXT NOT NULL,
++                   population INTEGER NOT NULL
++                   );""")
++
++        # Création de la table "rue" dans la base de données
++        cursor.execute("DROP TABLE IF EXISTS rue;")
++        cursor.execute("""CREATE TABLE IF NOT EXISTS rue (
++            rue_id INTEGER NOT NULL PRIMARY KEY,
++            nom TEXT NOT NULL,
++            code_postal INTEGER NOT NULL,
++            FOREIGN KEY (code_postal) REFERENCES ville(code_postal)
++        );""")
++
++        # Création de la table "vitesse" dans la base de données
++        cursor.execute("DROP TABLE IF EXISTS vitesse;")
++        cursor.execute("""CREATE TABLE IF NOT EXISTS vitesse (
++            rue_id INTEGER NOT NULL,
++            date TEXT NOT NULL, 
++            tranche_de_vitesse INTEGER NOT NULL,
++            proportion REAL NOT NULL,
++            PRIMARY KEY (rue_id,tranche_de_vitesse,date),
++            FOREIGN KEY(rue_id) REFERENCES rue(rue_id)
++        );""")
++
++        # Création de la table "v85" dans la base de données
++        cursor.execute("DROP TABLE IF EXISTS v85;")
++        cursor.execute("""CREATE TABLE IF NOT EXISTS v85 (
++            rue_id INTEGER NOT NULL,
++            date TEXT NOT NULL,
++            v85 REAL,
++            PRIMARY KEY(rue_id,date),
++            FOREIGN KEY (rue_id) REFERENCES rue(rue_id)
++        );""")
++
++        # Création de la table "traffic" dans la base de données
++        cursor.execute("DROP TABLE IF EXISTS traffic;")
++        cursor.execute("""CREATE TABLE IF NOT EXISTS traffic (
++            rue_id INTEGER NOT NULL,
++            date TEXT NOT NULL,
++            type_vehicule TEXT NOT NULL,
++            nb_vehicules INTEGER NOT NULL,
++            FOREIGN KEY (rue_id) REFERENCES rue(rue_id),
++            PRIMARY KEY (rue_id,type_vehicule,date)
++        );""")
++        start = 0
++        # Ouverture et traitement du fichier CSV
++        with open(filename) as fichier:
++            populationdico = {"Liege": 197325, "Bruxelles": 1208542, "Namur": 113174, "Charleroi": 203845,
++                              "Grobbendonk": 11442,
++                              "Herzele": 19000, "Jambes": 20125, "Courtrai": 78841, "beveren": 48000}
++            tranches_par_5 = [
++                "0-5", "5-10", "10-15", "15-20", "20-25",
++                "25-30", "30-35", "35-40", "40-45", "45-50",
++                "50-55", "55-60", "60-65", "65-70", "70-75",
++                "75-80", "80-85", "85-90", "90-95", "95-100",
++                "100-105", "105-110", "110-115", "115-120"
++            ]
++            for line in fichier:
++                if start != 0:
++                    list1 = line.split(",")
++                    histoliste = list1[18:42]
++                    histoliste[-1] = histoliste[-1].strip("""""[']""")
++                    population = populationdico[list1[0]]
++
++                    # Vérification de l'existence de la rue dans la base de données et insertion si elle n'existe pas
++                    cursor.execute("SELECT rue_id FROM rue WHERE rue_id = ?", (list1[3],))
++                    existing_rue = cursor.fetchone()
++                    if existing_rue is None:
++                        cursor.execute("""INSERT INTO rue('rue_id','nom','code_postal')
++                        VALUES(?,?,?);""", (list1[3], list1[2], list1[1]))
++
++                    # Vérification de l'existence de la ville dans la base de données et insertion si elle n'existe pas
++                    cursor.execute("SELECT code_postal FROM ville WHERE code_postal = ?", (list1[1],))
++                    existing_ville = cursor.fetchone()
++                    if existing_ville is None:
++                        cursor.execute("""INSERT INTO ville('code_postal','nom','population')
++                                    VALUES(?,?,?);""", (list1[1], list1[0], population))
++
++                    # Insertion des données de vitesse dans la table "vitesse"
++                    for tranche in range(0, 24):
++                        cursor.execute(
++                            "SELECT rue_id AND date AND tranche_de_vitesse FROM vitesse WHERE rue_id = ? AND date = ? AND tranche_de_vitesse = ?",
++                            (list1[3], list1[4], tranches_par_5[tranche]))
++                        existing_vitesse = cursor.fetchone()
++                        if existing_vitesse is None:
++                            cursor.execute("""INSERT INTO vitesse('rue_id','date','tranche_de_vitesse', 'proportion')
++                            VALUES(?,?,?,?);""", (list1[3], list1[4], tranches_par_5[tranche], float(histoliste[tranche])))
++
++                    # Insertion des données de v85 dans la table "v85"
++                    cursor.execute("SELECT rue_id AND date FROM v85 WHERE rue_id = ? AND date = ?", (list1[3], list1[4]))
++                    existing_v85 = cursor.fetchone()
++                    if existing_v85 is None:
++                        cursor.execute("""INSERT INTO v85('rue_id','date','v85')
++                        VALUES(?,?,?);""", (list1[3], list1[4], list1[-1]))
++
++                    # Insertion des données de trafic dans la table "traffic"
++                    types_vehicules = ["lourd", "voiture", "velo", "pieton"]
++                    valeur_vehicules = list1[5:9]
++                    for select in range(0, 4):
++                        cursor.execute(
++                            "SELECT rue_id AND date AND type_vehicule FROM traffic WHERE rue_id = ? AND date = ? AND type_vehicule = ?",
++                            (list1[3], list1[4], types_vehicules[select]))
++                        existing_traffic = cursor.fetchone()
++                        if existing_traffic is None:
++                            cursor.execute("""INSERT INTO traffic('rue_id','date','type_vehicule', 'nb_vehicules')
++                            VALUES(?,?,?,?);""", (list1[3], list1[4], types_vehicules[select], valeur_vehicules[select]))
++                start = 1
++        db.commit()
++    except Exception as e:
++        pass
++    finally:
++        db.close()
++        cursor.close()
++
++
+ 
+diff --git a/mobility/java.js b/mobility/java.js
+old mode 100644
+new mode 100755
+diff --git a/mobility/models/__init__.py b/mobility/models/__init__.py
+old mode 100644
+new mode 100755
+diff --git a/mobility/moon_utils.py b/mobility/moon_utils.py
+old mode 100644
+new mode 100755
+index 10bcfaf..3e4be9b
+--- a/mobility/moon_utils.py
++++ b/mobility/moon_utils.py
+@@ -1,22 +1,10 @@
++from datetime import datetime
+ from enum import Enum
+-import datetime
+ 
++from .table import abdu
+ 
+-def age(date):
+ 
+-    reference_date = datetime.datetime(1900, 1, 1)
+-
+-
+-    date = datetime.datetime.strptime(date, "%Y-%m-%d")
+-
+-    days_since_reference = (date - reference_date).days
+-
+-
+-    moon_age = days_since_reference % 29.53059
+-
+-    return moon_age
+-
+-class MoonPhase(Enum):
++class MoonPhase(Enum):  # classe Moon Phase, cours chap 9
+     NEW_MOON = 0
+     WAXING_CRESCENT = 1
+     FIRST_QUARTER = 2
+@@ -25,3 +13,73 @@ class MoonPhase(Enum):
+     WANING_GIBBOUS = 5
+     LAST_QUARTER = 6
+     WANING_CRESCENT = 7
++
++
++date_reference = datetime(2000, 1, 5)
++
++
++def age(date_voulu, date_reference):
++    diff_jour = (date_voulu - date_reference).days  # jour demandé - jour de pleine lune connue
++    age_lune = diff_jour % 29.53059  # nmbr de jour entre chaque pleine lune, cours chap 9 (algo proposé)
++    return age_lune
++
++
++def phase(age_lune):  # 7.38 --> différence de jours entre chaque cycle, mais a affiner pour etre plus précis
++    if 0 <= age_lune < 1.38:
++        return MoonPhase.NEW_MOON
++    if 1.38 <= age_lune < 2.78:
++        return MoonPhase.WAXING_CRESCENT
++    elif 2.78 <= age_lune < 3.76:
++        return MoonPhase.FIRST_QUARTER
++    elif 3.76 <= age_lune < 4.14:
++        return MoonPhase.WAXING_GIBBOUS
++    elif 4.14 <= age_lune < 5.78:
++        return MoonPhase.FULL_MOON
++    elif 5.78 <= age_lune < 6.38:
++        return MoonPhase.WANING_GIBBOUS
++    elif 6.38 <= age_lune < 7.58:
++        return MoonPhase.LAST_QUARTER
++    else:
++        return MoonPhase.WANING_CRESCENT
++
++
++
++def calcul_moonpahse():
++    data = abdu()
++
++    # Initialisation des listes
++    pleine_lune = []
++    pas_pleine_lune = []
++
++    # Parcourir les données et classer en fonction de la pleine lune
++    for date, velo in data:
++        year, month, day = date.split('-')
++        date_voulu = datetime(int(year), int(month), int(day))
++
++        ager = age(date_voulu, date_reference)
++        phase_lune = phase(ager)
++        if phase_lune == MoonPhase.FULL_MOON:
++            pleine_lune.append((date, velo))
++
++        else:
++            pas_pleine_lune.append((date, velo))
++
++    sumt=0
++    for date, velo in data:
++        sumt = sumt + velo
++
++    # jour ou y a la lune
++    sump = 0
++    for date, velo in pleine_lune:
++        sump = sump + velo
++
++    sump = round(sump / len(pleine_lune))
++
++    sumr = 0
++    for date, velo in pas_pleine_lune:
++        sumr = sumr + velo
++
++
++    sumr = round(sumr / len(pas_pleine_lune))
++
++    return sump, sumr
+diff --git a/mobility/schema.sql b/mobility/schema.sql
+new file mode 100755
+index 0000000..df745b5
+--- /dev/null
++++ b/mobility/schema.sql
+@@ -0,0 +1,43 @@
++DROP TABLE IF EXISTS ville;
++CREATE TABLE IF NOT EXISTS ville (
++    code_postal INTEGER NOT NULL PRIMARY KEY,
++    nom TEXT NOT NULL,
++    population INTEGER NOT NULL
++);
++
++DROP TABLE IF EXISTS rue;
++CREATE TABLE IF NOT EXISTS rue (
++    rue_id INTEGER NOT NULL PRIMARY KEY,
++    nom TEXT NOT NULL,
++    code_postal INTEGER NOT NULL,
++    FOREIGN KEY (code_postal) REFERENCES ville(code_postal)
++);
++
++DROP TABLE IF EXISTS vitesse;
++CREATE TABLE IF NOT EXISTS vitesse (
++    rue_id INTEGER NOT NULL,
++    date TEXT NOT NULL,
++    tranche_de_vitesse INTEGER NOT NULL,
++    proportion REAL NOT NULL,
++    PRIMARY KEY (rue_id, tranche_de_vitesse, date),
++    FOREIGN KEY (rue_id) REFERENCES rue(rue_id)
++);
++
++DROP TABLE IF EXISTS v85;
++CREATE TABLE IF NOT EXISTS v85 (
++    rue_id INTEGER NOT NULL,
++    date TEXT NOT NULL,
++    v85 REAL,
++    PRIMARY KEY (rue_id, date),
++    FOREIGN KEY (rue_id) REFERENCES rue(rue_id)
++);
++
++DROP TABLE IF EXISTS traffic;
++CREATE TABLE IF NOT EXISTS traffic (
++    rue_id INTEGER NOT NULL,
++    date TEXT NOT NULL,
++    type_vehicule TEXT NOT NULL,
++    nb_vehicules INTEGER NOT NULL,
++    FOREIGN KEY (rue_id) REFERENCES rue(rue_id),
++    PRIMARY KEY (rue_id, type_vehicule, date)
++);
+\ No newline at end of file
+diff --git a/mobility/static/.DS_Store b/mobility/static/.DS_Store
+old mode 100644
+new mode 100755
+index 0ac434c..06d30a8
+Binary files a/mobility/static/.DS_Store and b/mobility/static/.DS_Store differ
+diff --git a/mobility/static/2306080_b674e.gif b/mobility/static/2306080_b674e.gif
+old mode 100644
+new mode 100755
+diff --git a/mobility/static/abdu.png b/mobility/static/abdu.png
+old mode 100644
+new mode 100755
+diff --git a/mobility/static/backg.gif b/mobility/static/backg.gif
+old mode 100644
+new mode 100755
+diff --git a/mobility/static/background-cadre.png b/mobility/static/background-cadre.png
+old mode 100644
+new mode 100755
+diff --git a/mobility/static/cards.png b/mobility/static/cards.png
+old mode 100644
+new mode 100755
+diff --git a/mobility/static/cons.gif b/mobility/static/cons.gif
+old mode 100644
+new mode 100755
+diff --git a/mobility/static/cp.png b/mobility/static/cp.png
+old mode 100644
+new mode 100755
+diff --git a/mobility/static/cp2.png b/mobility/static/cp2.png
+old mode 100644
+new mode 100755
+diff --git a/mobility/static/favicon.ico b/mobility/static/favicon.ico
+old mode 100644
+new mode 100755
+diff --git a/mobility/static/guigui.png b/mobility/static/guigui.png
+old mode 100644
+new mode 100755
+diff --git a/mobility/static/heart.png b/mobility/static/heart.png
+old mode 100644
+new mode 100755
+diff --git a/mobility/static/heart.webp b/mobility/static/heart.webp
+old mode 100644
+new mode 100755
+diff --git a/mobility/static/houari.png b/mobility/static/houari.png
+old mode 100644
+new mode 100755
+diff --git a/mobility/static/images/.DS_Store b/mobility/static/images/.DS_Store
+new file mode 100755
+index 0000000..0b246f0
+Binary files /dev/null and b/mobility/static/images/.DS_Store differ
+diff --git a/mobility/static/images/FIRST_QUARTER.png b/mobility/static/images/FIRST_QUARTER.png
+new file mode 100755
+index 0000000..11a9934
+Binary files /dev/null and b/mobility/static/images/FIRST_QUARTER.png differ
+diff --git a/mobility/static/images/FULL_MOON.png b/mobility/static/images/FULL_MOON.png
+new file mode 100755
+index 0000000..345bb10
+Binary files /dev/null and b/mobility/static/images/FULL_MOON.png differ
+diff --git a/mobility/static/images/LAST_QUARTER.png b/mobility/static/images/LAST_QUARTER.png
+new file mode 100755
+index 0000000..efff948
+Binary files /dev/null and b/mobility/static/images/LAST_QUARTER.png differ
+diff --git a/mobility/static/images/NEW_MOON.png b/mobility/static/images/NEW_MOON.png
+new file mode 100755
+index 0000000..145e1cf
+Binary files /dev/null and b/mobility/static/images/NEW_MOON.png differ
+diff --git a/mobility/static/images/WANING_CRESCE.png b/mobility/static/images/WANING_CRESCE.png
+new file mode 100755
+index 0000000..3bc9df6
+Binary files /dev/null and b/mobility/static/images/WANING_CRESCE.png differ
+diff --git a/mobility/static/images/WANING_GIBBOU.png b/mobility/static/images/WANING_GIBBOU.png
+new file mode 100755
+index 0000000..00a1fb1
+Binary files /dev/null and b/mobility/static/images/WANING_GIBBOU.png differ
+diff --git a/mobility/static/images/WAXING_CRESCE.png b/mobility/static/images/WAXING_CRESCE.png
+new file mode 100755
+index 0000000..916839f
+Binary files /dev/null and b/mobility/static/images/WAXING_CRESCE.png differ
+diff --git a/mobility/static/images/WAXING_GIBBOU.png b/mobility/static/images/WAXING_GIBBOU.png
+new file mode 100755
+index 0000000..ac2e3b7
+Binary files /dev/null and b/mobility/static/images/WAXING_GIBBOU.png differ
+diff --git a/mobility/static/logo_main_page.png b/mobility/static/logo_main_page.png
+old mode 100644
+new mode 100755
+diff --git a/mobility/static/mp3_lecteur_background.png b/mobility/static/mp3_lecteur_background.png
+old mode 100644
+new mode 100755
+diff --git a/mobility/static/mp3_lecteur_background_calque.png b/mobility/static/mp3_lecteur_background_calque.png
+old mode 100644
+new mode 100755
+diff --git a/mobility/static/noah.png b/mobility/static/noah.png
+old mode 100644
+new mode 100755
+diff --git a/mobility/static/pause_button.png b/mobility/static/pause_button.png
+new file mode 100755
+index 0000000..112f3be
+Binary files /dev/null and b/mobility/static/pause_button.png differ
+diff --git a/mobility/static/pause_button.png.png b/mobility/static/pause_button.png.png
+deleted file mode 100644
+index 789aae3..0000000
+Binary files a/mobility/static/pause_button.png.png and /dev/null differ
+diff --git a/mobility/static/pink_car.png b/mobility/static/pink_car.png
+old mode 100644
+new mode 100755
+diff --git a/mobility/static/play_button.png b/mobility/static/play_button.png
+new file mode 100755
+index 0000000..5abd111
+Binary files /dev/null and b/mobility/static/play_button.png differ
+diff --git a/mobility/static/play_button.png.png b/mobility/static/play_button.png.png
+deleted file mode 100644
+index 371a2e4..0000000
+Binary files a/mobility/static/play_button.png.png and /dev/null differ
+diff --git a/mobility/static/stars.png b/mobility/static/stars.png
+old mode 100644
+new mode 100755
+diff --git a/mobility/static/stars2.png b/mobility/static/stars2.png
+old mode 100644
+new mode 100755
+diff --git a/mobility/static/style.css b/mobility/static/style.css
+old mode 100644
+new mode 100755
+index 174be46..05f7cff
+--- a/mobility/static/style.css
++++ b/mobility/static/style.css
+@@ -503,14 +503,15 @@ table th, table td {
+ 
+ #play-button, #pause-button {
+     position: absolute;
+-    top: 135px; /* Ajustez cette valeur pour positionner verticalement */
+-    left: 60px; /* Ajustez cette valeur pour positionner horizontalement */
+-    width: 20x; /* Ajustez la taille du bouton si nécessaire */
+-    height: 90px; /* Assurez-vous que la hauteur correspond à la taille de l'image */
++    top: 102px; /* Ajustez cette valeur pour positionner verticalement */
++    left: 27px; /* Ajustez cette valeur pour positionner horizontalement */
++    width: 100x; /* Ajustez la taille du bouton si nÃ©cessaire */
++    height: 150px; /* Assurez-vous que la hauteur correspond Ã  la taille de l'image */
+     cursor: pointer; /* Change le curseur au survol */
+-    z-index: 5; /* Assurez-vous que les boutons sont au-dessus des autres éléments */
++    z-index: 5; /* Assurez-vous que les boutons sont au-dessus des autres Ã©lÃ©ments */
+ }
+ 
++
+ .container {
+     position: relative;
+     width: 640px; /* Ajustez à la largeur de votre image de fond si différente */
+@@ -533,15 +534,15 @@ table th, table td {
+ }
+ 
+ 
+-        .nbr_rue-container {
+-            margin-left: 30px;
+-            font-size: 30px;
+-            display: flex;
++.nbr_rue-container {
++    margin-left: 30px;
++    font-family: 'Nouveau IBM Stretch', sans-serif;
++    font-size: 35px;
++    display: flex;
++        }
++.nbr_rue-container2 {
++    font-family: 'Nouveau IBM Stretch', sans-serif;
++    font-size: 25px;
++    display: flex;
+         }
+ 
+-        /* Pour espacer légèrement les divs */
+-        .nbr_rue {
+-            background-color: #fa55f5;
+-            background-size: cover;
+-            margin-right: 100px;
+-        }
+\ No newline at end of file
+diff --git a/mobility/static/titre.png b/mobility/static/titre.png
+old mode 100644
+new mode 100755
+diff --git a/mobility/static/tk.mp3 b/mobility/static/tk.mp3
+old mode 100644
+new mode 100755
+diff --git a/mobility/static/tk2.mp3 b/mobility/static/tk2.mp3
+new file mode 100755
+index 0000000..06589dd
+Binary files /dev/null and b/mobility/static/tk2.mp3 differ
+diff --git a/mobility/static/way_be_pokemon_pink.png b/mobility/static/way_be_pokemon_pink.png
+old mode 100644
+new mode 100755
+diff --git a/mobility/static/way_be_pokemon_yellow.png b/mobility/static/way_be_pokemon_yellow.png
+old mode 100644
+new mode 100755
+diff --git a/mobility/static/wheels.png b/mobility/static/wheels.png
+old mode 100644
+new mode 100755
+diff --git a/mobility/table.py b/mobility/table.py
+old mode 100644
+new mode 100755
+index d48d44d..9a3151c
+--- a/mobility/table.py
++++ b/mobility/table.py
+@@ -1,189 +1,137 @@
+-import sqlite3
+-import ast
+-import csv
+-
++from .db import get_db
++DATABASE_PATH = 'test2.db'
+ # Connexion à la base de données SQLite
+-connexion = sqlite3.connect('test2.db', check_same_thread=False)
+-db = connexion.cursor()
+-
+-# Création de la table "ville" dans la base de données
+-db.execute("DROP TABLE IF EXISTS ville;")
+-db.execute(""" CREATE TABLE IF NOT EXISTS ville (
+-           code_postal INTEGER NOT NULL PRIMARY KEY ,
+-           nom TEXT NOT NULL,
+-           population INTEGER NOT NULL
+-           );""")
+-
+-# Création de la table "rue" dans la base de données
+-db.execute("DROP TABLE IF EXISTS rue;")
+-db.execute("""CREATE TABLE IF NOT EXISTS rue (
+-    rue_id INTEGER NOT NULL PRIMARY KEY,
+-    nom TEXT NOT NULL,
+-    code_postal INTEGER NOT NULL,
+-    FOREIGN KEY (code_postal) REFERENCES ville(code_postal)
+-);""")
+-
+-# Création de la table "vitesse" dans la base de données
+-db.execute("DROP TABLE IF EXISTS vitesse;")
+-db.execute("""CREATE TABLE IF NOT EXISTS vitesse (
+-    rue_id INTEGER NOT NULL,
+-    date TEXT NOT NULL, 
+-    tranche_de_vitesse INTEGER NOT NULL,
+-    proportion REAL NOT NULL,
+-    PRIMARY KEY (rue_id,tranche_de_vitesse,date),
+-    FOREIGN KEY(rue_id) REFERENCES rue(rue_id)
+-);""")
+-
+-# Création de la table "v85" dans la base de données
+-db.execute("DROP TABLE IF EXISTS v85;")
+-db.execute("""CREATE TABLE IF NOT EXISTS v85 (
+-    rue_id INTEGER NOT NULL,
+-    date TEXT NOT NULL,
+-    v85 REAL,
+-    PRIMARY KEY(rue_id,date),
+-    FOREIGN KEY (rue_id) REFERENCES rue(rue_id)
+-);""")
+-
+-# Création de la table "traffic" dans la base de données
+-db.execute("DROP TABLE IF EXISTS traffic;")
+-db.execute("""CREATE TABLE IF NOT EXISTS traffic (
+-    rue_id INTEGER NOT NULL,
+-    date TEXT NOT NULL,
+-    type_vehicule TEXT NOT NULL,
+-    nb_vehicules INTEGER NOT NULL,
+-    FOREIGN KEY (rue_id) REFERENCES rue(rue_id),
+-    PRIMARY KEY (rue_id,type_vehicule,date)
+-);""")
+-
+ # Chemin vers le fichier CSV contenant les données
+-filename = "mobility/ugly.csv"
+-start = 0
+-
+-# Ouverture et traitement du fichier CSV
+-with open(filename) as fichier:
+-    populationdico = {"Liege": 197325, "Bruxelles": 1208542, "Namur": 113174, "Charleroi": 203845, "Grobbendonk": 11442,
+-                      "Herzele": 19000, "Jambes": 20125, "Courtrai": 78841, "beveren": 48000}
+-    tranches_par_5 = [
+-        "0-5", "5-10", "10-15", "15-20", "20-25",
+-        "25-30", "30-35", "35-40", "40-45", "45-50",
+-        "50-55", "55-60", "60-65", "65-70", "70-75",
+-        "75-80", "80-85", "85-90", "90-95", "95-100",
+-        "100-105", "105-110", "110-115", "115-120"
+-    ]
+-    for line in fichier:
+-        if start != 0:
+-            list = line.split(",")
+-            histoliste = list[18:42]
+-            histoliste[-1] = histoliste[-1].strip("""""[']""")
+-            population = populationdico[list[0]]
+-
+-            # Vérification de l'existence de la rue dans la base de données et insertion si elle n'existe pas
+-            db.execute("SELECT rue_id FROM rue WHERE rue_id = ?", (list[3],))
+-            existing_rue = db.fetchone()
+-            if existing_rue is None:
+-                db.execute("""INSERT INTO rue('rue_id','nom','code_postal')
+-                VALUES(?,?,?);""", (list[3], list[2], list[1]))
+-
+-            # Vérification de l'existence de la ville dans la base de données et insertion si elle n'existe pas
+-            db.execute("SELECT code_postal FROM ville WHERE code_postal = ?", (list[1],))
+-            existing_ville = db.fetchone()
+-            if existing_ville is None:
+-                db.execute("""INSERT INTO ville('code_postal','nom','population')
+-                            VALUES(?,?,?);""", (list[1], list[0], population))
+-
+-            # Insertion des données de vitesse dans la table "vitesse"
+-            for tranche in range(0, 24):
+-                db.execute(
+-                    "SELECT rue_id AND date AND tranche_de_vitesse FROM vitesse WHERE rue_id = ? AND date = ? AND tranche_de_vitesse = ?",
+-                    (list[3], list[4], tranches_par_5[tranche]))
+-                existing_vitesse = db.fetchone()
+-                if existing_vitesse is None:
+-                    db.execute("""INSERT INTO vitesse('rue_id','date','tranche_de_vitesse', 'proportion')
+-                    VALUES(?,?,?,?);""", (list[3], list[4], tranches_par_5[tranche], float(histoliste[tranche])))
+-
+-            # Insertion des données de v85 dans la table "v85"
+-            db.execute("SELECT rue_id AND date FROM v85 WHERE rue_id = ? AND date = ?", (list[3], list[4]))
+-            existing_v85 = db.fetchone()
+-            if existing_v85 is None:
+-                db.execute("""INSERT INTO v85('rue_id','date','v85')
+-                VALUES(?,?,?);""", (list[3], list[4], list[-1]))
+-
+-            # Insertion des données de trafic dans la table "traffic"
+-            types_vehicules = ["lourd", "voiture", "velo", "pieton"]
+-            valeur_vehicules = list[5:9]
+-            for select in range(0, 4):
+-                db.execute("SELECT rue_id AND date AND type_vehicule FROM traffic WHERE rue_id = ? AND date = ? AND type_vehicule = ?",
+-                    (list[3], list[4], types_vehicules[select]))
+-                existing_traffic = db.fetchone()
+-                if existing_traffic is None:
+-                    db.execute("""INSERT INTO traffic('rue_id','date','type_vehicule', 'nb_vehicules')
+-                    VALUES(?,?,?,?);""", (list[3], list[4], types_vehicules[select], valeur_vehicules[select]))
+-        start = 1
++
++
++
++
++
++def abdu():
++    db = get_db()
++    cursor = db.cursor()
++    cursor.execute("""SELECT DISTINCT strftime('%Y-%m-%d', date), SUM(nb_vehicules) FROM traffic GROUP BY strftime('%Y-%m-%d', date)""")
++    return cursor.fetchall()
+ 
+ 
+ def all(x):
++    db = get_db()
++    cursor = db.cursor()
+     if x == "nb_rues_par_ville":
+-        db.execute("""SELECT ville.nom, COUNT(rue_id) FROM rue JOIN ville on ville.code_postal = rue.code_postal""")
+-        return db.fetchall()
++        cursor.execute("""SELECT ville.nom, COUNT(rue_id) FROM rue JOIN ville on ville.code_postal = rue.code_postal GROUP BY ville.nom""")
++        return cursor.fetchall()
+     if x == "nbr_entreVille":
+-        db.execute("""SELECT COUNT(*) FROM ville""")
++        cursor.execute("""SELECT COUNT(*) FROM ville""")
+         return db.fetchall()
+     if x == "nbr_entreVitesse":
+-        db.execute("""SELECT COUNT(*) FROM vitesse""")
++        cursor.execute("""SELECT COUNT(*) FROM vitesse""")
+         return db.fetchall()
+     if x == "nbr_entreV85":
+-        db.execute("""SELECT COUNT(*) FROM v85""")
++        cursor.execute("""SELECT COUNT(*) FROM v85""")
+         return db.fetchall()
+     if x == "nbr_entreTraffic":
+-        db.execute("""SELECT COUNT(*) FROM traffic""")
++        cursor.execute("""SELECT COUNT(*) FROM traffic""")
+         return db.fetchall()
+     if x == "nbr_entreRue":
+-        db.execute("""SELECT COUNT(*) FROM rue""")
++        cursor.execute("""SELECT COUNT(*) FROM rue""")
+         return db.fetchall()
+     if x == "nb_rues_par_ville":
+-        db.execute("""SELECT ville.nom, COUNT(rue.rue_id) FROM ville JOIN rue on ville.code_postal = rue.code_postal GROUP BY ville.nom""")
++        cursor.execute(
++            """SELECT ville.nom, COUNT(rue.rue_id) FROM ville JOIN rue on ville.code_postal = rue.code_postal GROUP BY ville.nom""")
+         return db.fetchall()
+     if x == "cyclable":
+-        db.execute("""SELECT ville.nom, ville.population, SUM(nb_vehicules)/population FROM traffic JOIN rue on traffic.rue_id = rue.rue_id JOIN ville on rue.code_postal = ville.code_postal WHERE type_vehicule = 'velo' GROUP BY ville.nom""")
++        cursor.execute(
++            """SELECT ville.nom, ville.population, round(SUM(nb_vehicules)/population, 2) FROM traffic JOIN rue on traffic.rue_id = rue.rue_id JOIN ville on rue.code_postal = ville.code_postal WHERE type_vehicule = 'velo' GROUP BY ville.nom ORDER BY SUM(nb_vehicules) DESC;""")
+         return db.fetchall()
++
++
+ def requestsville(x):
+-    db.execute("""SELECT code_postal FROM ville WHERE nom = ?""", (x,))
++    db = get_db()
++    cursor = db.cursor()
++    cursor.execute("""SELECT code_postal FROM ville WHERE nom = ?""", (x,))
+     cprequest = db.fetchall()
+     cprequest = cprequest[0][0]
+-    db.execute("""SELECT rue_id FROM rue WHERE rue.code_postal = ?""",(cprequest,))
++    cursor.execute("""SELECT rue_id FROM rue WHERE rue.code_postal = ?""", (cprequest,))
+     totallourd = 0
+     totalvelo = 0
+     totalpieton = 0
+     totalvoiture = 0
+     listeRI = db.fetchall()
+     for i in range(len(listeRI)):
+-        db.execute("""SELECT SUM(nb_vehicules) FROM traffic WHERE traffic.rue_id = ? AND traffic.type_vehicule = 'lourd'""",(listeRI[i][0],))
++        cursor.execute(
++            """SELECT SUM(nb_vehicules) FROM traffic WHERE traffic.rue_id = ? AND traffic.type_vehicule = 'lourd'""",
++            (listeRI[i][0],))
+         x = db.fetchall()
+         totallourd = totallourd + x[0][0]
+-        db.execute("""SELECT SUM(nb_vehicules) FROM traffic WHERE traffic.rue_id = ? AND traffic.type_vehicule = 'pieton'""",(listeRI[i][0],))
++        cursor.execute(
++            """SELECT SUM(nb_vehicules) FROM traffic WHERE traffic.rue_id = ? AND traffic.type_vehicule = 'pieton'""",
++            (listeRI[i][0],))
+         x = db.fetchall()
+         totalpieton = totalpieton + x[0][0]
+-        db.execute("""SELECT SUM(nb_vehicules) FROM traffic WHERE traffic.rue_id = ? AND traffic.type_vehicule = 'voiture'""",(listeRI[i][0],))
++        cursor.execute(
++            """SELECT SUM(nb_vehicules) FROM traffic WHERE traffic.rue_id = ? AND traffic.type_vehicule = 'voiture'""",
++            (listeRI[i][0],))
+         x = db.fetchall()
+         totalvoiture = totalvoiture + x[0][0]
+-        db.execute("""SELECT SUM(nb_vehicules) FROM traffic WHERE traffic.rue_id = ? AND traffic.type_vehicule = 'velo'""",(listeRI[i][0],))
++        cursor.execute(
++            """SELECT SUM(nb_vehicules) FROM traffic WHERE traffic.rue_id = ? AND traffic.type_vehicule = 'velo'""",
++            (listeRI[i][0],))
+         x = db.fetchall()
+         totalvelo = totalvelo + x[0][0]
+     total = totalvelo + totallourd + totalpieton + totalvoiture
+-    totallourd = (totallourd/total)*100
+-    totalpieton = (totalpieton / total) * 100
+-    totalvoiture = (totalvoiture / total) * 100
+-    totalvelo = (totalvelo / total) * 100
+-    return totallourd, totalpieton, totalvoiture, totalvelo
+-'''def requestsrue(x):
++    totallourd = round((totallourd / total) * 100, 2)
++    totalpieton = round((totalpieton / total) * 100, 2)
++    totalvoiture = round((totalvoiture / total) * 100, 2)
++    totalvelo = round((totalvelo / total) * 100, 2)
++    return "totallourd", totallourd, "totalpieton", totalpieton, "totalvoiture", totalvoiture, "totalvelo", totalvelo
++
++
++def requestsrue(x, y):
++    db = get_db()
++    cursor = db.cursor()
++    y = str(y)
+     type = ['lourd', 'pieton', 'voiture', 'velo']
+-    db.execute("""SELECT rue_id FROM rue WHERE nom = ?""",(x,))
++    cursor.execute("""SELECT code_postal FROM ville WHERE nom = ?""", (y,))
++    # print(db.fetchall()[0][0])
++    CP = db.fetchall()[0][0]
++    cursor.execute("""SELECT rue_id FROM rue WHERE nom = ? AND code_postal = ?""", (x, CP))
+     IDderue = db.fetchall()[0][0]
+-    for i in range(1,8):
+-        db.execute("""SELECT date FROM traffic WHERE rue_id = ? AND CAST(strftime('%w', date) AS INTEGER) = ?""",(IDderue, i))
+-        for j in db.fetchall():
+-            for r in type:
+-            db.execute("""SELECT total(nb_vehicules) FROM traffic WHERE rue_id = ? AND date = j[0]) = ?""",(IDderue,))'''
+-
+-print(all("nb_rues_par_ville"))
+-connexion.commit()
+\ No newline at end of file
++    stock = []
++    total = []
++    for i in range(7):
++        for j in type:
++            cursor.execute(
++                f"""SELECT '{i}', type_vehicule, SUM(nb_vehicules) FROM traffic WHERE rue_id = ? AND CAST(strftime('%w', date) AS INTEGER) = ? AND type_vehicule = '{j}' """,
++                (IDderue, i))
++            stock.append(db.fetchall())
++
++    for i in range(0, 28, 4):
++        groupe = stock[i:i + 4]
++        x = 0
++        for j in groupe:
++            x = x + j[0][2]
++        if x == 0:
++            total.append(list(j[0]))
++        else:
++            for j in groupe:
++                yo = list(j[0])
++                yo[2] = round(((yo[2] / x) * 100), 2)
++                total.append(yo)
++    return total
++
++
++def selectrequest():
++    db = get_db()
++    cursor = db.cursor()
++    cursor.execute("""SELECT nom FROM ville""")
++    return db.fetchall()
++
++
++def selectruerequest(ville):
++    db = get_db()
++    cursor = db.cursor()
++    cursor.execute("""SELECT rue.nom FROM rue JOIN ville ON rue.code_postal = ville.code_postal WHERE ville.nom = ?""",
++               (ville,))
++    return db.fetchall()
++
++
+diff --git a/mobility/templates/.DS_Store b/mobility/templates/.DS_Store
+old mode 100644
+new mode 100755
+diff --git a/mobility/templates/about.html b/mobility/templates/about.html
+old mode 100644
+new mode 100755
+diff --git a/mobility/templates/base.html b/mobility/templates/base.html
+old mode 100644
+new mode 100755
+diff --git a/mobility/templates/endrequest.html b/mobility/templates/endrequest.html
+new file mode 100755
+index 0000000..ef8624f
+--- /dev/null
++++ b/mobility/templates/endrequest.html
+@@ -0,0 +1,35 @@
++{% extends "base.html" %}
++{% block header  %}
++    <link rel="stylesheet" href="static/style.css">
++{% endblock   %}
++{% block body %}
++    <nav>
++        <!-- Image à gauche de la barre de navigation -->
++        <img src="/static/heart.png" alt="Image" class="image-left">
++        <!-- Logo -->
++         <a href="/"> <img src="/static/titre.png" alt="Logo" class="navbar-logo"></a>
++        <!-- Menu -->
++        <ul class="menu">
++            <li><a href="/about">Team </a></li>
++            <li><a href="/request">Request</a></li>
++            <li><a href="/stats">Stats</a></li>
++            <li><a href="/moon">Moon</a></li>
++
++        </ul>
++    </nav>
++            <!-- Option par défaut -->
++    <div class="cadre2">
++     <div class="nbr_rue">
++     <p>Nombre de véhicules/passants par jour</p>
++
++        <ul>
++            {% for item in x %}
++                <th>{{ item[1]}} : {{item[2] }}</th>
++            {% endfor %}
++        </ul>
++     </div>
++    </div>
++
++{% endblock  %}
++{% block footer  %}
++{% endblock   %}
+\ No newline at end of file
+diff --git a/mobility/templates/home.html b/mobility/templates/home.html
+old mode 100644
+new mode 100755
+index b43812b..f14f83a
+--- a/mobility/templates/home.html
++++ b/mobility/templates/home.html
+@@ -52,14 +52,14 @@
+             <img src="/static/mp3_lecteur_background_calque.png" alt="Calque" class="overlay-image">
+             <!-- Informations sur la musique -->
+             <div class="music-info">
+-                <div id="scrolling-text">Savestate / Boy 2000</div>
++                <div id="scrolling-text">// Ayesha x Righteous</div>
+             </div>
+             <!-- Bouton de lecture -->
+-            <img src="/static/play_button.png.png" id="play-button" alt="Play" style="display: inline;">
++            <img src="/static/play_button.png" id="play-button" alt="Play" style="display: inline;">
+             <!-- Bouton de pause -->
+-            <img src="/static/pause_button.png.png" id="pause-button" alt="Pause" style="display: none;">
++            <img src="/static/pause_button.png" id="pause-button" alt="Pause" style="display: none;">
+             <!-- Élément audio pour la musique -->
+-            <audio id="music" src="/static/tk.mp3"></audio>
++            <audio id="music" src="/static/tk2.mp3"></audio>
+         </div>
+     </div>
+ 
+diff --git a/mobility/templates/moon.html b/mobility/templates/moon.html
+old mode 100644
+new mode 100755
+index 0f25c59..474b42d
+--- a/mobility/templates/moon.html
++++ b/mobility/templates/moon.html
+@@ -16,6 +16,39 @@
+             <li><a href="/stats">Stats</a></li>
+         </ul>
+     </nav>
++
++<body>
++    <h1>Phase de la Lune</h1>
++    <p>Âge de la lune : {{ age_lune }} jours</p>
++    <p>Phase actuelle : {{ moon_phase }}</p>
++    <!-- Affichage de l'image de la phase de la lune -->
++    <img src="{{ url_for('static', filename='images/' + moon_image) }}" alt="Phase de la Lune">
++
++    <div class="cadre2">
++         <div class="nbr_rue-container">
++        <!-- Deuxième partie de la statistique -->
++        <div class="nbr_rue">
++            <ul>
++                <!-- Affichage des données -->
++                <td> velos moyenne jours de pleine lune  :{{ sump}}</td>
++
++            </ul>
++        </div>
++         </div>
++        <div class="cadre3">
++     <div class="nbr_rue-container2">
++        <!-- Troisième partie de la statistique -->
++       <div class="nbr_rue">
++
++            <ul>
++                <!-- Affichage des données -->
++                <td> velos moyenne jours normal  :{{ smur}}</td>
++
++            </ul>
++        </div>
++         </div>
++</body>
++
+ {% endblock  %}
+ {% block footer  %}
+ {% endblock   %}
+\ No newline at end of file
+diff --git a/mobility/templates/nextrequest.html b/mobility/templates/nextrequest.html
+old mode 100644
+new mode 100755
+index 447df40..9cb9382
+--- a/mobility/templates/nextrequest.html
++++ b/mobility/templates/nextrequest.html
+@@ -1,23 +1,49 @@
+ {% extends "base.html" %}
+-{% block header  %}
++{% block header %}
+     <link rel="stylesheet" href="static/style.css">
+-{% endblock   %}
++{% endblock %}
+ {% block body %}
+     <nav>
+         <!-- Image à gauche de la barre de navigation -->
+         <img src="/static/heart.png" alt="Image" class="image-left">
+         <!-- Logo -->
+-         <a href="/"> <img src="/static/titre.png" alt="Logo" class="navbar-logo"></a>
++        <a href="/"> <img src="/static/titre.png" alt="Logo" class="navbar-logo"></a>
+         <!-- Menu -->
+         <ul class="menu">
+-            <li><a href="/">Home</a></li>
+             <li><a href="/about">Team </a></li>
+             <li><a href="/request">Request</a></li>
+             <li><a href="/stats">Stats</a></li>
+             <li><a href="/moon">Moon</a></li>
+-
+         </ul>
+     </nav>
+-{% endblock  %}
+-{% block footer  %}
+-{% endblock   %}
+\ No newline at end of file
++
++    <form id="rueForm" action="/nextrequest" method="POST">
++        <!-- Label pour la sélection de la rue -->
++        <label for="rue">Rue:</label>
++        <!-- Sélecteur de ville -->
++        <select id="rue" name="rue">
++            <!-- Option par défaut -->
++            <option value="None" selected>Choisir la rue</option>
++            <!-- Options pour les différentes villes -->
++            <ul>
++            {% for item in rue %}
++                <option>{{ item[0] }}</option>
++            {% endfor %}
++            </ul>
++        </select>
++        <!-- Bouton de soumission -->
++        <input type="submit" value="Valider">
++    </form>
++    <div class="cadre2">
++     <div class="nbr_rue">
++        <ul>
++            {% for item in ville_request %}
++                <li>{{ item }}</li>
++            {% endfor %}
++        </ul>
++     </div>
++    </div>
++
++{% endblock %}
++{% block footer %}
++{% endblock %}
+diff --git a/mobility/templates/request.html b/mobility/templates/request.html
+old mode 100644
+new mode 100755
+index ed0451c..da1d43d
+--- a/mobility/templates/request.html
++++ b/mobility/templates/request.html
+@@ -23,7 +23,7 @@
+         </ul>
+     </nav>
+     <!-- Formulaire -->
+-    <form id="myForm">
++    <form id="myForm" action="/request" method="POST">
+         <!-- Label pour la sélection de la ville -->
+         <label for="ville">Ville:</label>
+         <!-- Sélecteur de ville -->
+@@ -31,29 +31,19 @@
+             <!-- Option par défaut -->
+             <option value="None" selected>Choisir une ville</option>
+             <!-- Options pour les différentes villes -->
+-            <option value="Charleroi">Charleroi</option>
+-            <option value="Bruxelles">Bruxelles</option>
+-            <option value="Liege">Liege</option>
+-            <option value="Grobbendonk">Grobbendonk</option>
+-            <option value="Namur">Namur</option>
+-            <option value="Beveren">Beveren</option>
+-            <option value="Courtrai">Courtrai</option>
+-            <option value="Jambes">Jambes</option>
+-            <option value="Herzele">Herzele</option>
++            <ul>
++            {% for item in ville %}
++                <option>{{ item[0] }}</option>
++            {% endfor %}
++            </ul>
++
+             <!-- Ajoutez plus d'options ici selon vos besoins -->
+         </select>
+         <!-- Bouton de soumission -->
+-        <input type="submit" value="Chercher">
++        <input type="submit" value="Valider">
+     </form>
+-
+-
+- <div class="nbr_rue">
+-        <ul>
+-            {% for item in ville_request %}
+-                <li>{{ item }}</li>
+-            {% endfor %}
+-        </ul>
+-    </div>
++      <ul>
++                <!-- Affichage des données -->
+ 
+ 
+ </body>
+diff --git a/mobility/templates/stats.html b/mobility/templates/stats.html
+old mode 100644
+new mode 100755
+index dbc5c64..4ba3dad
+--- a/mobility/templates/stats.html
++++ b/mobility/templates/stats.html
+@@ -1,9 +1,8 @@
+-
+ {% extends "base.html" %}
+ 
+-{% block  header%}
++{% block  header %}
+ 
+-{% endblock   %}
++{% endblock %}
+ 
+ 
+ 
+@@ -14,7 +13,7 @@
+         <!-- Image à gauche de la barre de navigation -->
+         <img src="/static/heart.png" alt="Image" class="image-left">
+         <!-- Logo -->
+-         <a href="/"> <img src="/static/titre.png" alt="Logo" class="navbar-logo"></a>
++        <a href="/"> <img src="/static/titre.png" alt="Logo" class="navbar-logo"></a>
+         <!-- Menu -->
+         <ul class="menu">
+             <li><a href="/">Home</a></li>
+@@ -23,42 +22,52 @@
+             <li><a href="/moon">Moon</a></li>
+         </ul>
+     </nav>
+-   <!-- Contenu de la page -->
+-   <div class="nbr_rue-container">
+-        <!-- Première partie de la statistique -->
+-        <div class="nbr_rue">
+-            <ul>
++    <div class="cadre">
++        <!-- Contenu de la page -->
++        <div class="nbr_rue-container">
++            <!-- Première partie de la statistique -->
++            <div class="nbr_rue">
++                <p>Nombres de rues par villes</p>
++                <ul>
+ 
+-                {% for nbre_rue in x %}
+-                    <li>{{ nbre_rue[0]}}:{{ nbre_rue[1]}}</li>
+-                {% endfor %}
+-            </ul>
++                    {% for nbre_rue in x %}
++                        <li>{{ nbre_rue[0] }}:{{ nbre_rue[1] }}</li>
++                    {% endfor %}
++                </ul>
++            </div>
+         </div>
+-
+-        <!-- Deuxième partie de la statistique -->
+-        <div class="nbr_rue">
+-            <ul>
+-                <!-- Affichage des données -->
+-                <li>Entre Ville :{{ entreVille[0]}}</li>
+-                <li>Entre Vitesse :{{ entreVitesse[0]}}</li>
+-                <li>Entre V85 :{{ entreV85[0]}}</li>
+-                <li>Entre Traffic :{{ entreTraffic[0]}}</li>
+-                <li>Entre Rue :{{ entreRue[0]}}</li>
+-            </ul>
++        <div class="cadre2">
++            <div class="nbr_rue-container">
++                <!-- Deuxième partie de la statistique -->
++                <div class="nbr_rue">
++                    <p>Nombres d'entrées par villes</p>
++                    <ul>
++                        <!-- Affichage des données -->
++                        <li>Entre Ville :{{ entreVille[0][0]}}</li>
++                        <li>Entre Vitesse :{{ entreVitesse[0][0] }}</li>
++                        <li>Entre V85 :{{ entreV85[0][0] }}</li>
++                        <li>Entre Traffic :{{ entreTraffic[0][0] }}</li>
++                        <li>Entre Rue :{{ entreRue[0][0] }}</li>
++                    </ul>
++                </div>
++            </div>
+         </div>
+-
+-        <!-- Troisième partie de la statistique -->
+-        <div class="nbr_rue">
+-            <ul>
+-                <!-- Utilisation d'une boucle for pour afficher les données -->
+-                 {% for nbre_rue in qtt_velo %}
+-                    <li>{{ nbre_rue[0]}}: {{ nbre_rue[2]}}</li>
+-                {% endfor %}
+-            </ul>
++        <div class="cadre3">
++            <div class="nbr_rue-container2">
++                <!-- Troisième partie de la statistique -->
++                <div class="nbr_rue">
++                    <p>Classement des villes les plus cyclistes</p>
++                    <ul>
++                        <!-- Utilisation d'une boucle for pour afficher les données -->
++                        {% for nbre_rue in qtt_velo %}
++                            <li>{{ nbre_rue[0] }}: {{ nbre_rue[2] }}</li>
++                        {% endfor %}
++                    </ul>
++                </div>
++            </div>
+         </div>
+-    </div>
+-</body>
+-{% endblock  %}
++    </body>
++{% endblock %}
+ {% block footer %}
+     <!-- Contenu du pied de page ici -->
+-{% endblock  %}
+\ No newline at end of file
++{% endblock %}
+\ No newline at end of file
+diff --git a/mobility/test2.db b/mobility/test2.db
+old mode 100644
+new mode 100755
+index cefea3b..21cae24
+Binary files a/mobility/test2.db and b/mobility/test2.db differ
+diff --git a/mobility/testrequests.py b/mobility/testrequests.py
+new file mode 100755
+index 0000000..62b0b27
+--- /dev/null
++++ b/mobility/testrequests.py
+@@ -0,0 +1,33 @@
++import unittest
++from .table import *
++
++
++class TestAll(unittest.TestCase):
++    def test_alltest1(self):
++        x = "nb_rues_par_ville"
++        self.assertEqual(all(x), [('Bruxelles', 4), ('Charleroi', 1), ('Courtrai', 2), ('Grobbendonk', 1), ('Herzele', 3), ('Jambes', 3), ('Liege', 2), ('Namur', 2), ('beveren', 1)])
++
++    def test_alltest2(self):
++        x = "nbr_entreVille"
++        self.assertEqual(all(x),[(9,)] )
++    def test_alltest3(self):
++        x = "nbr_entreVitesse"
++        self.assertEqual(all(x),[(433128,)] )
++    def test_alltest4(self):
++        x = "nbr_entreV85"
++        self.assertEqual(all(x),[(18047,)] )
++    def test_alltest5(self):
++        x = "nbr_entreTraffic"
++        self.assertEqual(all(x),[(72188,)] )
++    def test_alltest6(self):
++        x = "nbr_entreRue"
++        self.assertEqual(all(x),[(19,)])
++    #def test_alltest7(self):
++        #x = "nb_rues_par_ville"
++        #self.assertEqual(all(x), [('Bruxelles', 4), ('Charleroi', 1), ('Courtrai', 2), ('Grobbendonk', 1), ('Herzele', 3), ('Jambes', 3), ('Liege', 2), ('Namur', 2), ('beveren', 1)] )
++    #23-12-16', 65851.9862332976), ('2023-12-17', 49547.1464038218), ('2023-12-18', 84229.0713804348), ('2023-12-19', 76757.8742691449), ('2023-12-20', 87976.3647830103), ('2023-12-21', 83484.4897005752), ('2023-12-22', 89494.12268756679), ('2023-12-23', 69733.7156933008), ('2023-12-24', 44021.5582655542), ('2023-12-25', 31716.1590693082), ('2023-12-26', 57674.3916294718), ('2023-12-27', 65467.6497394185), ('2023-12-28', 67555.665906917), ('2023-12-29', 67694.1222692811), ('2023-12-30', 65258.767769251), ('2023-12-31', 44943.6767485158), ('2024-01-01', 28987.9265134083), ('2024-01-02', 57104.0051864836), ('2024-01-03', 72642.3365485606), ('2024-01-04', 67595.0381526177), ('2024-01-05', 70329.8548059016), ('2024-01-06', 68702.2391569428), ('2024-01-07', 47722.8011576148), ('2024-01-08', 88782.2125860239), ('2024-01-09', 95694.2930396209), ('2024-01-10', 98872.4504851272), ('2024-01-11', 91197.9299304268), ('2024-01-12', 92337.7451480073), ('2024-01-13', 79056.7198438945), ('2024-01-14', 50412.9694181948), ('2024-01-15', 93669.1120686482), ('2024-01-16', 92429.8187899605), ('2024-01-17', 72146.0226497152), ('2024-01-18', 78783.7379775703), ('2024-01-19', 100522.571055886), ('2024-01-20', 87062.9932065226), ('2024-01-21', 54816.9375091563), ('2024-01-22', 97331.0318975456), ('2024-01-23', 97411.1752375302), ('2024-01-24', 107093.2190783944), ('2024-01-25', 106207.3746065695), ('2024-01-26', 99924.6448121037), ('2024-01-27', 85350.1020072206), ('2024-01-28', 60741.4998577745), ('2024-01-29', 101025.17526297321), ('2024-01-30', 104094.7393155329), ('2024-01-31', 100830.4112309319), ('2024-02-01', 87202.63749687759), ('2024-02-02', 63796.5344257099)])
++if __name__ == '__main__':
++        unittest.main(verbosity=2)
++
++
++
+diff --git a/mobility/tests/__init__.py b/mobility/tests/__init__.py
+old mode 100644
+new mode 100755
+diff --git a/mobility/tests/moon_test.py b/mobility/tests/moon_test.py
+new file mode 100755
+index 0000000..a8b2e5e
+--- /dev/null
++++ b/mobility/tests/moon_test.py
+@@ -0,0 +1,118 @@
++import unittest
++from mobility.moon_utils import age, phase, MoonPhase
++from datetime import datetime
++
++class MoonUtilsTestCase(unittest.TestCase):
++
++    def test_1(self):
++        date_reference = datetime(2000, 1, 5)
++        my_fixture = datetime(2019, 1, 21, 5, 16, 0)
++        expected = MoonPhase.WANING_CRESCENT
++        self.assertEqual(phase(age(my_fixture, date_reference)), expected,
++                         msg=f'My error message on pl.f({my_fixture}) different than {expected}')
++
++    def test_2(self):
++        date_reference = datetime(2000, 1, 5)
++        my_fixture = datetime(2020, 2, 10, 7, 33, 0)
++        expected = MoonPhase.WANING_CRESCENT
++        self.assertEqual(phase(age(my_fixture, date_reference)), expected,
++                         msg=f'My error message on pl.f({my_fixture}) different than {expected}')
++
++    def test_3(self):
++        date_reference = datetime(2000, 1, 5)
++        my_fixture = datetime(2020, 2, 24, 15, 33, 0)
++        expected = MoonPhase.WAXING_CRESCENT
++        self.assertEqual(phase(age(my_fixture, date_reference)), expected,
++                         msg=f'My error message on pl.f({my_fixture}) different than {expected}')
++
++    def test_4(self):
++        date_reference = datetime(2000, 1, 5)
++        my_fixture = datetime(2020, 2, 10, 7, 33, 0)
++        expected = MoonPhase.WANING_CRESCENT
++        self.assertEqual(phase(age(my_fixture, date_reference)), expected,
++                         msg=f'My error message on pl.f({my_fixture}) different than {expected}')
++
++    def test_5(self):
++        date_reference = datetime(2000, 1, 5)
++        my_fixture = datetime(2020, 2, 2)
++        expected = MoonPhase.WANING_CRESCENT
++        self.assertEqual(phase(age(my_fixture, date_reference)), expected,
++                         msg=f'My error message on pl.f({my_fixture}) different than {expected}')
++
++    def test_6(self):
++        date_reference = datetime(2000, 1, 5)
++        my_fixture = datetime(2020, 2, 23)
++        expected = MoonPhase.NEW_MOON
++        self.assertEqual(phase(age(my_fixture, date_reference)), expected,
++                         msg=f'My error message on pl.f({my_fixture}) different than {expected}')
++
++    def test_7(self):
++        date_reference = datetime(2000, 1, 5)
++        my_fixture = datetime(2020, 2, 16)
++        expected = MoonPhase.WANING_CRESCENT
++        self.assertEqual(phase(age(my_fixture, date_reference)), expected,
++                         msg=f'My error message on pl.f({my_fixture}) different than {expected}')
++
++    def test_8(self):
++        date_reference = datetime(2000, 1, 5)
++        my_fixture = datetime(2020, 2, 19)
++        expected = MoonPhase.WANING_CRESCENT
++        self.assertEqual(phase(age(my_fixture, date_reference)), expected,
++                         msg=f'My error message on pl.f({my_fixture}) different than {expected}')
++
++    def test_9(self):
++        date_reference = datetime(2000, 1, 5)
++        my_fixture = datetime(2020, 2, 3)
++        expected = MoonPhase.WANING_CRESCENT
++        self.assertEqual(phase(age(my_fixture, date_reference)), expected,
++                         msg=f'My error message on pl.f({my_fixture}) different than {expected}')
++
++    def test_10(self):
++        date_reference = datetime(2000, 1, 5)
++        my_fixture = datetime(2020, 2, 13)
++        expected = MoonPhase.WANING_CRESCENT
++        self.assertEqual(phase(age(my_fixture, date_reference)), expected,
++                         msg=f'My error message on pl.f({my_fixture}) different than {expected}')
++
++    def test_11(self):
++        date_reference = datetime(2000, 1, 5)
++        my_fixture = datetime(2020, 2, 29)
++        expected = MoonPhase.LAST_QUARTER
++        self.assertEqual(phase(age(my_fixture, date_reference)), expected,
++                         msg=f'My error message on pl.f({my_fixture}) different than {expected}')
++
++    def test_12(self):
++        date_reference = datetime(2000, 1, 5)
++        my_fixture = datetime(2022, 6, 15)
++        expected = MoonPhase.WANING_CRESCENT
++        self.assertEqual(phase(age(my_fixture, date_reference)), expected,
++                         msg=f'Expected phase for date {my_fixture} is {expected}')
++
++    def test_13(self):
++        date_reference = datetime(2000, 1, 5)
++        my_fixture = datetime(2024, 6, 1)
++        expected = MoonPhase.WANING_CRESCENT
++        self.assertEqual(phase(age(my_fixture, date_reference)), expected,
++                         msg=f'Expected phase for date {my_fixture} is {expected}, but got a different phase')
++
++
++
++    def test_14(self):
++
++        date_reference = datetime(2000, 1, 5)
++        my_fixture = datetime(2023, 3, 15)
++        expected = MoonPhase.WANING_CRESCENT
++        self.assertEqual(phase(age(my_fixture, date_reference)), expected,
++                         msg=f'Expected phase for date {my_fixture} is {expected}, but got a different phase')
++
++    def test_15(self):
++        # Teste une date avec une phase de lune incorrecte
++        date_reference = datetime(2000, 1, 5)
++        my_fixture = datetime(2014, 2, 1)
++        expected = MoonPhase.WAXING_CRESCENT
++        self.assertEqual(phase(age(my_fixture, date_reference)), expected,
++                         msg=f'My custom error message on phase function call')
++
++
++if __name__ == '__main__':
++    unittest.main(verbosity=2)
+diff --git a/mobility/tests/schema_test.sql b/mobility/tests/schema_test.sql
+old mode 100644
+new mode 100755
+diff --git a/mobility/tests/test2.db b/mobility/tests/test2.db
+new file mode 100755
+index 0000000..95a4fcf
+Binary files /dev/null and b/mobility/tests/test2.db differ
+diff --git a/mobility/tests/test_example.py b/mobility/tests/test_example.py
+old mode 100644
+new mode 100755
+index dcc2d6a..e69de29
+--- a/mobility/tests/test_example.py
++++ b/mobility/tests/test_example.py
+@@ -1,31 +0,0 @@
+-import os
+-import tempfile
+-import unittest
+-
+-from mobility import create_app
+-from mobility.db import close_db, get_db
+-
+-class TestUser(unittest.TestCase):
+-    def test_search_by_maison(self):
+-        # unit test against the test db.
+-        self.assertEquals(True,True) #change to appropriate
+-
+-    def setUp(self):
+-
+-        # generate a temporary file for the test db
+-        self.db_fd, self.db_path = tempfile.mkstemp()
+-        # create the testapp with the temp file for the test db
+-        self.app = create_app({'TESTING': True, 'DATABASE': self.db_path})
+-        self.app_context = self.app.app_context()
+-        self.app_context.push()
+-
+-        self.db = get_db()
+-        # read in SQL for populating test data
+-        with open(os.path.join(os.path.dirname(__file__), "schema_test.sql"), "rb") as f:
+-            self.db.executescript(f.read().decode("utf8"))
+-    def tearDown(self):
+-        # closing the db and cleaning the temp file
+-        close_db()
+-        os.close(self.db_fd)
+-        os.unlink(self.db_path)
+-
+diff --git a/mobility/tests/test_user.py b/mobility/tests/test_user.py
+new file mode 100755
+index 0000000..e69de29
+diff --git a/mobility/ugly.csv b/mobility/ugly.csv
+old mode 100644
+new mode 100755
+diff --git a/mobility/wsgi.py b/mobility/wsgi.py
+old mode 100644
+new mode 100755
+index 01a22f1..ba4ff70
+--- a/mobility/wsgi.py
++++ b/mobility/wsgi.py
+@@ -1,4 +1,4 @@
+ from __future__ import absolute_import
+ from mobility import create_app
+ 
+-application = create_app()
++application = create_app()
+\ No newline at end of file
+diff --git a/requirements.txt b/requirements.txt
+old mode 100644
+new mode 100755
+diff --git a/test2.db b/test2.db
+old mode 100644
+new mode 100755
+index a7b71f3..b607869
+Binary files a/test2.db and b/test2.db differ
