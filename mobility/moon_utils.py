@@ -44,41 +44,42 @@ def phase(age_lune):  # 7.38 --> différence de jours entre chaque cycle, mais a
 
 
 
+def calcul_moonpahse():
+    data = abdu()
+    print(data)
+    # Initialisation des listes
+    pleine_lune = []
+    pas_pleine_lune = []
+
+    # Parcourir les données et classer en fonction de la pleine lune
+    for date, velo in data:
+        year, month, day = date.split('-')
+        date_voulu = datetime(int(year), int(month), int(day))
+
+        ager = age(date_voulu, date_reference)
+        phase_lune = phase(ager)
+        if phase_lune == MoonPhase.FULL_MOON:
+            pleine_lune.append((date, velo))
+
+        else:
+            pas_pleine_lune.append((date, velo))
+
+    sumt=0
+    for date, velo in data:
+        sumt = sumt + velo
+
+    # jour ou y a la lune
+    sump = 0
+    for date, velo in pleine_lune:
+        sump = sump + velo
+    print(len(pleine_lune))
+    sump = round(sump / len(pleine_lune))
+
+    sumr = 0
+    for date, velo in pas_pleine_lune:
+        sumr = sumr + velo
 
 
-data = abdu()
+    sumr = round(sumr / len(pas_pleine_lune))
 
-# Initialisation des listes
-pleine_lune = []
-pas_pleine_lune = []
-
-# Parcourir les données et classer en fonction de la pleine lune
-for date, velo in data:
-    year, month, day = date.split('-')
-    date_voulu = datetime(int(year), int(month), int(day))
-
-    ager = age(date_voulu, date_reference)
-    phase_lune = phase(ager)
-    if phase_lune == MoonPhase.FULL_MOON:
-        pleine_lune.append((date, velo))
-
-    else:
-        pas_pleine_lune.append((date, velo))
-
-sumt=0
-for date, velo in data:
-    sumt = sumt + velo
-
-# jour ou y a la lune
-sump = 0
-for date, velo in pleine_lune:
-    sump = sump + velo
-
-sump = round(sump / len(pleine_lune))
-
-sumr = 0
-for date, velo in pas_pleine_lune:
-    sumr = sumr + velo
-
-
-sumr = round(sumr / len(pas_pleine_lune))
+    return sump, sumr
