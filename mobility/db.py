@@ -1,7 +1,7 @@
 import sqlite3
 import os
 from flask import current_app, g
-filename = os.path.join('ugly.csv')
+filename = "mobility/ugly.csv"
 def get_db():
 
     """Returns the database connection. Create the connection if needed.
@@ -17,7 +17,6 @@ def get_db():
             detect_types=sqlite3.PARSE_DECLTYPES)
         # Instead of getting "tuple" out of queries, we'll get dictionaries of column->value
         g.db.row_factory = sqlite3.Row
-    print("db")
     return g.db
 
 def close_db(e=None):
@@ -33,9 +32,7 @@ def close_db(e=None):
 def init_data():
     db = get_db()
     cursor = db.cursor()
-    print("test1")
     try:
-        print("testok")
         # Création de la table "ville" dans la base de données
         cursor.execute("DROP TABLE IF EXISTS ville;")
         cursor.execute(""" CREATE TABLE IF NOT EXISTS ville (

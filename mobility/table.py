@@ -22,61 +22,61 @@ def all(x):
         return cursor.fetchall()
     if x == "nbr_entreVille":
         cursor.execute("""SELECT COUNT(*) FROM ville""")
-        return db.fetchall()
+        return cursor.fetchall()
     if x == "nbr_entreVitesse":
         cursor.execute("""SELECT COUNT(*) FROM vitesse""")
-        return db.fetchall()
+        return cursor.fetchall()
     if x == "nbr_entreV85":
         cursor.execute("""SELECT COUNT(*) FROM v85""")
-        return db.fetchall()
+        return cursor.fetchall()
     if x == "nbr_entreTraffic":
         cursor.execute("""SELECT COUNT(*) FROM traffic""")
-        return db.fetchall()
+        return cursor.fetchall()
     if x == "nbr_entreRue":
         cursor.execute("""SELECT COUNT(*) FROM rue""")
-        return db.fetchall()
+        return cursor.fetchall()
     if x == "nb_rues_par_ville":
         cursor.execute(
             """SELECT ville.nom, COUNT(rue.rue_id) FROM ville JOIN rue on ville.code_postal = rue.code_postal GROUP BY ville.nom""")
-        return db.fetchall()
+        return cursor.fetchall()
     if x == "cyclable":
         cursor.execute(
             """SELECT ville.nom, ville.population, round(SUM(nb_vehicules)/population, 2) FROM traffic JOIN rue on traffic.rue_id = rue.rue_id JOIN ville on rue.code_postal = ville.code_postal WHERE type_vehicule = 'velo' GROUP BY ville.nom ORDER BY SUM(nb_vehicules) DESC;""")
-        return db.fetchall()
+        return cursor.fetchall()
 
 
 def requestsville(x):
     db = get_db()
     cursor = db.cursor()
     cursor.execute("""SELECT code_postal FROM ville WHERE nom = ?""", (x,))
-    cprequest = db.fetchall()
+    cprequest = cursor.fetchall()
     cprequest = cprequest[0][0]
     cursor.execute("""SELECT rue_id FROM rue WHERE rue.code_postal = ?""", (cprequest,))
     totallourd = 0
     totalvelo = 0
     totalpieton = 0
     totalvoiture = 0
-    listeRI = db.fetchall()
+    listeRI = cursor.fetchall()
     for i in range(len(listeRI)):
         cursor.execute(
             """SELECT SUM(nb_vehicules) FROM traffic WHERE traffic.rue_id = ? AND traffic.type_vehicule = 'lourd'""",
             (listeRI[i][0],))
-        x = db.fetchall()
+        x = cursor.fetchall()
         totallourd = totallourd + x[0][0]
         cursor.execute(
             """SELECT SUM(nb_vehicules) FROM traffic WHERE traffic.rue_id = ? AND traffic.type_vehicule = 'pieton'""",
             (listeRI[i][0],))
-        x = db.fetchall()
+        x = cursor.fetchall()
         totalpieton = totalpieton + x[0][0]
         cursor.execute(
             """SELECT SUM(nb_vehicules) FROM traffic WHERE traffic.rue_id = ? AND traffic.type_vehicule = 'voiture'""",
             (listeRI[i][0],))
-        x = db.fetchall()
+        x = cursor.fetchall()
         totalvoiture = totalvoiture + x[0][0]
         cursor.execute(
             """SELECT SUM(nb_vehicules) FROM traffic WHERE traffic.rue_id = ? AND traffic.type_vehicule = 'velo'""",
             (listeRI[i][0],))
-        x = db.fetchall()
+        x = cursor.fetchall()
         totalvelo = totalvelo + x[0][0]
     total = totalvelo + totallourd + totalpieton + totalvoiture
     totallourd = round((totallourd / total) * 100, 2)
@@ -86,16 +86,16 @@ def requestsville(x):
     return "totallourd", totallourd, "totalpieton", totalpieton, "totalvoiture", totalvoiture, "totalvelo", totalvelo
 
 
-def requestsrue(x, y):
+def requestsrue(nom_rue, nom_ville):
     db = get_db()
     cursor = db.cursor()
-    y = str(y)
+    nom_ville = str(nom_ville)
     type = ['lourd', 'pieton', 'voiture', 'velo']
-    cursor.execute("""SELECT code_postal FROM ville WHERE nom = ?""", (y,))
-    # print(db.fetchall()[0][0])
-    CP = db.fetchall()[0][0]
-    cursor.execute("""SELECT rue_id FROM rue WHERE nom = ? AND code_postal = ?""", (x, CP))
-    IDderue = db.fetchall()[0][0]
+    cursor.execute("""SELECT code_postal FROM ville WHERE nom = ?""", (nom_ville,))
+    omp = cursor.fetchall()
+    CP = omp[0][0]
+    cursor.execute("""SELECT rue_id FROM rue WHERE nom = ? AND code_postal = ?""", (nom_rue, CP))
+    IDderue = cursor.fetchall()[0][0]
     stock = []
     total = []
     for i in range(7):
@@ -103,7 +103,7 @@ def requestsrue(x, y):
             cursor.execute(
                 f"""SELECT '{i}', type_vehicule, SUM(nb_vehicules) FROM traffic WHERE rue_id = ? AND CAST(strftime('%w', date) AS INTEGER) = ? AND type_vehicule = '{j}' """,
                 (IDderue, i))
-            stock.append(db.fetchall())
+            stock.append(cursor.fetchall())
 
     for i in range(0, 28, 4):
         groupe = stock[i:i + 4]

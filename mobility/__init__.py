@@ -16,7 +16,6 @@ app.config.from_mapping(
     DATABASE=os.path.join(app.root_path, 'test2.db'),
 )
 
-#init_data()
 
 """if test_config is None:
     app.config.from_pyfile("config.py", silent=True)
@@ -25,13 +24,13 @@ else:
 try:
     os.makedirs(app.instance_path)
 except OSError:
-    pass
+    pass"""
 try:
     with app.app_context():
-        
-except database_is_locked:
+        init_data()
+except:
     pass
-# Ensure the instance folder exists"""
+# Ensure the instance folder exists
 
 
 
