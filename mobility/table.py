@@ -1,4 +1,4 @@
-from db import get_db
+from .db import get_db
 DATABASE_PATH = 'test2.db'
 # Connexion à la base de données SQLite
 # Chemin vers le fichier CSV contenant les données

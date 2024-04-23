@@ -2,14 +2,13 @@ from datetime import datetime
 from .db import *
 from flask import Flask, render_template, request
 
-from .moon_utils import age, phase, sumr, sump
+from .moon_utils import age, phase, calcul_moonpahse
 from .table import all, requestsville, requestsrue, selectrequest, selectruerequest
 
 app = Flask(__name__)
 
 
 def create_app(test_config=None):
-    print("cdkced")
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
@@ -27,10 +26,8 @@ def create_app(test_config=None):
         pass
     try:
         with app.app_context():
-            print("testtttt")
             init_data()
     except database_is_locked:
-        print("waaa")
         pass
 # Ensure the instance folder exists
 
@@ -118,8 +115,8 @@ def create_app(test_config=None):
 
         moon_image = images[phase_lune.name]
 
-        return render_template('moon.html', age_lune=age_lune, moon_phase=phase_lune.name, moon_image=moon_image, smur=sumr,
-                               sump=sump)
+        return render_template('moon.html', age_lune=age_lune, moon_phase=phase_lune.name, moon_image=moon_image, smur=calcul_moonpahse()[1],
+                               sump=calcul_moonpahse()[0])
 
 
     @app.route('/base')
