@@ -109,5 +109,9 @@ def create_app(test_config=None):
     def base():
         return render_template('base.html', noah='hello world')
 
+    @app.route('/game')
+    def game():
+        return render_template('game.html', noah='hello world')
+
 
     return app
