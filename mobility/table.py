@@ -93,16 +93,16 @@ def requestsrue(nom_rue, nom_ville):
     type = ['lourd', 'pieton', 'voiture', 'velo']
     cursor.execute("""SELECT code_postal FROM ville WHERE nom = ?""", (nom_ville,))
     omp = cursor.fetchall()
-    CP = omp[0][0]
-    cursor.execute("""SELECT rue_id FROM rue WHERE nom = ? AND code_postal = ?""", (nom_rue, CP))
-    IDderue = cursor.fetchall()[0][0]
+    cp = omp[0][0]
+    cursor.execute("""SELECT rue_id FROM rue WHERE nom = ? AND code_postal = ?""", (nom_rue, cp))
+    idderue = cursor.fetchall()[0][0]
     stock = []
     total = []
     for i in range(7):
         for j in type:
             cursor.execute(
                 f"""SELECT '{i}', type_vehicule, SUM(nb_vehicules) FROM traffic WHERE rue_id = ? AND CAST(strftime('%w', date) AS INTEGER) = ? AND type_vehicule = '{j}' """,
-                (IDderue, i))
+                (idderue, i))
             stock.append(cursor.fetchall())
 
     for i in range(0, 28, 4):
