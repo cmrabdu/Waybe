@@ -1,51 +1,63 @@
+
+
 from .db import get_db
+
 DATABASE_PATH = 'test2.db'
-# Connexion à la base de données SQLite
-# Chemin vers le fichier CSV contenant les données
 
 
-
-
-
-def abdu():
+def total_velo_for_date():
     db = get_db()
     cursor = db.cursor()
-    cursor.execute("""SELECT DISTINCT strftime('%Y-%m-%d', date), SUM(nb_vehicules) FROM traffic GROUP BY strftime('%Y-%m-%d', date)""")
+    cursor.execute(
+        """SELECT DISTINCT strftime('%Y-%m-%d', date), SUM(nb_vehicules) FROM traffic WHERE type_vehicule = "velo" GROUP BY strftime('%Y-%m-%d', date)""")
     return cursor.fetchall()
 
 
-def all(x):
+def entre_tableau(x):
     db = get_db()
     cursor = db.cursor()
-    if x == "nb_rues_par_ville":
-        cursor.execute("""SELECT ville.nom, COUNT(rue_id) FROM rue JOIN ville on ville.code_postal = rue.code_postal GROUP BY ville.nom""")
-        return cursor.fetchall()
-    if x == "nbr_entreVille":
-        cursor.execute("""SELECT COUNT(*) FROM ville""")
-        return cursor.fetchall()
-    if x == "nbr_entreVitesse":
-        cursor.execute("""SELECT COUNT(*) FROM vitesse""")
-        return cursor.fetchall()
-    if x == "nbr_entreV85":
-        cursor.execute("""SELECT COUNT(*) FROM v85""")
-        return cursor.fetchall()
-    if x == "nbr_entreTraffic":
-        cursor.execute("""SELECT COUNT(*) FROM traffic""")
-        return cursor.fetchall()
-    if x == "nbr_entreRue":
-        cursor.execute("""SELECT COUNT(*) FROM rue""")
-        return cursor.fetchall()
-    if x == "nb_rues_par_ville":
-        cursor.execute(
-            """SELECT ville.nom, COUNT(rue.rue_id) FROM ville JOIN rue on ville.code_postal = rue.code_postal GROUP BY ville.nom""")
-        return cursor.fetchall()
-    if x == "cyclable":
-        cursor.execute(
-            """SELECT ville.nom, ville.population, round(SUM(nb_vehicules)/population, 2) FROM traffic JOIN rue on traffic.rue_id = rue.rue_id JOIN ville on rue.code_postal = ville.code_postal WHERE type_vehicule = 'velo' GROUP BY ville.nom ORDER BY SUM(nb_vehicules) DESC;""")
-        return cursor.fetchall()
+    cursor.execute(f"""SELECT COUNT(*) FROM '{x}' """)
+    return cursor.fetchall()
 
 
-def requestsville(x):
+def nb_rues_par_ville():
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute(
+        """SELECT ville.nom, COUNT(rue_id) FROM rue JOIN ville on ville.code_postal = rue.code_postal GROUP BY ville.nom""")
+    return cursor.fetchall()
+
+
+def cyclable():
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute(
+        """SELECT ville.nom, ville.population, round(SUM(nb_vehicules)/population, 2) FROM traffic JOIN rue on traffic.rue_id = rue.rue_id JOIN ville on rue.code_postal = ville.code_postal WHERE type_vehicule = 'velo' GROUP BY ville.nom ORDER BY SUM(nb_vehicules) DESC;""")
+    return cursor.fetchall()
+
+
+def interval_total(city, street, date_start, date_end):
+    db = get_db()
+    cursor = db.cursor()
+    return_list = []
+    type = ['lourd', 'pieton', 'voiture', 'velo']
+    for types in type:
+        cursor.execute(
+            """SELECT SUM(traffic.nb_vehicules) FROM traffic JOIN rue ON rue.rue_id = traffic.rue_id JOIN ville ON rue.code_postal = ville.code_postal WHERE ville.nom = ? AND rue.nom = ? AND traffic.type_vehicule = ? AND date BETWEEN strftime('%Y-%m-%d', date) = ? AND strftime('%Y-%m-%d', date) = ? """,
+            (city, street, types, date_start, date_end))
+        return_list.append(cursor.fetchall())
+    return return_list
+
+
+def rue_selection(ville):
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("""SELECT rue.nom FROM rue JOIN ville ON rue.code_postal = ville.code_postal WHERE ville.nom = ?""",
+                   (ville,))
+    return cursor.fetchall()
+
+
+def ville_selection(x):
     db = get_db()
     cursor = db.cursor()
     cursor.execute("""SELECT code_postal FROM ville WHERE nom = ?""", (x,))
@@ -86,25 +98,25 @@ def requestsville(x):
     return "totallourd", totallourd, "totalpieton", totalpieton, "totalvoiture", totalvoiture, "totalvelo", totalvelo
 
 
-def requestsrue(nom_rue, nom_ville):
+def stats_rue(nom_rue, nom_ville):
     db = get_db()
     cursor = db.cursor()
     nom_ville = str(nom_ville)
     type = ['lourd', 'pieton', 'voiture', 'velo']
     cursor.execute("""SELECT code_postal FROM ville WHERE nom = ?""", (nom_ville,))
     omp = cursor.fetchall()
-    cp = omp[0][0]
-    cursor.execute("""SELECT rue_id FROM rue WHERE nom = ? AND code_postal = ?""", (nom_rue, cp))
-    idderue = cursor.fetchall()[0][0]
+    CP = omp[0][0]
+    cursor.execute("""SELECT rue_id FROM rue WHERE nom = ? AND code_postal = ?""", (nom_rue, CP))
+    IDderue = cursor.fetchall()[0][0]
     stock = []
     total = []
     for i in range(7):
         for j in type:
             cursor.execute(
                 f"""SELECT '{i}', type_vehicule, SUM(nb_vehicules) FROM traffic WHERE rue_id = ? AND CAST(strftime('%w', date) AS INTEGER) = ? AND type_vehicule = '{j}' """,
-                (idderue, i))
+                (IDderue, i))
             stock.append(cursor.fetchall())
-
+    # nbr vehicule separe
     for i in range(0, 28, 4):
         groupe = stock[i:i + 4]
         x = 0
@@ -120,17 +132,17 @@ def requestsrue(nom_rue, nom_ville):
     return total
 
 
-def selectrequest():
+def lst_ville():
     db = get_db()
     cursor = db.cursor()
     cursor.execute("""SELECT nom FROM ville""")
     return cursor.fetchall()
 
 
-def selectruerequest(ville):
+def lst_rue(ville):
     db = get_db()
     cursor = db.cursor()
-    cursor.execute("""SELECT rue.nom FROM rue JOIN ville ON rue.code_postal = ville.code_postal WHERE ville.nom = ?""", (ville,))
+    cursor.execute("""SELECT rue.nom FROM rue JOIN ville ON rue.code_postal = ville.code_postal WHERE ville.nom = ?""",
+                   (ville,))
     return cursor.fetchall()
-
 
