@@ -1,7 +1,7 @@
 from datetime import datetime
 from enum import Enum
 
-from .table import abdu
+from .table import total_velo_for_date
 
 
 class MoonPhase(Enum):  # classe Moon Phase, cours chap 9
@@ -45,7 +45,7 @@ def phase(age_lune):  # 7.38 --> différence de jours entre chaque cycle, mais a
 
 
 def calcul_moonpahse():
-    data = abdu()
+    data = total_velo_for_date()
     print(data)
     # Initialisation des listes
     pleine_lune = []

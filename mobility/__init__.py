@@ -3,7 +3,8 @@ from .db import *
 from flask import Flask, render_template, request
 
 from .moon_utils import age, phase, calcul_moonpahse
-from .table import all, requestsville, requestsrue, selectrequest, selectruerequest
+from .table import lst_rue, lst_ville, stats_rue, nb_rues_par_ville, ville_selection,total_velo_for_date,interval_total,rue_selection,entre_tableau,cyclable
+
 
 
 def create_app(test_config=None):
@@ -33,13 +34,13 @@ def create_app(test_config=None):
         return render_template('about.html', HelloWorld='Hello World')
     @app.route('/stats')
     def stats():
-        result1 = all("nb_rues_par_ville")
-        result2 = all("nbr_entreVille")
-        result3 = all("nbr_entreVitesse")
-        result4 = all("nbr_entreV85")
-        result5 = all("nbr_entreTraffic")
-        result6 = all("nbr_entreRue")
-        result7 = all("cyclable")
+        result1 = nb_rues_par_ville()
+        result2 = entre_tableau("ville")
+        result4 = entre_tableau("v85")
+        result3 = entre_tableau("vitesse")
+        result5 = entre_tableau("traffic")
+        result6 = entre_tableau("rue")
+        result7 = cyclable()
         return render_template('stats.html', x=result1, entreVille=result2, entreVitesse=result3, entreV85=result4,
                                entreTraffic=result5, entreRue=result6, qtt_velo=result7)
 
@@ -59,21 +60,21 @@ def create_app(test_config=None):
             # Récupérer la valeur sélectionnée dans le sélecteur de ville
             ville_info = request.form['ville']
             # Faire quelque chose avec la valeur sélectionnée, comme l'afficher
-            x = requestsville(ville_info)
-            rue = selectruerequest(ville_info)
+            x = ville_selection(ville_info)
+            rue = lst_rue(ville_info)
             return render_template('nextrequest.html', ville_request=x, rue=rue)
 
         else:
-            ville = selectrequest()
+            ville = lst_ville()
             return render_template('request.html', ville=ville)
 
     @app.route('/nextrequest', methods=['GET', 'POST'])
     def nextrequest():
-        rue = selectruerequest(ville_info)
+        rue = lst_rue(ville_info)
         if request.method == 'POST':
             rue_info = request.form.get('rue')
             # Faire quelque chose avec la valeur sélectionnée, comme l'afficher
-            x = requestsrue(rue_info, ville_info)
+            x = stats_rue(rue_info, ville_info)
             return render_template('endrequest.html', x=x)
         else:
             return render_template('nextrequest.html', rue=rue)
@@ -109,9 +110,6 @@ def create_app(test_config=None):
     def base():
         return render_template('base.html', noah='hello world')
 
-    @app.route('/game')
-    def game():
-        return render_template('game.html', noah='hello world')
 
 
     return app
