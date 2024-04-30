@@ -68,6 +68,8 @@ def create_app(test_config=None):
             ville = lst_ville()
             return render_template('request.html', ville=ville)
 
+
+
     @app.route('/nextrequest', methods=['GET', 'POST'])
     def nextrequest():
         rue = lst_rue(ville_info)
@@ -77,8 +79,20 @@ def create_app(test_config=None):
             x = stats_rue(rue_info, ville_info)
             return render_template('endrequest.html', x=x)
         else:
-            return render_template('nextrequest.html', rue=rue)
+            return render_template('daterequest.html', rue=rue)
 
+    @app.route('/daterequest', methods=['GET', 'POST'])
+    def daterequest():
+        if request.method == 'POST':
+            start_date = request.form['start_date']
+            end_date = request.form['end_date']
+
+
+            store_dates(start_date, end_date)
+
+            return redirect(url_for('endrequest.html', start_date=start_date, end_date=end_date))
+        else:
+            return render_template('daterequest.html')
 
     @app.route('/moon')
     def moon_phase_view():
