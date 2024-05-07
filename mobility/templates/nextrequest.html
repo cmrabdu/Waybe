@@ -17,15 +17,35 @@
         </ul>
     </nav>
 
-    <form action="/finalize" method="POST">
-        <label for="start">Date de début :</label>
-        <input type="date" id="start" name="start_date" required>
-
-        <label for="end">Date de fin :</label>
-        <input type="date" id="end" name="end_date" required>
-
-        <input type="submit" value="Valider">
+    <form id="rueForm" action="/nextrequest" method="POST">
+        <!-- Label pour la sélection de la rue -->
+        <label for="rue">Rue:</label>
+        <!-- Sélecteur de ville -->
+        <select id="rue" name="rue">
+            <!-- Option par défaut -->
+            <option value="None" selected>Choisir la rue</option>
+            <!-- Options pour les différentes villes -->
+            <ul>
+            {% for item in rue %}
+                <option>{{ item[0] }}</option>
+            {% endfor %}
+            </ul>
+        </select>
+    <input type="submit" value="Valider">
     </form>
+
+
+     <div class="cadre2">
+     <div class="nbr_rue">
+        <ul>
+            {% for item in ville_request %}
+                <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+     </div>
+    </div>
+
+
 {% endblock %}
 
 {% block footer %}
