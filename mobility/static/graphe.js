@@ -2,6 +2,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Récupérer le contexte du canvas avec l'id 'myChart'
     var ctx = document.getElementById('myChart').getContext('2d');
 
+    // Changer la taille du canvas
+    document.getElementById('myChart').style.width = '600px'; // Largeur
+    document.getElementById('myChart').style.height = '400px'; // Hauteur
+
     // Créer un nouveau graphique de type 'bar' avec le contexte récupéré
     var myChart = new Chart(ctx, {
         type: 'bar',

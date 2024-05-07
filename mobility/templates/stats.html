@@ -2,17 +2,35 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <!-- Inclusion de la feuille de style -->
+    <link rel="stylesheet" href="static/style.css">
+    <!-- Importation de la police de caractères yagiza -->
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/yagiza');
+    </style>
+    <!-- Importation de la police de caractères nouveau-ibm -->
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/nouveau-ibm');
+    </style>
+    <!-- Importation de la police de caractères popstarregular -->
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/popstarregular');
+    </style>
+    <!-- Définition de l'icône de raccourci -->
+    <link rel="shortcut icon" href="/static/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Graphique de rues par ville</title>
     <!-- Lien vers la bibliothèque Chart.js -->
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 </head>
 <body>
     <h1>Graphique de rues par ville</h1>
-    <!-- Canvas pour afficher le graphique -->
-    <canvas id="myChart" width="200" height="200"></canvas>
+    <!-- Div pour contenir le graphique -->
+    <div id="chartContainer" style="width: 400px; height: 400px;">
+        <!-- Canvas pour afficher le graphique -->
+        <canvas id="myChart"></canvas>
+    </div>
+
     <!-- Lien vers le fichier JavaScript -->
     <script src="../static/graphe.js"></script>
 </body>

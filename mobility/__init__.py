@@ -6,7 +6,7 @@ from .moon_utils import age, phase, calcul_moonpahse
 from .table import lst_rue, lst_ville, stats_rue, nb_rues_par_ville, ville_selection,total_velo_for_date,interval_total,rue_selection,entre_tableau,cyclable
 
 
-
+ville_info = None
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
@@ -45,7 +45,7 @@ def create_app(test_config=None):
                                entreTraffic=result5, entreRue=result6, qtt_velo=result7)
 
 
-    ville_info = None
+
 
 
     @app.route('/endrequest')
