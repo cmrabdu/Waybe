@@ -5,17 +5,6 @@
 {% endblock %}
 
 {% block body %}
-    <nav>
-        <!-- Barre de navigation répétée -->
-        <img src="/static/heart.png" alt="Image" class="image-left">
-        <a href="/"><img src="/static/titre.png" alt="Logo" class="navbar-logo"></a>
-        <ul class="menu">
-            <li><a href="/about">Team</a></li>
-            <li><a href="/request">Request</a></li>
-            <li><a href="/stats">Stats</a></li>
-            <li><a href="/moon">Moon</a></li>
-        </ul>
-    </nav>
 
     <form id="rueForm" action="/nextrequest" method="POST">
         <!-- Label pour la sélection de la rue -->

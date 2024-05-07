@@ -32,6 +32,10 @@ def create_app(test_config=None):
     @app.route('/about')
     def about():
         return render_template('about.html', HelloWorld='Hello World')
+
+    @app.route('/game')
+    def game():
+        return render_template('game.html', HelloWorld='Hello World')
     @app.route('/stats')
     def stats():
         result1 = nb_rues_par_ville()
