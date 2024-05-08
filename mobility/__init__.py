@@ -3,7 +3,7 @@ from .db import *
 from flask import Flask, render_template, request
 
 from .moon_utils import age, phase, calcul_moonpahse
-from .table import lst_rue, lst_ville, stats_rue, nb_rues_par_ville, ville_selection,total_velo_for_date,interval_total,rue_selection,entre_tableau,cyclable
+from .table import lst_rue, lst_ville, stats_rue, nb_rues_par_ville, ville_selection,total_velo_for_date,interval_total,rue_selection,entre_tableau,cyclable,selection_date
 
 
 ville_info = None
@@ -79,9 +79,16 @@ def create_app(test_config=None):
         rue = lst_rue(ville_info)
         if request.method == 'POST':
             rue_info = request.form.get('rue')
+            start_date = request.form.get('start_date')
+            end_date = request.form.get('end_date')
+            heure_debut=request.form.get('heure_debut')
+            heure_fin=request.form.get('heure_fin')
+            start_date = str(start_date)+str(heure_debut)
+            end_date=str(end_date)+str(heure_fin)
+            horraire= selection_date(ville_info, rue_info, start_date, end_date)
             # Faire quelque chose avec la valeur sélectionnée, comme l'afficher
             x = stats_rue(rue_info, ville_info)
-            return render_template('endrequest.html', x=x)
+            return render_template('endrequest.html', x=x , horraire=horraire)
         else:
             return render_template('nextrequest.html', rue=rue)
 
