@@ -3,7 +3,7 @@ from .db import *
 from flask import Flask, render_template, request
 
 from .moon_utils import age, phase, calcul_moonpahse
-from .table import lst_rue, lst_ville, stats_rue, nb_rues_par_ville, ville_selection,total_velo_for_date,interval_total,rue_selection,entre_tableau,cyclable,selection_date
+from .table import lst_rue, lst_ville, stats_rue, nb_rues_par_ville, ville_selection,total_velo_for_date,rue_selection,entre_tableau,cyclable,selection_date
 
 
 ville_info = None

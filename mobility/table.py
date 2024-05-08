@@ -35,20 +35,6 @@ def cyclable():
         """SELECT ville.nom, ville.population, round(SUM(nb_vehicules)/population, 2) FROM traffic JOIN rue on traffic.rue_id = rue.rue_id JOIN ville on rue.code_postal = ville.code_postal WHERE type_vehicule = 'velo' GROUP BY ville.nom ORDER BY SUM(nb_vehicules) DESC;""")
     return cursor.fetchall()
 
-
-def interval_total(city, street, date_start, date_end):
-    db = get_db()
-    cursor = db.cursor()
-    return_list = []
-    type = ['lourd', 'pieton', 'voiture', 'velo']
-    for types in type:
-        cursor.execute(
-            """SELECT SUM(traffic.nb_vehicules) FROM traffic JOIN rue ON rue.rue_id = traffic.rue_id JOIN ville ON rue.code_postal = ville.code_postal WHERE ville.nom = ? AND rue.nom = ? AND traffic.type_vehicule = ? AND date BETWEEN strftime('%Y-%m-%d', date) = ? AND strftime('%Y-%m-%d', date) = ? """,
-            (city, street, types, date_start, date_end))
-        return_list.append(cursor.fetchall())
-    return return_list
-
-
 def rue_selection(ville):
     db = get_db()
     cursor = db.cursor()
@@ -150,17 +136,20 @@ def selection_date(nom_ville, nom_rue, date_debut, date_fin):
     print(date_debut,date_fin)
     db = get_db()
     cursor = db.cursor()
-    lstV = ["lourde_voiture", "velo", "pieton"]  # Correction des éléments de la liste
+    lstV = ["lourd", "voiture", "velo", "pieton"]  # Correction des éléments de la liste
     listeFinal = []
     for element in lstV:
-        # Utilisation de guillemets simples pour les chaînes de caractères dans la requête
         cursor.execute("""SELECT traffic.type_vehicule, SUM(traffic.nb_vehicules) FROM traffic 
             JOIN rue ON rue.rue_id = traffic.rue_id 
             JOIN ville ON ville.code_postal = rue.code_postal 
             WHERE traffic.type_vehicule = ? AND ville.nom = ? AND rue.nom = ? AND traffic.date BETWEEN ? AND ?""",
             (element, nom_ville, nom_rue, date_debut, date_fin))
         # Ajout des résultats à la liste finale
-        listeFinal.append(cursor.fetchall())
+        get = cursor.fetchall()[0]
+        get1 = get[0]
+        get2 = get[1]
+        listeFinal.append(get1)
+        listeFinal.append(get2)
     return listeFinal
 
 
