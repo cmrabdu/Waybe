@@ -57,7 +57,7 @@ function startGame() {
             let cardImg = cardSet.pop();
             row.push(cardImg);
             card.id = r.toString() + "-" + c.toString();
-            card.src = "back.jpg";
+            card.src = "../static/back.jpg"; // Chemin relatif
             card.classList.add("card");
             card.addEventListener("click", selectCard);
             document.getElementById("board").append(card);
@@ -73,7 +73,7 @@ function hideCards() {
     for (let r = 0; r < rows; r++) {
         for (let c = 0; c < columns; c++) {
             let card = document.getElementById(r.toString() + "-" + c.toString());
-            card.src = "back.jpg";
+            card.src = "../static/back.jpg"; // Chemin relatif
         }
     }
 }
@@ -86,13 +86,13 @@ function selectCard() {
             let coords = card1Selected.id.split("-");
             let r = parseInt(coords[0]);
             let c = parseInt(coords[1]);
-            card1Selected.src = board[r][c] + ".jpg";
+            card1Selected.src = "../static/" + board[r][c] + ".jpg"; // Chemin relatif
         } else if (!card2Selected && this !== card1Selected) {
             card2Selected = this;
             let coords = card2Selected.id.split("-");
             let r = parseInt(coords[0]);
             let c = parseInt(coords[1]);
-            card2Selected.src = board[r][c] + ".jpg";
+            card2Selected.src = "../static/" + board[r][c] + ".jpg"; // Chemin relatif
             setTimeout(update, 1000);
         }
     }
@@ -106,8 +106,8 @@ function update() {
 
     // Vérifie si l'une est le double de l'autre en utilisant le dictionnaire cardPairs
     if (!(cardPairs[baseName1] === baseName2 || cardPairs[baseName2] === baseName1)) {
-        card1Selected.src = "back.jpg";
-        card2Selected.src = "back.jpg";
+        card1Selected.src = "../static/back.jpg"; // Chemin relatif
+        card2Selected.src = "../static/back.jpg"; // Chemin relatif
         errors += 1;
         document.getElementById("errors").innerText = errors; // Met à jour le compteur d'erreurs
     } else {
@@ -118,4 +118,3 @@ function update() {
     card1Selected = null;
     card2Selected = null;
 }
-

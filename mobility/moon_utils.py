@@ -46,7 +46,6 @@ def phase(age_lune):  # 7.38 --> différence de jours entre chaque cycle, mais a
 
 def calcul_moonpahse():
     data = total_velo_for_date()
-    print(data)
     # Initialisation des listes
     pleine_lune = []
     pas_pleine_lune = []
@@ -72,7 +71,6 @@ def calcul_moonpahse():
     sump = 0
     for date, velo in pleine_lune:
         sump = sump + velo
-    print(len(pleine_lune))
     sump = round(sump / len(pleine_lune))
 
     sumr = 0
