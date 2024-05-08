@@ -1,5 +1,6 @@
 {% extends "base.html" %}
- {% block header %}
+
+{% block header %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -7,20 +8,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/cards.css">
 </head>
- {% endblock   %}
+{% endblock %}
+
 {% block body %}
 <body>
-    <script src="static/cards.js"></script>
     <h2>
         {% for item in ville %}
-                {{ item }}
-            {% endfor %}
+            {{ item }}
+        {% endfor %}
     </h2>
+    <br>
     <h2>Erreur : <span id="errors">0</span></h2>
+    <br>
     <div id="board">
-        <!-- Le contenu du jeu sera probablement injecté ici via JavaScript -->
+        <script src="static/cards.js"></script>
     </div>
 </body>
- {% endblock   %}
-{% block footer  %}
-{% endblock  %}
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
