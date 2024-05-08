@@ -83,8 +83,8 @@ def create_app(test_config=None):
             end_date = request.form.get('end_date')
             heure_debut=request.form.get('heure_debut')
             heure_fin=request.form.get('heure_fin')
-            start_date = str(start_date)+str(heure_debut)
-            end_date=str(end_date)+str(heure_fin)
+            start_date = str(start_date)+"T"+str(heure_debut)+":00.000Z"
+            end_date=str(end_date)+"T"+str(heure_fin)+":00.000Z"
             horraire= selection_date(ville_info, rue_info, start_date, end_date)
             # Faire quelque chose avec la valeur sélectionnée, comme l'afficher
             x = stats_rue(rue_info, ville_info)

@@ -154,11 +154,11 @@ def selection_date(nom_ville, nom_rue, date_debut, date_fin):
     listeFinal = []
     for element in lstV:
         # Utilisation de guillemets simples pour les chaînes de caractères dans la requête
-        cursor.execute("""SELECT {element}, SUM(traffic.nb_vehicules) FROM traffic \
-            JOIN rue ON rue.rue_id = traffic.rue_id \
-            JOIN ville ON ville.code_postal = rue.code_postal \
-            WHERE traffic.type_vehicule = ? AND ville.nom = ? AND rue.nom = ? AND traffic.date BETWEEN ? AND ?",
-            """(element, nom_ville, nom_rue, date_debut, date_fin))
+        cursor.execute("""SELECT traffic.type_vehicule, SUM(traffic.nb_vehicules) FROM traffic 
+            JOIN rue ON rue.rue_id = traffic.rue_id 
+            JOIN ville ON ville.code_postal = rue.code_postal 
+            WHERE traffic.type_vehicule = ? AND ville.nom = ? AND rue.nom = ? AND traffic.date BETWEEN ? AND ?""",
+            (element, nom_ville, nom_rue, date_debut, date_fin))
         # Ajout des résultats à la liste finale
         listeFinal.append(cursor.fetchall())
     return listeFinal
