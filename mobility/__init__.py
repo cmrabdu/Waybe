@@ -85,8 +85,6 @@ def create_app(test_config=None):
             ville = lst_ville()
             return render_template('request.html', ville=ville)
 
-
-
     @app.route('/nextrequest', methods=['GET', 'POST'])
     def nextrequest():
         rue = lst_rue(ville_info)
@@ -94,14 +92,14 @@ def create_app(test_config=None):
             rue_info = request.form.get('rue')
             start_date = request.form.get('start_date')
             end_date = request.form.get('end_date')
-            heure_debut=request.form.get('heure_debut')
-            heure_fin=request.form.get('heure_fin')
-            start_date = str(start_date)+"T"+str(heure_debut)+":00.000Z"
-            end_date=str(end_date)+"T"+str(heure_fin)+":00.000Z"
-            horraire= selection_date(ville_info, rue_info, start_date, end_date)
+            heure_debut = request.form.get('heure_debut')
+            heure_fin = request.form.get('heure_fin')
+            start_date = str(start_date) + "T" + str(heure_debut) + ":00.000Z"
+            end_date = str(end_date) + "T" + str(heure_fin) + ":00.000Z"
+            horraire = selection_date(ville_info, rue_info, start_date, end_date)
             # Faire quelque chose avec la valeur sélectionnée, comme l'afficher
             x = stats_rue(rue_info, ville_info)
-            return render_template('endrequest.html', x=x , horraire=horraire)
+            return render_template('endrequest.html', x=x, horraire=horraire)
         else:
             return render_template('nextrequest.html', rue=rue)
 

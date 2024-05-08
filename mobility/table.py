@@ -150,17 +150,21 @@ def selection_date(nom_ville, nom_rue, date_debut, date_fin):
     print(date_debut,date_fin)
     db = get_db()
     cursor = db.cursor()
-    lstV = ["lourde_voiture", "velo", "pieton"]  # Correction des éléments de la liste
+    lstV = ["lourd", "voiture", "velo", "pieton"]  # Correction des éléments de la liste
     listeFinal = []
     for element in lstV:
-        # Utilisation de guillemets simples pour les chaînes de caractères dans la requête
         cursor.execute("""SELECT traffic.type_vehicule, SUM(traffic.nb_vehicules) FROM traffic 
             JOIN rue ON rue.rue_id = traffic.rue_id 
             JOIN ville ON ville.code_postal = rue.code_postal 
             WHERE traffic.type_vehicule = ? AND ville.nom = ? AND rue.nom = ? AND traffic.date BETWEEN ? AND ?""",
             (element, nom_ville, nom_rue, date_debut, date_fin))
         # Ajout des résultats à la liste finale
-        listeFinal.append(cursor.fetchall())
+        get = cursor.fetchall()[0]
+        get1 = get[0]
+        get2 = get[1]
+        listeFinal.append(get1)
+        listeFinal.append(get2)
     return listeFinal
+
 
 
