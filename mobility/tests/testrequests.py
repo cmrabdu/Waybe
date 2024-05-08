@@ -88,6 +88,21 @@ class TestUser(unittest.TestCase):
                                                (list1[3], list1[4], types_vehicules[select], valeur_vehicules[select]))
                     start = 1
 
+    def test_ville_selection(self):
+        self.assertEqual(ville_selection("Liege")[0][0],
+        ('totallourd', 100.0, 'totalpieton', 0.0, 'totalvoiture', 0.0, 'totalvelo', 0.0))
+
+    def tearDown(self):
+        # closing the db and cleaning the temp file
+        self.db.commit()
+        self.db.close()
+        os.close(self.db_fd)
+        os.unlink(self.db_path)
+"""
+    
+    def test_selection_date(self):
+        self.assertEqual(selection_date("Liege", "Avenue Rogier", "2024-01-05T16:00:00.000Z", "2024-01-05T18:00:00.000Z"), ['lourd', 30, 'voiture', 2, 'velo', 70, 'pieton', 20])
+    
     def test_total_velo_for_date(self):
         self.assertEqual(total_velo_for_date()[0][0], "2023-12-16")
         self.assertEqual(total_velo_for_date()[1][0], "2023-12-20")
@@ -105,14 +120,22 @@ class TestUser(unittest.TestCase):
     def test_nb_rues_par_ville(self):
         self.assertEqual(nb_rues_par_ville()[0][0], "Bruxelles")
         self.assertEqual(nb_rues_par_ville()[1][0], "Liege")
+    def test_cyclable(self):
+        respond = ["Liege", 197325, 0.0, "Bruxelles", 1208542, 0.0]
+        inc = 0
+        for element in range(0,2):
+            for element2 in range(0,3):
+                self.assertEqual(cyclable()[element][element2], respond[inc])
+                inc = inc + 1
+
+    def test_rue_selection(self):
+        respond = ["Bogaardenstraat", "Avenue Rogier"]
+        for element, number in zip(respond, range(len(respond))):
+            self.assertEqual(rue_selection("Bruxelles")[number][0], respond[number])
+        self.assertEqual(rue_selection("Liege")[0][0], "Avenue Rogier")
+"""
 
 
-    def tearDown(self):
-        # closing the db and cleaning the temp file
-        self.db.commit()
-        self.db.close()
-        os.close(self.db_fd)
-        os.unlink(self.db_path)
 
 
 if __name__ == '__main__':

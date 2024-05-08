@@ -32,19 +32,35 @@ def nb_rues_par_ville():
 def cyclable():
     db = get_db()
     cursor = db.cursor()
-    cursor.execute(
-        """SELECT ville.nom, ville.population, round(SUM(nb_vehicules)/population, 2) FROM traffic JOIN rue on traffic.rue_id = rue.rue_id JOIN ville on rue.code_postal = ville.code_postal WHERE type_vehicule = 'velo' GROUP BY ville.nom ORDER BY SUM(nb_vehicules) DESC;""")
+    cursor.execute("""SELECT ville.nom, ville.population, round(SUM(nb_vehicules)/population, 2) 
+    FROM traffic 
+    JOIN rue on traffic.rue_id = rue.rue_id 
+    JOIN ville on rue.code_postal = ville.code_postal 
+    WHERE type_vehicule = 'velo' 
+    GROUP BY ville.nom 
+    ORDER BY SUM(nb_vehicules) DESC;""")
     return cursor.fetchall()
 
 def rue_selection(ville):
     db = get_db()
     cursor = db.cursor()
-    cursor.execute("""SELECT rue.nom FROM rue JOIN ville ON rue.code_postal = ville.code_postal WHERE ville.nom = ?""",
-                   (ville,))
+    cursor.execute("""SELECT rue.nom FROM rue 
+    JOIN ville ON rue.code_postal = ville.code_postal 
+    WHERE ville.nom = ?""",(ville,))
     return cursor.fetchall()
 
-
-def ville_selection(x):
+def ville_selection(nom_ville):
+    db = get_db()
+    cursor = db.cursor()
+    type = ["lourd", "voiture", "velo", "pieton"]
+    cursor.execute("""SELECT SUM(traffic.nb_vehicules) FROM traffic 
+    JOIN rue ON traffic.rue_id = rue.rue_id
+    JOIN ville on rue.code_postal = ville.code_postal
+    WHERE ville.nom = ?""",(nom_ville,))
+    total_vehicule = cursor.fetchall()
+    '''for element in total_vehicule:
+        curso'''
+'''def ville_selection(x):
     db = get_db()
     cursor = db.cursor()
     cursor.execute("""SELECT code_postal FROM ville WHERE nom = ?""", (x,))
@@ -83,7 +99,7 @@ def ville_selection(x):
     totalvoiture = round((totalvoiture / total) * 100, 2)
     totalvelo = round((totalvelo / total) * 100, 2)
     return "totallourd", totallourd, "totalpieton", totalpieton, "totalvoiture", totalvoiture, "totalvelo", totalvelo
-
+'''
 
 def stats_rue(nom_rue, nom_ville):
     db = get_db()
@@ -134,7 +150,6 @@ def lst_rue(ville):
     return cursor.fetchall()
 
 def selection_date(nom_ville, nom_rue, date_debut, date_fin):
-    print(date_debut,date_fin)
     db = get_db()
     cursor = db.cursor()
     lstV = ["lourd", "voiture", "velo", "pieton"]  # Correction des éléments de la liste
