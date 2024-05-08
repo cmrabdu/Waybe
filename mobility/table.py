@@ -5,11 +5,12 @@ from .db import get_db
 DATABASE_PATH = 'test2.db'
 
 
-def total_velo_for_date():
+def total_velo_for_date(): #le total de vélo par jour
     db = get_db()
     cursor = db.cursor()
-    cursor.execute(
-        """SELECT DISTINCT strftime('%Y-%m-%d', date), SUM(nb_vehicules) FROM traffic WHERE type_vehicule = "velo" GROUP BY strftime('%Y-%m-%d', date)""")
+    cursor.execute("""SELECT DISTINCT strftime('%Y-%m-%d', date), SUM(nb_vehicules) 
+    FROM traffic WHERE type_vehicule = "velo" 
+    GROUP BY strftime('%Y-%m-%d', date)""")
     return cursor.fetchall()
 
 
