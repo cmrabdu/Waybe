@@ -1,6 +1,6 @@
 from datetime import datetime
 from .db import *
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 
 from .moon_utils import age, phase, calcul_moonpahse
 from .table import lst_rue, lst_ville, stats_rue, nb_rues_par_ville, ville_selection,total_velo_for_date,interval_total,rue_selection,entre_tableau,cyclable,selection_date
@@ -71,6 +71,8 @@ def create_app(test_config=None):
 
 
     @app.route('/request', methods=['GET', 'POST'])
+
+
     def request_handler():
         global ville_info
         if request.method == 'POST':
@@ -78,8 +80,28 @@ def create_app(test_config=None):
             ville_info = request.form['ville']
             # Faire quelque chose avec la valeur sélectionnée, comme l'afficher
             x = ville_selection(ville_info)
+
+            # Initialisation des listes pour les chaînes de caractères et les nombres
+            str_list = []
+            int_list = []
+
+            # Parcours du tuple
+            for item in x:
+                if isinstance(item, str):
+                    str_list.append(item)
+                elif isinstance(item, (int, float)):
+                    int_list.append(item)
+
+            # Trier les listes
+            str_list.sort()
+            int_list.sort()
+
+            # Affichage des listes triées
+            print("Liste des chaînes de caractères triées:", str_list)
+            print("Liste des nombres triés:", int_list)
+
             rue = lst_rue(ville_info)
-            return render_template('nextrequest.html', ville_request=x, rue=rue)
+            return render_template('nextrequest.html', str_list=str_list, rue=rue, int_list=int_list,ville_info=ville_info)
 
         else:
             ville = lst_ville()

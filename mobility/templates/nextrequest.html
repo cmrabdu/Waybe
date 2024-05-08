@@ -2,9 +2,13 @@
 
 {% block header %}
     <link rel="stylesheet" href="/static/style.css">
+    <!-- Inclure la bibliothèque Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 {% endblock %}
 
 {% block body %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <!-- Formulaire et liste de sélection dans une div -->
     <div class="form-container">
@@ -44,15 +48,55 @@
             <input type="submit" value="Valider">
         </form>
 
-        <!-- Liste des rues dans une div -->
-        <div class="street-list">
-            <ul>
-                {% for item in ville_request %}
-                     {{ item }}
-                {% endfor %}
-            </ul>
-        </div>
+
     </div>
+
+    <!-- Div pour le graphique -->
+    <div class="chart-container">
+        <h2>
+        {% for item in ville_info %}
+            {{ item }}
+        {% endfor %}
+         </h2>
+        <canvas id="myChart" width="600" height="400"></canvas>
+        <script>
+        // Récupérer les données passées depuis Flask
+        var intList = {{ int_list | tojson | safe }};
+        var strList = {{ str_list | tojson | safe }};
+
+        // Créer un tableau de labels pour l'axe des ordonnées (y)
+        var labels = strList;
+
+        // Créer un tableau de données pour l'axe des abscisses (x)
+        var data = intList;
+
+        // Créer un contexte pour le canevas
+        var ctx = document.getElementById('myChart').getContext('2d');
+
+        // Créer le graphique
+        var myChart = new Chart(ctx, {
+            type: 'bar', // Type de graphique (barres)
+            data: {
+                labels: labels, // Données pour l'axe des ordonnées (y)
+                datasets: [{
+                    label: 'Valeurs', // Légende
+                    data: data, // Données pour l'axe des abscisses (x)
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)', // Couleur de fond des barres
+                    borderColor: 'rgba(75, 192, 192, 1)', // Couleur de bordure des barres
+                    borderWidth: 1 // Largeur de la bordure
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true // Commencer l'axe des ordonnées à zéro
+                    }
+                }
+            }
+        });
+    </script>
+    </div>
+
 
 {% endblock %}
 
