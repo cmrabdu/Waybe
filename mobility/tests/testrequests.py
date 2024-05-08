@@ -88,9 +88,8 @@ class TestUser(unittest.TestCase):
                                                (list1[3], list1[4], types_vehicules[select], valeur_vehicules[select]))
                     start = 1
 
-    def test_ville_selection(self):
-        self.assertEqual(ville_selection("Liege")[0][0],
-        ('totallourd', 100.0, 'totalpieton', 0.0, 'totalvoiture', 0.0, 'totalvelo', 0.0))
+
+
 
     def tearDown(self):
         # closing the db and cleaning the temp file
@@ -98,7 +97,6 @@ class TestUser(unittest.TestCase):
         self.db.close()
         os.close(self.db_fd)
         os.unlink(self.db_path)
-"""
     
     def test_selection_date(self):
         self.assertEqual(selection_date("Liege", "Avenue Rogier", "2024-01-05T16:00:00.000Z", "2024-01-05T18:00:00.000Z"), ['lourd', 30, 'voiture', 2, 'velo', 70, 'pieton', 20])
@@ -133,7 +131,19 @@ class TestUser(unittest.TestCase):
         for element, number in zip(respond, range(len(respond))):
             self.assertEqual(rue_selection("Bruxelles")[number][0], respond[number])
         self.assertEqual(rue_selection("Liege")[0][0], "Avenue Rogier")
-"""
+    
+    def test_ville_selection(self):
+        self.assertEqual(ville_selection("Liege"),
+                     ['lourd', 24.59, 'pieton', 16.39, 'voiture', 1.64, 'velo', 57.38])
+        self.assertEqual(ville_selection("Bruxelles"), ['lourd', 100.0, 'pieton', 0.0, 'voiture', 0.0, 'velo', 0.0])
+
+    def test_lst_ville(self):
+        self.assertEqual(lst_ville()[0][0], "Bruxelles")
+        self.assertEqual(lst_ville()[1][0], "Liege")
+    def test_lst_rue(self):
+        self.assertEqual(lst_rue("Bruxelles")[0][0],"Bogaardenstraat")
+        self.assertEqual(lst_rue("Bruxelles")[1][0], "Avenue Rogier")
+        self.assertEqual(lst_rue("Liege")[0][0], "Avenue Rogier")
 
 
 
