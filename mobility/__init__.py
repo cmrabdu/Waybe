@@ -119,9 +119,19 @@ def create_app(test_config=None):
             start_date = str(start_date) + "T" + str(heure_debut) + ":00.000Z"
             end_date = str(end_date) + "T" + str(heure_fin) + ":00.000Z"
             horraire = selection_date(ville_info, rue_info, start_date, end_date)
-            # Faire quelque chose avec la valeur sélectionnée, comme l'afficher
+            # Initialiser les listes pour les chaînes de caractères et les nombres
+            str_list = []
+            int_list = []
+
+            # Parcourir la liste horraire pour séparer les chaînes de caractères et les nombres
+            for i in range(0, len(horraire), 2):
+                if isinstance(horraire[i], str):
+                    str_list.append(horraire[i])
+                if isinstance(horraire[i + 1], (int, float)):
+                    int_list.append(horraire[i + 1])
+
             x = stats_rue(rue_info, ville_info)
-            return render_template('endrequest.html', x=x, horraire=horraire)
+            return render_template('endrequest.html', str_list=str_list, int_list=int_list ,rue_info=rue_info)
         else:
             return render_template('nextrequest.html', rue=rue)
 
