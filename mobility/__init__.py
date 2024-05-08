@@ -33,6 +33,17 @@ def create_app(test_config=None):
     def about():
         return render_template('about.html', HelloWorld='Hello World')
 
+    @app.route('/chosegame')
+    def chosegame():
+        if request.method == 'POST':
+            # Récupérer la valeur sélectionnée dans le sélecteur de ville
+            # Faire quelque chose avec la valeur sélectionnée, comme l'afficher
+
+            return render_template('game.html', HelloWorld='Hello World')
+
+        else:
+            ville = lst_ville()
+            return render_template('chosegame.html', ville=ville)
     @app.route('/game')
     def game():
         return render_template('game.html', HelloWorld='Hello World')

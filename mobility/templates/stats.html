@@ -1,3 +1,6 @@
+{% extends "base.html" %}
+
+{% block header %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -23,7 +26,9 @@
     <!-- Lien vers la bibliothèque Chart.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 </head>
-<body>
+{% endblock  %}
+
+{% block body %}
 <body>
 
     <h1>Graphique de rues par ville</h1>
@@ -35,5 +40,12 @@
 
     <!-- Lien vers le fichier JavaScript -->
     <script src="../static/graphe.js"></script>
+
 </body>
-</html>
+{% endblock  %}
+
+{% block footer %}
+<footer>
+    <!-- Insérer le contenu du footer ici -->
+</footer>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+ {% block header %}
+ {% endblock   %}
+{% block body %}
+    <body>
+
+    <!-- Formulaire -->
+    <form id="myForm" action="/request" method="POST">
+        <!-- Label pour la sélection de la ville -->
+        <label for="ville">Ville:</label>
+        <!-- Sélecteur de ville -->
+        <select id="ville" name="ville">
+            <!-- Option par défaut -->
+            <option value="None" selected>Choisir une ville</option>
+            <!-- Options pour les différentes villes -->
+            <ul>
+            {% for item in ville %}
+                <option>{{ item[0] }}</option>
+            {% endfor %}
+            </ul>
+
+            <!-- Ajoutez plus d'options ici selon vos besoins -->
+        </select>
+        <!-- Bouton de soumission -->
+        <input type="submit" value="Valider">
+    </form>
+    </body>
+{% endblock   %}
+{% block footer  %}
+{% endblock  %}
