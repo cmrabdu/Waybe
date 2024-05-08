@@ -11,7 +11,11 @@
 {% block body %}
 <body>
     <script src="static/cards.js"></script>
-    <h2>{nom_de_la_ville}</h2>
+    <h2>
+        {% for item in ville %}
+                {{ item }}
+            {% endfor %}
+    </h2>
     <h2>Erreur : <span id="errors">0</span></h2>
     <div id="board">
         <!-- Le contenu du jeu sera probablement injecté ici via JavaScript -->

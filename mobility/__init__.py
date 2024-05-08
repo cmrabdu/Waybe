@@ -7,6 +7,7 @@ from .table import lst_rue, lst_ville, stats_rue, nb_rues_par_ville, ville_selec
 
 
 ville_info = None
+ville_jeu = None
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
@@ -33,20 +34,21 @@ def create_app(test_config=None):
     def about():
         return render_template('about.html', HelloWorld='Hello World')
 
-    @app.route('/chosegame')
+    @app.route('/chosegame', methods=['GET', 'POST'])
     def chosegame():
+        global ville_jeu
         if request.method == 'POST':
-            # Récupérer la valeur sélectionnée dans le sélecteur de ville
-            # Faire quelque chose avec la valeur sélectionnée, comme l'afficher
-
-            return render_template('game.html', HelloWorld='Hello World')
-
+            # Récupérer la valeur sélectionnée dans le sélecteur de ville_jeu
+            ville_jeu = request.form['ville']
+            return render_template('game.html', HelloWorld='Hello World',ville=ville_jeu)
         else:
             ville = lst_ville()
             return render_template('chosegame.html', ville=ville)
+
     @app.route('/game')
     def game():
         return render_template('game.html', HelloWorld='Hello World')
+
     @app.route('/stats')
     def stats():
         result1 = nb_rues_par_ville()
