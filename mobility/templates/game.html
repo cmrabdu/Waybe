@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block header %}
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -12,6 +13,28 @@
 
 {% block body %}
 <body>
+<nav>
+        <!-- Image à gauche de la barre de navigation -->
+        <a href="game">
+            <img src="/static/stars.png" alt="Image" class="image-left">
+            <div class="game">
+                <a href="/chosegame">Game</a>
+            </div>
+        </a>
+        <!-- Logo -->
+        <a href="/"> <img src="/static/titre.png" alt="Logo" class="navbar-logo"></a>
+        <!-- Conteneur du menu -->
+        <div class="menu-container">
+            <!-- Menu -->
+            <ul class="menu">
+                <li><a href="/request">Request</a></li>
+                <li><a href="/stats">Stats</a></li>
+                <li><a href="/about">Team</a></li>
+                <li><a href="/chosemoon">Moon</a></li>
+
+            </ul>
+        </div>
+    </nav>
     <h2>
         {% for item in ville %}
             {{ item }}

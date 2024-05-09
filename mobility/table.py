@@ -149,7 +149,6 @@ def lst_rue(ville):
     return cursor.fetchall()
 
 def selection_date(nom_ville, nom_rue, date_debut, date_fin):
-    print(date_debut,date_fin)
     db = get_db()
     cursor = db.cursor()
     lstV = ["lourd", "voiture", "velo", "pieton"]  # Correction des éléments de la liste
@@ -166,7 +165,6 @@ def selection_date(nom_ville, nom_rue, date_debut, date_fin):
         get2 = get[1]
         listeFinal.append(get1)
         listeFinal.append(get2)
-        print(listeFinal)
     return listeFinal
 
 

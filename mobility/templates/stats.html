@@ -1,12 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Graphique</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <nav>
+        <!-- Image à gauche de la barre de navigation -->
+        <a href="game">
+            <img src="/static/stars.png" alt="Image" class="image-left">
+            <div class="game">
+                <a href="/chosegame">Game</a>
+            </div>
+        </a>
+        <!-- Logo -->
+        <a href="/"> <img src="/static/titre.png" alt="Logo" class="navbar-logo"></a>
+        <!-- Conteneur du menu -->
+        <div class="menu-container">
+            <!-- Menu -->
+            <ul class="menu">
+                <li><a href="/request">Request</a></li>
+                <li><a href="/stats">Stats</a></li>
+                <li><a href="/about">Team</a></li>
+                <li><a href="/chosemoon">Moon</a></li>
+
+            </ul>
+        </div>
+    </nav>
     <canvas id="myChart" width="400" height="400"></canvas>
 
     <script>

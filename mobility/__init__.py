@@ -54,13 +54,11 @@ def create_app(test_config=None):
     def stats():
         result1 = nb_rues_par_ville()
         result2 = entre_tableau("ville")
-        print(result2[0][0])
         result4 = entre_tableau("v85")
         result3 = entre_tableau("vitesse")
         result5 = entre_tableau("traffic")
         result6 = entre_tableau("rue")
         result7 = cyclable()
-        print(result7[0][0],result7)
         return render_template('stats.html', result2=result2, result4=result4, result3=result3, result5=result5, result6=result6)
 
 
