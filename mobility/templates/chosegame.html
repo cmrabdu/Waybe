@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block header %}
+
+{% endblock %}
+
+{% block body %}
+     <nav>
+        <!-- Image à gauche de la barre de navigation -->
+        <a href="game">
+            <img src="/static/stars.png" alt="Image" class="image-left">
+            <div class="game">
+                <a href="/chosegame">Game</a>
+            </div>
+        </a>
+        <!-- Logo -->
+        <a href="/"> <img src="/static/titre.png" alt="Logo" class="navbar-logo"></a>
+        <!-- Conteneur du menu -->
+        <div class="menu-container">
+            <!-- Menu -->
+            <ul class="menu">
+                <li><a href="/request">Request</a></li>
+                <li><a href="/stats">Stats</a></li>
+                <li><a href="/about">Team</a></li>
+                <li><a href="/chosemoon">Moon</a></li>
+
+            </ul>
+        </div>
+    </nav>
+<body>
+
+    <h1>Choisissez une ville pour le thème du jeu  :</h1>
+
+    <!-- Formulaire -->
+    <form id="myForm" action="/chosegame" method="POST">
+        <!-- Label pour la sélection de la ville -->
+        <label for="ville">Ville:</label>
+        <!-- Sélecteur de ville -->
+        <select id="ville" name="ville">
+            <!-- Option par défaut -->
+            <option value="None" selected>Choisir une ville</option>
+            <!-- Options pour les différentes villes -->
+            {% for item in ville %}
+                <option>{{ item[0] }}</option>
+            {% endfor %}
+        </select>
+        <!-- Bouton de soumission -->
+        <input type="submit" value="Valider">
+    </form>
+
+</body>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

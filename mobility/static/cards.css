@@ -4,19 +4,21 @@ body {
     text-align: center;
 }
 
-#board {
-    height: 266px;
-    width: 380px;
+board {
+    height: 266px; /* Augmenter la hauteur */
+    width: 900px; /* Augmenter la largeur */
     margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
+    justify-content: center; /* Centrer les cartes horizontalement */
+    align-items: center; /* Centrer les cartes verticalement */
     background-color: #000000;
     border: 5px solid #ffb700;
     border-radius: 10px;
 }
 
 .card {
-    height: 128px;
-    width: 90px;
-    margin: 2.5px;
+    height: 128px; /* Garder la même hauteur */
+    width: 120px; /* Ajuster la largeur */
+    margin: 5px; /* Ajuster la marge */
 }

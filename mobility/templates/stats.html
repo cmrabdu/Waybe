@@ -1,39 +1,66 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
+
     <meta charset="UTF-8">
-    <!-- Inclusion de la feuille de style -->
-    <link rel="stylesheet" href="static/style.css">
-    <!-- Importation de la police de caractères yagiza -->
-    <style>
-        @import url('https://fonts.cdnfonts.com/css/yagiza');
-    </style>
-    <!-- Importation de la police de caractères nouveau-ibm -->
-    <style>
-        @import url('https://fonts.cdnfonts.com/css/nouveau-ibm');
-    </style>
-    <!-- Importation de la police de caractères popstarregular -->
-    <style>
-        @import url('https://fonts.cdnfonts.com/css/popstarregular');
-    </style>
-    <!-- Définition de l'icône de raccourci -->
-    <link rel="shortcut icon" href="/static/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Graphique de rues par ville</title>
-    <!-- Lien vers la bibliothèque Chart.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <title>Graphique</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-<body>
+    <nav>
+        <!-- Image à gauche de la barre de navigation -->
+        <a href="game">
+            <img src="/static/stars.png" alt="Image" class="image-left">
+            <div class="game">
+                <a href="/chosegame">Game</a>
+            </div>
+        </a>
+        <!-- Logo -->
+        <a href="/"> <img src="/static/titre.png" alt="Logo" class="navbar-logo"></a>
+        <!-- Conteneur du menu -->
+        <div class="menu-container">
+            <!-- Menu -->
+            <ul class="menu">
+                <li><a href="/request">Request</a></li>
+                <li><a href="/stats">Stats</a></li>
+                <li><a href="/about">Team</a></li>
+                <li><a href="/chosemoon">Moon</a></li>
 
-    <h1>Graphique de rues par ville</h1>
-    <!-- Div pour contenir le graphique -->
-    <div id="chartContainer" style="width: 400px; height: 400px;">
-        <!-- Canvas pour afficher le graphique -->
-        <canvas id="myChart"></canvas>
-    </div>
+            </ul>
+        </div>
+    </nav>
+    <canvas id="myChart" width="400" height="400"></canvas>
 
-    <!-- Lien vers le fichier JavaScript -->
-    <script src="../static/graphe.js"></script>
+    <script>
+        // Vos listes séparées
+        var labels = ["entre ville", "entre vitesse moyenne", "entre vitesse", "entre traffic", "entre tableau"];
+        var values = [{{ result2|tojson }}, {{ result4|tojson }}, {{ result3|tojson }}, {{ result5|tojson }}, {{ result6|tojson }}];
+
+        // Création du graphique
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Nombre de valeurs',
+                    data: values.map(arr => arr.length), // Utiliser la longueur de chaque tableau
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
 </body>
 </html>

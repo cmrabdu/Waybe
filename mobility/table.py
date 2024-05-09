@@ -29,6 +29,8 @@ def nb_rues_par_ville():
     return cursor.fetchall()
 
 
+
+
 def cyclable():
     db = get_db()
     cursor = db.cursor()
@@ -146,5 +148,6 @@ def selection_date(nom_ville, nom_rue, date_debut, date_fin):
         listeFinal.append(get1)
         listeFinal.append(get2)
     return listeFinal
+
 
 

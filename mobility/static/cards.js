@@ -16,8 +16,8 @@ var cardPairs = {
 
 var cardSet;
 var board = [];
-var rows = 4; // Nombre de lignes du plateau
-var columns = 2; // Nombre de colonnes du plateau
+var rows = 2; // Nombre de lignes du plateau
+var columns = 4; // Nombre de colonnes du plateau
 
 var card1Selected;
 var card2Selected;

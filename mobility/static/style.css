@@ -142,6 +142,18 @@ nav {
     margin-right: 20px; /* Curseur indiquant qu'il s'agit d'un élément cliquable */ /* Espacement entre les éléments du menu */
 }
 
+.game {;
+    padding: 0 5px; /* Espacement autour de chaque élément du menu */
+    border: 2px solid #ffffff; /* Bordure autour de chaque élément */
+    border-radius: 5px; /* Coins arrondis */
+    display: inline-block; /* Afficher en ligne pour que les éléments ne soient pas empilés */
+    background-color: transparent; /* Couleur de fond */
+    color: #333; /* Couleur du texte */
+    text-decoration: none; /* Supprime les soulignements par défaut */
+    cursor: pointer;
+    margin-right: 20px; /* Curseur indiquant qu'il s'agit d'un élément cliquable */ /* Espacement entre les éléments du menu */
+}
+
 .menu li a {
     margin-right: 20px;
     color: #fff;
@@ -554,7 +566,7 @@ body {
 
 #board {
     height: 266px;
-    width: 380px;
+    width: 390px;
     margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
@@ -568,3 +580,39 @@ body {
     width: 90px;
     margin: 2.5px;
 }
+
+/* Ajoute un arrière-plan spécifique à la page de la phase de la lune */
+.moon-page {
+    background-image: url('backmoon.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.moon-and-graph-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 20px;
+}
+
+.moon-info,
+.graph-info {
+    width: 45%; /* Ajustez la largeur selon vos préférences */
+}
+
+.graph-info {
+    text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+    .moon-and-graph-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .moon-info,
+    .graph-info {
+        width: 100%;
+    }
+}
+

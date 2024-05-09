@@ -1,5 +1,7 @@
 {% extends "base.html" %}
- {% block header %}
+
+{% block header %}
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -7,16 +9,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="static/cards.css">
 </head>
- {% endblock   %}
+{% endblock %}
+
 {% block body %}
 <body>
-    <script src="static/cards.js"></script>
-    <h2>{nom_de_la_ville}</h2>
+<nav>
+        <!-- Image à gauche de la barre de navigation -->
+        <a href="game">
+            <img src="/static/stars.png" alt="Image" class="image-left">
+            <div class="game">
+                <a href="/chosegame">Game</a>
+            </div>
+        </a>
+        <!-- Logo -->
+        <a href="/"> <img src="/static/titre.png" alt="Logo" class="navbar-logo"></a>
+        <!-- Conteneur du menu -->
+        <div class="menu-container">
+            <!-- Menu -->
+            <ul class="menu">
+                <li><a href="/request">Request</a></li>
+                <li><a href="/stats">Stats</a></li>
+                <li><a href="/about">Team</a></li>
+                <li><a href="/chosemoon">Moon</a></li>
+
+            </ul>
+        </div>
+    </nav>
+    <h2>
+        {% for item in ville %}
+            {{ item }}
+        {% endfor %}
+    </h2>
+    <br>
     <h2>Erreur : <span id="errors">0</span></h2>
+    <br>
     <div id="board">
-        <!-- Le contenu du jeu sera probablement injecté ici via JavaScript -->
+        <script src="static/cards.js"></script>
     </div>
 </body>
- {% endblock   %}
-{% block footer  %}
-{% endblock  %}
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
