@@ -1,73 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+{% extends "base.html" %}
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Graphique</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
+{% block  header %}
+
+{% endblock %}
+
+
+
+{% block  body %}
+    <body>
+    <!-- Barre de navigation -->
     <nav>
         <!-- Image à gauche de la barre de navigation -->
-        <a href="game">
-            <img src="/static/stars.png" alt="Image" class="image-left">
-            <div class="game">
-                <a href="/chosegame">Game</a>
-            </div>
-        </a>
+        <img src="/static/heart.png" alt="Image" class="image-left">
         <!-- Logo -->
         <a href="/"> <img src="/static/titre.png" alt="Logo" class="navbar-logo"></a>
-        <!-- Conteneur du menu -->
-        <div class="menu-container">
-            <!-- Menu -->
-            <ul class="menu">
-                <li><a href="/request">Request</a></li>
-                <li><a href="/stats">Stats</a></li>
-                <li><a href="/about">Team</a></li>
-                <li><a href="/chosemoon">Moon</a></li>
-
-            </ul>
-        </div>
+        <!-- Menu -->
+        <ul class="menu">
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">Team </a></li>
+            <li><a href="/request">Request</a></li>
+            <li><a href="/moon">Moon</a></li>
+        </ul>
     </nav>
-    <h1>Statistiques</h1>
+    <div class="cadre">
+        <!-- Contenu de la page -->
+        <div class="nbr_rue-container">
+            <!-- Première partie de la statistique -->
+            <div class="nbr_rue">
+                <p>Nombres de rues par villes</p>
+                <ul>
 
-    <h2>Nombre de rues par ville :</h2>
-    <ul>
-        {% for ville, nb_rues in result1.items() %}
-            <li>{{ ville }} : {{ nb_rues }}</li>
-        {% endfor %}
-    </ul>
-
-    <h2>Liste des villes :</h2>
-    <ul>
-        {% for ville in result2 %}
-            <li>{{ ville }}</li>
-        {% endfor %}
-    </ul>
-
-    <h2>Vitesse moyenne (km/h) :</h2>
-    <ul>
-        {% for vitesse in result3 %}
-            <li>{{ vitesse }}</li>
-        {% endfor %}
-    </ul>
-
-    <h2>Trafic :</h2>
-    <ul>
-        {% for traffic in result5 %}
-            <li>{{ traffic }}</li>
-        {% endfor %}
-    </ul>
-
-    <h2>Liste des rues :</h2>
-    <ul>
-        {% for rue in result6 %}
-            <li>{{ rue }}</li>
-        {% endfor %}
-    </ul>
-
-    <h2>Cyclable :</h2>
-    <p>{{ result7 }}</p>
-</body>
-</html>
+                    {% for nbre_rue in x %}
+                        <li>{{ nbre_rue[0] }}:{{ nbre_rue[1] }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="cadre2">
+            <div class="nbr_rue-container">
+                <!-- Deuxième partie de la statistique -->
+                <div class="nbr_rue">
+                    <p>Nombres d'entrées par villes</p>
+                    <ul>
+                        <!-- Affichage des données -->
+                        <li>Entre Ville :{{ entreVille[0][0]}}</li>
+                        <li>Entre Vitesse :{{ entreVitesse[0][0] }}</li>
+                        <li>Entre V85 :{{ entreV85[0][0] }}</li>
+                        <li>Entre Traffic :{{ entreTraffic[0][0] }}</li>
+                        <li>Entre Rue :{{ entreRue[0][0] }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="cadre3">
+            <div class="nbr_rue-container2">
+                <!-- Troisième partie de la statistique -->
+                <div class="nbr_rue">
+                    <p>Classement des villes les plus cyclistes</p>
+                    <ul>
+                        <!-- Utilisation d'une boucle for pour afficher les données -->
+                        {% for nbre_rue in qtt_velo %}
+                            <li>{{ nbre_rue[0] }}: {{ nbre_rue[2] }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </body>
+{% endblock %}
+{% block footer %}
+    <!-- Contenu du pied de page ici -->
+{% endblock %}
