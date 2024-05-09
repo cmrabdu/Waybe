@@ -30,37 +30,44 @@
             </ul>
         </div>
     </nav>
-    <canvas id="myChart" width="400" height="400"></canvas>
+    <h1>Statistiques</h1>
 
-    <script>
-        // Vos listes séparées
-        var labels = ["entre ville", "entre vitesse moyenne", "entre vitesse", "entre traffic", "entre tableau"];
-        var values = [{{ result2|tojson }}, {{ result4|tojson }}, {{ result3|tojson }}, {{ result5|tojson }}, {{ result6|tojson }}];
+    <h2>Nombre de rues par ville :</h2>
+    <ul>
+        {% for ville, nb_rues in result1.items() %}
+            <li>{{ ville }} : {{ nb_rues }}</li>
+        {% endfor %}
+    </ul>
 
-        // Création du graphique
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Nombre de valeurs',
-                    data: values.map(arr => arr.length), // Utiliser la longueur de chaque tableau
-                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
-        });
-    </script>
+    <h2>Liste des villes :</h2>
+    <ul>
+        {% for ville in result2 %}
+            <li>{{ ville }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Vitesse moyenne (km/h) :</h2>
+    <ul>
+        {% for vitesse in result3 %}
+            <li>{{ vitesse }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Trafic :</h2>
+    <ul>
+        {% for traffic in result5 %}
+            <li>{{ traffic }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Liste des rues :</h2>
+    <ul>
+        {% for rue in result6 %}
+            <li>{{ rue }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Cyclable :</h2>
+    <p>{{ result7 }}</p>
 </body>
 </html>

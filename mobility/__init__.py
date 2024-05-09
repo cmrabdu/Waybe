@@ -59,7 +59,7 @@ def create_app(test_config=None):
         result5 = entre_tableau("traffic")
         result6 = entre_tableau("rue")
         result7 = cyclable()
-        return render_template('stats.html', result2=result2, result4=result4, result3=result3, result5=result5, result6=result6)
+        return render_template('stats.html', result1=result1,result7=result7,result2=result2, result4=result4, result3=result3, result5=result5, result6=result6)
 
 
 
