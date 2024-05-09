@@ -1,26 +1,16 @@
 var errors = 0; // Compteur d'erreurs
-var cardList = [
-    "car",
-    "truc",
-    "cycle",
-    "human"
-];
+var pairsFound = 0; // Compteur de paires trouvées
+var totalPairs; // Nombre total de paires à trouver
 
-// Dictionnaire pour associer chaque carte à son double spécifique
-var cardPairs = {
-    "car": "number_car",
-    "truc": "number_truc",
-    "cycle": "number_cycle",
-    "human": "number_human"
-};
-
-var cardSet;
-var board = [];
+var cardList = ["car", "cycle", "human", "truc"]; // Cartes disponibles
+var cardPairs = {}; // Paires de cartes
+var cardSet; // Ensemble de cartes pour le jeu
+var board = []; // Tableau de jeu
 var rows = 2; // Nombre de lignes du plateau
 var columns = 4; // Nombre de colonnes du plateau
 
-var card1Selected;
-var card2Selected;
+var card1Selected; // Première carte sélectionnée
+var card2Selected; // Deuxième carte sélectionnée
 
 window.onload = function() {
     prepareCards();
@@ -28,27 +18,42 @@ window.onload = function() {
     startGame();
 }
 
-// Préparation des paires de cartes
-function prepareCards() {
-    cardSet = [];
-    for (let card of cardList) {
-        cardSet.push(card);
-        cardSet.push(cardPairs[card]); // Ajoute le double spécifique de chaque carte
-    }
+function setupCards(cityPrefix) {
+    cardPairs = {};
+    cardList.forEach(card => {
+        cardPairs[card] = `${cityPrefix}_${card}`;
+    });
 }
 
-// Fonction pour mélanger les cartes
+function prepareCards() {
+    const cityPrefixes = {
+        "Charleroi": "chr",
+        "Jambes": "jmb",
+        "Bruxelles": "bx",
+        "Beveren": "bev",
+        "Courtrait": "cou",
+        "Namur": "nam",
+        "Liege": "lie",
+        "Grobbendonk": "gro",
+        "Herzel": "her"
+    };
+    setupCards(cityPrefixes[chosenCity] || "chr");
+    cardSet = [];
+    cardList.forEach(card => {
+        cardSet.push(card);
+        cardSet.push(cardPairs[card]);
+    });
+    totalPairs = cardList.length; // Mise à jour du total des paires
+}
+
 function shuffleCards() {
     for (let i = cardSet.length - 1; i > 0; i--) {
         let j = Math.floor(Math.random() * (i + 1));
-        let temp = cardSet[i];
-        cardSet[i] = cardSet[j];
-        cardSet[j] = temp;
+        [cardSet[i], cardSet[j]] = [cardSet[j], cardSet[i]];
     }
     console.log(cardSet);
 }
 
-// Fonction pour démarrer le jeu
 function startGame() {
     for (let r = 0; r < rows; r++) {
         let row = [];
@@ -56,11 +61,11 @@ function startGame() {
             let card = document.createElement("img");
             let cardImg = cardSet.pop();
             row.push(cardImg);
-            card.id = r.toString() + "-" + c.toString();
-            card.src = "../static/back.jpg"; // Chemin relatif
+            card.id = `${r}-${c}`;
+            card.src = "../static/back.jpg";
             card.classList.add("card");
             card.addEventListener("click", selectCard);
-            document.getElementById("board").append(card);
+            document.getElementById("board").appendChild(card);
         }
         board.push(row);
     }
@@ -68,53 +73,48 @@ function startGame() {
     setTimeout(hideCards, 2000);
 }
 
-// Fonction pour cacher les cartes après un temps initial
 function hideCards() {
     for (let r = 0; r < rows; r++) {
         for (let c = 0; c < columns; c++) {
-            let card = document.getElementById(r.toString() + "-" + c.toString());
-            card.src = "../static/back.jpg"; // Chemin relatif
+            document.getElementById(`${r}-${c}`).src = "../static/back.jpg";
         }
     }
 }
 
-// Fonction pour gérer les sélections de cartes
 function selectCard() {
     if (this.src.includes("back")) {
         if (!card1Selected) {
             card1Selected = this;
-            let coords = card1Selected.id.split("-");
-            let r = parseInt(coords[0]);
-            let c = parseInt(coords[1]);
-            card1Selected.src = "../static/" + board[r][c] + ".jpg"; // Chemin relatif
+            let [r, c] = card1Selected.id.split("-");
+            card1Selected.src = `../static/${board[r][c]}.jpg`;
         } else if (!card2Selected && this !== card1Selected) {
             card2Selected = this;
-            let coords = card2Selected.id.split("-");
-            let r = parseInt(coords[0]);
-            let c = parseInt(coords[1]);
-            card2Selected.src = "../static/" + board[r][c] + ".jpg"; // Chemin relatif
-            setTimeout(update, 1000);
+            let [r, c] = card2Selected.id.split("-");
+            card2Selected.src = `../static/${board[r][c]}.jpg`;
+            setTimeout(checkPair, 1000);
         }
     }
 }
 
-// Fonction pour vérifier si les deux cartes sélectionnées sont des doubles spécifiques
-function update() {
-    // Extraire les noms de base des images en enlevant le chemin et l'extension
-    let baseName1 = card1Selected.src.replace(/^.*[\\\/]/, '').replace(/\..+$/, '');
-    let baseName2 = card2Selected.src.replace(/^.*[\\\/]/, '').replace(/\..+$/, '');
+function checkPair() {
+    let baseName1 = card1Selected.src.match(/([^\/]+)\.jpg$/)[1];
+    let baseName2 = card2Selected.src.match(/([^\/]+)\.jpg$/)[1];
 
-    // Vérifie si l'une est le double de l'autre en utilisant le dictionnaire cardPairs
-    if (!(cardPairs[baseName1] === baseName2 || cardPairs[baseName2] === baseName1)) {
-        card1Selected.src = "../static/back.jpg"; // Chemin relatif
-        card2Selected.src = "../static/back.jpg"; // Chemin relatif
-        errors += 1;
-        document.getElementById("errors").innerText = errors; // Met à jour le compteur d'erreurs
+    if (cardPairs[baseName1] === baseName2 || cardPairs[baseName2] === baseName1) {
+        pairsFound += 1;
+        if (pairsFound === totalPairs) {
+            displayCongratulations();
+        }
     } else {
-        // Optionnel : Ajouter une rétroaction positive ici si la paire est correcte
+        card1Selected.src = "../static/back.jpg";
+        card2Selected.src = "../static/back.jpg";
+        errors += 1;
+        document.getElementById("errors").innerText = errors;
     }
-
-    // Réinitialiser les sélections pour permettre de nouvelles sélections
     card1Selected = null;
     card2Selected = null;
+}
+
+function displayCongratulations() {
+    alert("Bien joué ! Vous avez trouvé toutes les paires. Nous vous invitons a aller voir Request pour avoir plus d'info sur vôtre ville ! ");
 }

@@ -262,9 +262,9 @@ footer p {
 
 .cadre2 {
     position: fixed;
-    bottom: 50px;
+    bottom: 80px;
     left: 90px;
-    width: 40%;
+    width: 45%;
     height: 30%;
     border: 7px solid #000; /* Bordure */
     border-radius: 5px; /* Coins arrondis */
@@ -288,9 +288,9 @@ footer p {
 
 .cadre3 {
     position: fixed;
-    bottom: 50px;
-    left: 900px;
-    width: 40%;
+    bottom: 80px;
+    right: 90px;
+    width: 45%;
     height: 30%;
     border: 7px solid #000; /* Bordure */
     border-radius: 5px; /* Coins arrondis */
@@ -565,7 +565,7 @@ body {
 }
 
 #board {
-    height: 266px;
+    height: 280px;
     width: 390px;
     margin: 0 auto;
     display: flex;
@@ -583,7 +583,7 @@ body {
 
 /* Ajoute un arrière-plan spécifique à la page de la phase de la lune */
 .moon-page {
-    background-image: url('backmoon.png');
+    background-image: url('backm.png');
     background-size: cover;
     background-position: center;
 }
@@ -615,4 +615,3 @@ body {
         width: 100%;
     }
 }
-
