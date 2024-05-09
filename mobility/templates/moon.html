@@ -1,41 +1,67 @@
 {% extends "base.html" %}
-{% block header  %}
+{% block header %}
     <link rel="stylesheet" href="static/style.css">
-{% endblock   %}
+{% endblock %}
 {% block body %}
 
-<body>
-    <h1>Phase de la Lune</h1>
-    <p>Âge de la lune : {{ age_lune }} jours</p>
-    <p>Phase actuelle : {{ moon_phase }}</p>
-    <!-- Affichage de l'image de la phase de la lune -->
-    <img src="{{ url_for('static', filename='images/' + moon_image) }}" alt="Phase de la Lune">
-
-    <div class="cadre2">
-         <div class="nbr_rue-container">
-        <!-- Deuxième partie de la statistique -->
-        <div class="nbr_rue">
-            <ul>
-                <!-- Affichage des données -->
-                <td> velos moyenne jours de pleine lune  :{{ sump}}</td>
-
-            </ul>
+<body class="moon-page">
+    <div class="moon-and-graph-container">
+        <!-- Div pour la lune -->
+        <div class="moon-info">
+            <h1>Phase de la Lune</h1>
+            <p>Âge de la lune : {{ age_lune }} jours</p>
+            <p>Phase actuelle : {{ moon_phase }}</p>
+            <!-- Affichage de l'image de la phase de la lune -->
+            <img src="{{ url_for('static', filename='images/' + moon_image) }}" alt="Phase de la Lune">
         </div>
-         </div>
-        <div class="cadre3">
-     <div class="nbr_rue-container2">
-        <!-- Troisième partie de la statistique -->
-       <div class="nbr_rue">
-
-            <ul>
-                <!-- Affichage des données -->
-                <td> velos moyenne jours normal  :{{ smur}}</td>
-
-            </ul>
+        <!-- Div pour le graphique -->
+        <div class="graph-info">
+            <h2>Graphique circulaire des moyennes de vélos sur les jours en données</h2>
+            <canvas id="myChart" width="200" height="200"></canvas>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Jours de pleine lune', 'Jours normaux'],
+                        datasets: [{
+                            label: 'Moyenne de vélos',
+                            data: [{{ sump }}, {{ smur }}],
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.7)',
+                                'rgba(54, 162, 235, 0.7)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                display: false // Masquer l'axe y
+                            },
+                            x: {
+                                display: false // Masquer l'axe x
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: 'white' // Changer la couleur du texte des labels
+                                }
+                            }
+                        }
+                    }
+                });
+            </script>
         </div>
-         </div>
+    </div>
 </body>
 
-{% endblock  %}
-{% block footer  %}
-{% endblock   %}
+{% endblock %}
+{% block footer %}
+{% endblock %}

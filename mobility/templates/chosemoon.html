@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block header %}
+{% endblock %}
+
+{% block body %}
+<body class="moon-page">
+<div class="form-container">
+        <form id="rueForm" action="/chosemoon" method="POST">
+
+
+            <!-- Label et champs pour les dates -->
+            <div>
+                <label for="start_date">Date de début :</label>
+                <input type="date" id="start_date" name="start_date" required>
+                <br>
+            </div>
+
+            <!-- Bouton de soumission -->
+            <input type="submit" value="Valider">
+        </form>
+
+
+    </div>
+
+</body>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

@@ -28,6 +28,8 @@ def nb_rues_par_ville():
     return cursor.fetchall()
 
 
+
+
 def cyclable():
     db = get_db()
     cursor = db.cursor()

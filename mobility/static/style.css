@@ -580,3 +580,39 @@ body {
     width: 90px;
     margin: 2.5px;
 }
+
+/* Ajoute un arrière-plan spécifique à la page de la phase de la lune */
+.moon-page {
+    background-image: url('backmoon.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.moon-and-graph-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 20px;
+}
+
+.moon-info,
+.graph-info {
+    width: 45%; /* Ajustez la largeur selon vos préférences */
+}
+
+.graph-info {
+    text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+    .moon-and-graph-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .moon-info,
+    .graph-info {
+        width: 100%;
+    }
+}
+

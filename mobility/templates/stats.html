@@ -1,51 +1,43 @@
-{% extends "base.html" %}
-
-{% block header %}
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- Inclusion de la feuille de style -->
-    <link rel="stylesheet" href="static/style.css">
-    <!-- Importation de la police de caractères yagiza -->
-    <style>
-        @import url('https://fonts.cdnfonts.com/css/yagiza');
-    </style>
-    <!-- Importation de la police de caractères nouveau-ibm -->
-    <style>
-        @import url('https://fonts.cdnfonts.com/css/nouveau-ibm');
-    </style>
-    <!-- Importation de la police de caractères popstarregular -->
-    <style>
-        @import url('https://fonts.cdnfonts.com/css/popstarregular');
-    </style>
-    <!-- Définition de l'icône de raccourci -->
-    <link rel="shortcut icon" href="/static/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Graphique de rues par ville</title>
-    <!-- Lien vers la bibliothèque Chart.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <title>Graphique</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-{% endblock  %}
-
-{% block body %}
 <body>
+    <canvas id="myChart" width="400" height="400"></canvas>
 
-    <h1>Graphique de rues par ville</h1>
-    <!-- Div pour contenir le graphique -->
-    <div id="chartContainer" style="width: 400px; height: 400px;">
-        <!-- Canvas pour afficher le graphique -->
-        <canvas id="myChart"></canvas>
-    </div>
+    <script>
+        // Vos listes séparées
+        var labels = ["entre ville", "entre vitesse moyenne", "entre vitesse", "entre traffic", "entre tableau"];
+        var values = [{{ result2|tojson }}, {{ result4|tojson }}, {{ result3|tojson }}, {{ result5|tojson }}, {{ result6|tojson }}];
 
-    <!-- Lien vers le fichier JavaScript -->
-    <script src="../static/graphe.js"></script>
-
+        // Création du graphique
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Nombre de valeurs',
+                    data: values.map(arr => arr.length), // Utiliser la longueur de chaque tableau
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
 </body>
-{% endblock  %}
-
-{% block footer %}
-<footer>
-    <!-- Insérer le contenu du footer ici -->
-</footer>
-{% endblock %}
+</html>

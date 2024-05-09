@@ -8,6 +8,7 @@ from .table import lst_rue, lst_ville, stats_rue, nb_rues_par_ville, ville_selec
 
 ville_info = None
 ville_jeu = None
+date_voulu = None
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
@@ -53,13 +54,14 @@ def create_app(test_config=None):
     def stats():
         result1 = nb_rues_par_ville()
         result2 = entre_tableau("ville")
+        print(result2[0][0])
         result4 = entre_tableau("v85")
         result3 = entre_tableau("vitesse")
         result5 = entre_tableau("traffic")
         result6 = entre_tableau("rue")
         result7 = cyclable()
-        return render_template('stats.html', x=result1, entreVille=result2, entreVitesse=result3, entreV85=result4,
-                               entreTraffic=result5, entreRue=result6, qtt_velo=result7)
+        print(result7[0][0],result7)
+        return render_template('stats.html', result2=result2, result4=result4, result3=result3, result5=result5, result6=result6)
 
 
 
@@ -96,10 +98,6 @@ def create_app(test_config=None):
             str_list.sort()
             int_list.sort()
 
-            # Affichage des listes triées
-            print("Liste des chaînes de caractères triées:", str_list)
-            print("Liste des nombres triés:", int_list)
-
             rue = lst_rue(ville_info)
             return render_template('nextrequest.html', str_list=str_list, rue=rue, int_list=int_list,ville_info=ville_info)
 
@@ -129,36 +127,51 @@ def create_app(test_config=None):
                     str_list.append(horraire[i])
                 if isinstance(horraire[i + 1], (int, float)):
                     int_list.append(horraire[i + 1])
-
-            x = stats_rue(rue_info, ville_info)
             return render_template('endrequest.html', str_list=str_list, int_list=int_list ,rue_info=rue_info)
         else:
             return render_template('nextrequest.html', rue=rue)
 
+    @app.route('/chosemoon',methods=['GET', 'POST'])
+    def chosemoon():
+        if request.method == 'POST':
+            date_voulu_str = request.form.get('start_date')
+
+            date_voulu = datetime.strptime(date_voulu_str, '%Y-%m-%d')
+
+
+            date_reference = datetime(2000, 1, 5)
+
+
+            age_lune = moon_utils.age(date_voulu, date_reference)
+            phase_lune = moon_utils.phase(age_lune)
+
+            # pour associer phases to images
+            images = {
+                'NEW_MOON': 'NEW_MOON.png',
+                'WAXING_CRESCENT': 'WAXING_CRESCE.png',
+                'FIRST_QUARTER': 'FIRST_QUARTER.png',
+                'WAXING_GIBBOUS': 'WAXING_GIBBOU.png',
+                'FULL_MOON': 'FULL_MOON.png',
+                'WANING_GIBBOUS': 'WANING_GIBBOU.png',
+                'LAST_QUARTER': 'LAST_QUARTER.png',
+                'WANING_CRESCENT': 'WANING_CRESCE.png',
+            }
+
+            moon_image = images[phase_lune.name]
+
+            return render_template('moon.html',date_voulu=date_voulu,date_reference=date_reference,age_lune=age_lune, moon_phase=phase_lune.name, moon_image=moon_image,smur=int(calcul_moonpahse()[1]),
+                               sump=int(calcul_moonpahse()[0])
+)
+        else:
+            return render_template('chosemoon.html')
+
 
     @app.route('/moon')
     def moon_phase_view():
-        date_voulu = datetime(2004, 4, 23)  # datetime.now()  #date de aujourd'hui (peux mettre une date fixe aussi)
-        date_reference = datetime(2000, 1, 5)
 
-        age_lune = moon_utils.age(date_voulu, date_reference)
-        phase_lune = moon_utils.phase(age_lune)
 
-        # pour associer phases to images
-        images = {
-            'NEW_MOON': 'NEW_MOON.png',
-            'WAXING_CRESCENT': 'WAXING_CRESCENT.png',
-            'FIRST_QUARTER': 'FIRST_QUARTER.png',
-            'WAXING_GIBBOUS': 'WAXING_GIBBOUS.png',
-            'FULL_MOON': 'FULL_MOON.png',
-            'WANING_GIBBOUS': 'WANING_GIBBOUS.png',
-            'LAST_QUARTER': 'LAST_QUARTER.png',
-            'WANING_CRESCENT': 'WANING_CRESCENT.png',
-        }
 
-        moon_image = images[phase_lune.name]
-
-        return render_template('moon.html', age_lune=age_lune, moon_phase=phase_lune.name, moon_image=moon_image, smur=int(calcul_moonpahse()[1]),
+        return render_template('moon.html',  smur=int(calcul_moonpahse()[1]),
                                sump=int(calcul_moonpahse()[0]))
 
 
