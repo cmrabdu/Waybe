@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}WAY-BE · la mobilité belge en mode Y2K{% endblock %}
+
+{% block head_extra %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/player.css') }}">
+{% endblock %}
+
+{% block body_class %}page-home{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="container hero__inner">
+    <div class="hero__copy">
+      <span class="rise eyebrow">Telraam · Belgique · 2024 <span class="new-burst" aria-hidden="true">NEW!</span></span>
+      <h1 class="rise hero__title" data-delay="1">
+        La mobilité belge,<br><span class="text-gradient">version&nbsp;Y2K.</span>
+      </h1>
+      <p class="rise lead" data-delay="2">
+        Vélos, voitures, piétons et camions comptés rue par rue par des capteurs citoyens.
+        Explore les données, compare les villes, joue au memory, et vérifie si la pleine lune fait sortir les cyclistes.
+      </p>
+      <div class="rise hero__actions" data-delay="3">
+        <a class="btn btn--primary" href="/request">Explorer les données <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="btn btn--ghost" href="/chosegame">Jouer au memory</a>
+      </div>
+      {% if stats %}
+      <dl class="rise hero__stats" data-delay="3">
+        <div class="stat"><dt class="stat__label">villes suivies</dt><dd class="stat__value">{{ stats.villes }}</dd></div>
+        <div class="stat"><dt class="stat__label">rues équipées</dt><dd class="stat__value">{{ stats.rues }}</dd></div>
+        <div class="stat"><dt class="stat__label">vélos comptés</dt><dd class="stat__value">{{ '{:,}'.format(stats.velos).replace(',', '&#8239;')|safe }}</dd></div>
+      </dl>
+      {% endif %}
+    </div>
+
+    <div class="hero__visual" aria-hidden="true">
+      <div class="hero__orbit"></div>
+      <img class="hero__logo" src="{{ url_for('static', filename='logo_main_page.png') }}" alt="" width="1280" height="720">
+      <span class="sparkle sparkle--1"></span>
+      <span class="sparkle sparkle--2"></span>
+      <span class="sparkle sparkle--3"></span>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight" id="radio">
+  <div class="container radio">
+    <div class="radio__copy" data-reveal>
+      <span class="eyebrow">Radio WAY-BE · 128&nbsp;kbps</span>
+      <h2>Une bande-son pour<br>la route.</h2>
+      <p class="muted">Le lecteur MP3 du site original de 2024, remonté façon Winamp&nbsp;: appuie sur play, l'écran s'allume et le titre défile.</p>
+      <p class="muted radio__keys"><kbd>Espace</kbd> lecture / pause</p>
+    </div>
+
+    <div class="panel mp3" data-player data-state="stop" data-reveal data-delay="1" role="region" aria-label="Lecteur audio Radio WAY-BE">
+      <div class="window-bar" aria-hidden="true"><span>radio_wayBE.mp3</span><span class="window-bar__dots"><i></i><i></i><i></i></span></div>
+      <div class="mp3__body">
+        <button class="mp3__play" type="button" data-play aria-label="Lecture">
+          <svg class="mp3__ico-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="mp3__ico-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 5h4v14h-4zM13.5 5h4v14h-4z"/></svg>
+        </button>
+        <div class="mp3__main">
+          <div class="mp3__lcd">
+            <div class="mp3__top">
+              <span class="mp3__status" data-status>STOP</span>
+              <span class="mp3__bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+              <span class="mp3__time" data-time>0:00 / 10:00</span>
+            </div>
+            <div class="mp3__marquee" aria-hidden="true">
+              <div class="mp3__track" data-marquee><span>1. Ayesha x Righteous &nbsp;***&nbsp; </span><span>1. Ayesha x Righteous &nbsp;***&nbsp; </span></div>
+            </div>
+          </div>
+          <div class="mp3__row">
+            <input class="mp3__seek" type="range" min="0" max="1000" step="1" value="0" data-seek aria-label="Position dans la piste" aria-valuetext="0:00 sur 10:00">
+            <button class="mp3__next" type="button" data-next aria-label="Piste suivante">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5v14l9-7zM15 5h3v14h-3z"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <p class="sr-only" aria-live="polite" data-live></p>
+      <ul hidden data-tracks>
+        <li data-src="{{ url_for('static', filename='tk2.mp3') }}" data-title="Ayesha x Righteous" data-duration="600"></li>
+        <li data-src="{{ url_for('static', filename='tk.mp3') }}" data-title="WAY-BE mix" data-duration="600"></li>
+      </ul>
+      <audio preload="none"></audio>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="explorer">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Au programme</span>
+      <h2>Quatre façons de lire la ville.</h2>
+    </div>
+
+    <div class="features">
+      <a class="feature" href="/request" data-reveal>
+        <div class="window-bar" aria-hidden="true"><span>data.exe</span><span class="window-bar__dots"><i></i><i></i><i></i></span></div>
+        <span class="feature__index mono">01</span>
+        <h3>Data</h3>
+        <p>Choisis une ville, une rue et une plage horaire : le trafic s'affiche par type d'usager.</p>
+        <span class="feature__cta">Lancer une requête <span aria-hidden="true">→</span></span>
+      </a>
+      <a class="feature" href="/stats" data-reveal data-delay="1">
+        <div class="window-bar" aria-hidden="true"><span>stats.xls</span><span class="window-bar__dots"><i></i><i></i><i></i></span></div>
+        <span class="feature__index mono">02</span>
+        <h3>Stats</h3>
+        <p>La base en un coup d'œil : rues par ville, volume de mesures, cyclabilité rapportée à la population.</p>
+        <span class="feature__cta">Voir les stats <span aria-hidden="true">→</span></span>
+      </a>
+      <a class="feature" href="/chosegame" data-reveal data-delay="2">
+        <div class="window-bar" aria-hidden="true"><span>memory.exe</span><span class="window-bar__dots"><i></i><i></i><i></i></span></div>
+        <span class="feature__index mono">03</span>
+        <h3>Memory</h3>
+        <p>Des cartes qui se retournent, des paires de véhicules à retrouver, une ville belge par partie.</p>
+        <span class="feature__cta">Jouer <span aria-hidden="true">→</span></span>
+      </a>
+      <a class="feature" href="/moon" data-reveal data-delay="3">
+        <div class="window-bar" aria-hidden="true"><span>lune.scr</span><span class="window-bar__dots"><i></i><i></i><i></i></span></div>
+        <span class="feature__index mono">04</span>
+        <h3>Lune</h3>
+        <p>Calcule la phase de la lune à n'importe quelle date et compare le trafic vélo les soirs de pleine lune.</p>
+        <span class="feature__cta">Lever les yeux <span aria-hidden="true">→</span></span>
+      </a>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/player.js') }}" defer></script>
+{% endblock %}

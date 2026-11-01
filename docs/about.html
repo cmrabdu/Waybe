@@ -1,64 +1,91 @@
-
-{% extends "base.html" %}
- {% block header %}
-     <link rel="stylesheet" href="static/style.css">
-
- {% endblock   %}
-{% block body %}
-    <nav>
-        <!-- Image à gauche de la barre de navigation -->
-        <a href="game">
-            <img src="/static/stars.png" alt="Image" class="image-left">
-            <div class="game">
-                <a href="/chosegame">Game</a>
-            </div>
-        </a>
-        <!-- Logo -->
-        <a href="/"> <img src="/static/titre.png" alt="Logo" class="navbar-logo"></a>
-        <!-- Conteneur du menu -->
-        <div class="menu-container">
-            <!-- Menu -->
-            <ul class="menu">
-                <li><a href="/request">Request</a></li>
-                <li><a href="/stats">Stats</a></li>
-                <li><a href="/about">Team</a></li>
-                <li><a href="/chosemoon">Moon</a></li>
-
-            </ul>
-        </div>
-    </nav>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Team — WAY-BE</title>
+  <link rel="icon" href="assets/img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css?v=3">
+</head>
 <body>
+  <header class="wb-nav">
+    <div class="wb-nav__inner">
+      <a class="wb-nav__game" href="game.html"><img src="assets/img/stars.png" alt="">Game</a>
+      <a class="wb-nav__brand" href="index.html"><img src="assets/img/titre.png" alt="WAY-BE"></a>
+      <button type="button" class="wb-nav__toggle" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+      <nav class="wb-nav__links" aria-label="Navigation">
+        <a href="request.html">Request</a>
+        <a href="stats.html">Stats</a>
+        <a href="about.html">Team</a>
+        <a href="moon.html">Moon</a>
+      </nav>
+    </div>
+  </header>
 
-    <!-- Conteneur pour les cartes -->
-    <div class="wrapper">
-        <!-- Première carte -->
-        <div class="card1">
-            <div class="front"></div>
-            <div class="back back1"></div> <!-- Utilisez la classe "back1" pour la première carte -->
+  <main class="wb-main">
+    <h1>Team</h1>
+
+    <div class="wb-team">
+      <article class="wb-card" data-name="Noah" tabindex="0" role="button" aria-label="Carte Noah">
+        <div class="wb-card__inner">
+          <div class="wb-card__face wb-card__face--front"></div>
+          <div class="wb-card__face wb-card__face--back wb-card__face--noah"></div>
         </div>
-        <!-- Deuxième carte -->
-        <div class="card2">
-            <div class="front"></div>
-            <div class="back back2"></div> <!-- Utilisez la classe "back2" pour la deuxième carte -->
+        <p class="wb-card__name">Noah</p>
+      </article>
+
+      <article class="wb-card" data-name="Abdu" tabindex="0" role="button" aria-label="Carte Abdu">
+        <div class="wb-card__inner">
+          <div class="wb-card__face wb-card__face--front"></div>
+          <div class="wb-card__face wb-card__face--back wb-card__face--abdu"></div>
         </div>
-        <!-- Troisième carte -->
-        <div class="card3">
-            <div class="front"></div>
-            <div class="back back3"></div> <!-- Utilisez la classe "back3" pour la troisième carte -->
+        <p class="wb-card__name">Abdu</p>
+      </article>
+
+      <article class="wb-card" data-name="Houari" tabindex="0" role="button" aria-label="Carte Houari">
+        <div class="wb-card__inner">
+          <div class="wb-card__face wb-card__face--front"></div>
+          <div class="wb-card__face wb-card__face--back wb-card__face--houari"></div>
         </div>
-        <!-- Quatrième carte -->
-        <div class="card4">
-            <div class="front"></div>
-            <div class="back back4"></div> <!-- Utilisez la classe "back4" pour la quatrième carte -->
+        <p class="wb-card__name">Houari</p>
+      </article>
+
+      <article class="wb-card" data-name="Guigui" tabindex="0" role="button" aria-label="Carte Guigui">
+        <div class="wb-card__inner">
+          <div class="wb-card__face wb-card__face--front"></div>
+          <div class="wb-card__face wb-card__face--back wb-card__face--guigui"></div>
         </div>
+        <p class="wb-card__name">Guigui</p>
+      </article>
     </div>
 
-    <!-- Conteneur pour les informations sur les Pokémon -->
-    <div class="pokemon">
-        <!-- Ajoutez ici du contenu concernant les Pokémon si nécessaire -->
-    </div>
+    <section class="wb-panel wb-section">
+      <p>
+        WAY-BE est un <strong>projet de fin de 1<sup>re</sup> année</strong> du
+        <strong>groupe C02</strong>, centré sur la <strong>mobilité en Belgique</strong>.
+        Une vitrine Y2K rose pour explorer transports, stats et fun — version Flask complète dans le repo.
+      </p>
+    </section>
+  </main>
 
+  <footer class="wb-footer"><p>© 2024 Groupe C02 — WAY-BE · Projet Bac 1 UCLouvain/EPL · Vitrine demo</p></footer>
+  <script src="assets/js/nav.js"></script>
+  <script>
+    document.querySelectorAll('.wb-card[data-name]').forEach(function (card) {
+      function flip() {
+        card.classList.toggle('is-flipped');
+      }
+      card.addEventListener('click', flip);
+      card.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          flip();
+        }
+      });
+    });
+  </script>
 </body>
- {% endblock   %}
-{% block footer  %}
-{% endblock  %}
+</html>

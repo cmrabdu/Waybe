@@ -1,0 +1,7 @@
+/* Lune : animations du changement de date (moon.js) */
+[data-swap].is-swapped { animation: moon-swap .45s var(--ease) both; }
+@keyframes moon-swap { from { opacity: 0; transform: translateY(6px); filter: blur(3px); } }
+.moon-visual.is-loading .moon-svg { opacity: .85; transition: opacity .2s; }
+.moon-visual.is-spinning .moon-svg { filter: drop-shadow(0 0 18px rgba(255, 62, 165, .35)); }
+.moon-visual .moon-svg { transition: filter .4s var(--ease), opacity .2s; }
+@media (prefers-reduced-motion: reduce) { [data-swap].is-swapped { animation: none; } }

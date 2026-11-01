@@ -1,56 +1,65 @@
-{% extends "base.html" %}
-
-{% block header %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="static/cards.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memory — WAY-BE</title>
+  <link rel="icon" href="assets/img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css?v=3">
 </head>
-{% endblock %}
-
-{% block body %}
 <body>
+  <header class="wb-nav">
+    <div class="wb-nav__inner">
+      <a class="wb-nav__game" href="game.html"><img src="assets/img/stars.png" alt="">Game</a>
+      <a class="wb-nav__brand" href="index.html"><img src="assets/img/titre.png" alt="WAY-BE"></a>
+      <button type="button" class="wb-nav__toggle" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+      <nav class="wb-nav__links" aria-label="Navigation">
+        <a href="request.html">Request</a>
+        <a href="stats.html">Stats</a>
+        <a href="about.html">Team</a>
+        <a href="moon.html">Moon</a>
+      </nav>
+    </div>
+  </header>
 
-         <!-- Barre de navigation -->
-    <nav>
-        <!-- Image Ã  gauche de la barre de navigation -->
-        <a href="/chosegame">
-            <img src="/static/stars.png" alt="Image" class="image-left">
-        </a>
-        <!-- Logo -->
-        <a href="/"> <img src="/static/titre.png" alt="Logo" class="navbar-logo"></a>
-        <!-- Conteneur du menu -->
-        <div class="menu-container">
-            <!-- Menu -->
-            <ul class="menu">
-                <li><a href="/request">Request</a></li>
-                <li><a href="/stats">Stats</a></li>
-                <li><a href="/about">Team</a></li>
-                <li><a href="/chosemoon">Moon</a></li>
+  <main class="wb-main">
+    <h1>Memory</h1>
 
-            </ul>
-        </div>
-    </nav>
+    <section class="wb-panel wb-section">
+      <form class="wb-form" aria-labelledby="game-setup-title">
+        <h2 id="game-setup-title" class="wb-panel__title">Choisissez une ville</h2>
+        <label for="city-select">Ville</label>
+        <select id="city-select" name="city">
+          <option value="">Choisir une ville</option>
+          <option value="Charleroi">Charleroi</option>
+          <option value="Jambes">Jambes</option>
+          <option value="Bruxelles">Bruxelles</option>
+          <option value="Beveren">Beveren</option>
+          <option value="Courtrai">Courtrai</option>
+          <option value="Namur">Namur</option>
+          <option value="Liege">Liege</option>
+          <option value="Grobbendonk">Grobbendonk</option>
+          <option value="Herzele">Herzele</option>
+        </select>
+        <button type="button" id="start-game" class="wb-btn wb-btn--primary">Lancer le jeu</button>
+      </form>
+    </section>
 
-<script>
-    var chosenCity = "{{ ville }}";
-</script>
+    <p>Erreur : <span id="errors">0</span></p>
 
-<h2>
-    {% for item in ville %}
-    {{ item }}
-    {% endfor %}
-</h2>
-<br>
-<h2>Erreur : <span id="errors">0</span></h2>
-<br>
-<div id="board">
-    <script src="static/cards.js"></script>
-</div>
+    <div id="victory" hidden role="status">
+      <p>Bien joué ! Vous avez trouvé toutes les paires. Consultez Request pour en savoir plus sur votre ville.</p>
+      <a href="request.html" class="wb-btn wb-btn--primary">Aller à Request</a>
+    </div>
+
+    <div id="board" aria-label="Plateau de memory"></div>
+  </main>
+
+  <footer class="wb-footer"><p>© 2024 Groupe C02 — WAY-BE · Projet Bac 1 UCLouvain/EPL · Vitrine demo</p></footer>
+  <script src="assets/js/nav.js"></script>
+  <script src="assets/js/cards.js"></script>
 </body>
-{% endblock %}
-
-{% block footer %}
-{% endblock %}
+</html>

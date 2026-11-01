@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+
+{% block title %}{{ label }} · Explorer · WAY-BE{% endblock %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/data.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="container data-hero">
+  <ol class="stepper" aria-label="Étapes">
+    <li class="is-done"><a href="{{ url_for('request_handler') }}"><b>01</b> {{ label }}</a></li>
+    <li class="is-current"><b>02</b> Rue &amp; période</li>
+    <li><b>03</b> Résultats</li>
+  </ol>
+  <h1>{{ label }}</h1>
+  <p class="lead">{{ rues|length }} rue{{ 's' if rues|length > 1 }} équipée{{ 's' if rues|length > 1 }} d'un capteur · {{ '{:,}'.format(ville.population).replace(',', ' ') }} habitants · code postal {{ ville.code_postal }}</p>
+</section>
+
+<section class="container">
+  {% if error %}<div class="alert" role="alert">{{ error }}</div>{% endif %}
+
+  <div class="explore-layout">
+    <form class="panel" action="{{ url_for('endrequest') }}" method="get" id="explore-form" novalidate>
+      <div class="window-bar" aria-hidden="true"><span>requete.exe</span><span class="window-bar__dots"><i></i><i></i><i></i></span></div>
+      <input type="hidden" name="ville" value="{{ ville.nom }}">
+
+      <div class="form-block">
+        <h2 class="step-label"><span>A</span> Choisis une rue</h2>
+        {% if rues %}
+        <div class="street-list" role="radiogroup" aria-label="Rues">
+          {% set selected = (form.get('rue') or '')|string %}
+          {% for r in rues %}
+          <label class="street">
+            <input type="radio" name="rue" value="{{ r.rue_id }}" data-min="{{ r.debut or '' }}" data-max="{{ r.fin or '' }}"
+                   {% if selected == r.rue_id|string or (not selected and loop.first) %}checked{% endif %}>
+            <span class="street__name">{{ r.nom }}</span>
+            <span class="street__period">{% if r.debut %}{{ r.debut }} → {{ r.fin }}{% else %}aucune mesure{% endif %}</span>
+          </label>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="muted">Aucune rue n'est équipée dans cette ville.</p>
+        {% endif %}
+      </div>
+
+      <div class="form-block">
+        <h2 class="step-label"><span>B</span> Choisis la période</h2>
+        <div class="presets" role="group" aria-label="Raccourcis de période">
+          <button type="button" class="chip" data-preset="all">Toute la période</button>
+          <button type="button" class="chip" data-preset="week">7 derniers jours</button>
+          <button type="button" class="chip" data-preset="day">Dernier jour</button>
+        </div>
+        <div class="date-grid">
+          <div class="field">
+            <label for="start_date">Du</label>
+            <input type="date" id="start_date" name="start_date" value="{{ form.get('start_date', '') }}" required>
+          </div>
+          <div class="field">
+            <label for="end_date">Au</label>
+            <input type="date" id="end_date" name="end_date" value="{{ form.get('end_date', '') }}" required>
+          </div>
+          <div class="field">
+            <label for="heure_debut">À partir de <span class="muted">(optionnel)</span></label>
+            <input type="time" id="heure_debut" name="heure_debut" value="{{ form.get('heure_debut', '') }}">
+          </div>
+          <div class="field">
+            <label for="heure_fin">Jusqu'à <span class="muted">(optionnel)</span></label>
+            <input type="time" id="heure_fin" name="heure_fin" value="{{ form.get('heure_fin', '') }}">
+          </div>
+        </div>
+        <p class="hint" id="range-hint"></p>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn--primary"{% if not rues %} disabled{% endif %}>Voir les résultats <span class="arrow">&rarr;</span></button>
+        <a class="back-link" href="{{ url_for('request_handler') }}">&larr; changer de ville</a>
+      </div>
+    </form>
+
+    <aside class="panel">
+      <div class="window-bar" aria-hidden="true"><span>camembert.xls</span><span class="window-bar__dots"><i></i><i></i><i></i></span></div>
+      <div class="chart-head">
+        <h2>Qui passe à {{ label }} ?</h2>
+        <p>toutes rues, toute la période</p>
+      </div>
+      {% if rep.total %}
+      <div class="donut-wrap chart-box--donut">
+        <canvas id="donut" aria-label="Répartition des passages à {{ label }}" role="img"></canvas>
+        <div class="donut-center"><strong data-count="{{ rep.total }}">{{ rep.total }}</strong><span>passages</span></div>
+      </div>
+      <table class="table" style="margin-top: var(--space-5)">
+        <thead><tr><th>Type</th><th class="num">Passages</th><th class="num">Part</th></tr></thead>
+        <tbody>
+          {% for t in types %}
+          <tr><td><span class="swatch dot-{{ t }}"></span>{{ labels[t] }}</td>
+              <td class="num">{{ '{:,}'.format(rep.totaux[t]).replace(',', ' ') }}</td>
+              <td class="num">{{ '%.1f'|format(rep.pct[t]) }} %</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="muted">Pas encore de mesures pour cette ville.</p>
+      {% endif %}
+    </aside>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='vendor/chart.umd.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/data.js') }}"></script>
+<script>
+(function () {
+  const form = document.getElementById("explore-form");
+  const start = document.getElementById("start_date");
+  const end = document.getElementById("end_date");
+  const hint = document.getElementById("range-hint");
+  const chips = document.querySelectorAll("[data-preset]");
+
+  const current = () => form.querySelector('input[name="rue"]:checked');
+  const shift = (iso, days) => {
+    const d = new Date(iso + "T00:00:00Z"); d.setUTCDate(d.getUTCDate() + days);
+    return d.toISOString().slice(0, 10);
+  };
+
+  function applyBounds(reset) {
+    const r = current(); if (!r || !r.dataset.min) return;
+    const min = r.dataset.min, max = r.dataset.max;
+    [start, end].forEach((i) => { i.min = min; i.max = max; });
+    if (reset || !start.value || start.value < min || start.value > max) start.value = min;
+    if (reset || !end.value || end.value > max || end.value < min) end.value = max;
+    hint.textContent = `Mesures disponibles du ${min} au ${max}.`;
+    markChip();
+  }
+
+  function markChip() {
+    const r = current(); if (!r) return;
+    chips.forEach((c) => c.classList.remove("is-active"));
+    const max = r.dataset.max;
+    let p = null;
+    if (start.value === r.dataset.min && end.value === max) p = "all";
+    else if (end.value === max && start.value === shift(max, -6)) p = "week";
+    else if (start.value === max && end.value === max) p = "day";
+    if (p) document.querySelector(`[data-preset="${p}"]`).classList.add("is-active");
+  }
+
+  chips.forEach((c) => c.addEventListener("click", () => {
+    const r = current(); if (!r) return;
+    const min = r.dataset.min, max = r.dataset.max;
+    end.value = max;
+    start.value = c.dataset.preset === "all" ? min : c.dataset.preset === "week" ? (shift(max, -6) < min ? min : shift(max, -6)) : max;
+    markChip();
+  }));
+  form.addEventListener("change", (e) => {
+    if (e.target.name === "rue") applyBounds(false);
+    else markChip();
+  });
+  form.addEventListener("submit", (e) => {
+    if (start.value && end.value && end.value < start.value) {
+      e.preventDefault();
+      hint.textContent = "La date de fin doit être après la date de début.";
+      hint.style.color = "var(--danger)";
+    }
+  });
+  applyBounds(false);
+
+  {% if rep.total %}
+  WB.theme();
+  const types = {{ types|list|tojson }};
+  const labels = {{ labels|tojson }};
+  const pct = {{ rep.pct|tojson }};
+  new Chart(document.getElementById("donut"), {
+    type: "doughnut",
+    data: {
+      labels: types.map((t) => labels[t]),
+      datasets: [{
+        data: types.map((t) => pct[t]),
+        backgroundColor: types.map((t) => WB.COLORS[t]),
+        borderColor: "#130b24", borderWidth: 2, hoverOffset: 8, spacing: 1,
+      }],
+    },
+    options: {
+      cutout: "72%",
+      interaction: { mode: "nearest", intersect: true },
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: (c) => ` ${c.label} : ${WB.fmt(c.raw, 1)} %` } },
+      },
+    },
+  });
+  {% endif %}
+})();
+</script>
+{% endblock %}

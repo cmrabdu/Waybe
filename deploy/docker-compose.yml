@@ -1,0 +1,27 @@
+# WAY-BE on watchy. Hard limits: the site can never take more than 256 MB RAM / half a CPU.
+services:
+  waybe:
+    build: ..
+    image: waybe:latest
+    container_name: waybe
+    restart: unless-stopped
+    environment:
+      WAYBE_SECRET_KEY: ${WAYBE_SECRET_KEY:?set WAYBE_SECRET_KEY in deploy/.env}
+      WAYBE_RATE_PER_MIN: "120"
+    volumes:
+      - waybe-data:/data            # SQLite, rebuilt from the CSV if empty
+    ports:
+      - "127.0.0.1:8010:8000"       # only Caddy can reach it
+    read_only: true
+    tmpfs: [/tmp]
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: [ALL]
+    mem_limit: 256m
+    cpus: 0.5
+    pids_limit: 64
+    logging:
+      driver: json-file
+      options: { max-size: "5m", max-file: "2" }
+
+volumes:
+  waybe-data:

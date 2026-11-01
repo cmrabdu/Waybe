@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Équipe · WAY-BE{% endblock %}
+
+{% block head_extra %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
+{% endblock %}
+
+{% block body_class %}page-about{% endblock %}
+
+{% block content %}
+<section class="section team">
+  <div class="container">
+    <div class="rise section-head team__head">
+      <span class="eyebrow">Groupe C02 · EPL UCLouvain</span>
+      <h1>L'équipe, <span class="text-gradient">en édition limitée.</span></h1>
+      <p class="lead">Quatre cartes, quatre étudiants de Bac&nbsp;1. Retourne-les pour découvrir qui se cache derrière WAY-BE.</p>
+      <div>
+        <button type="button" class="btn btn--ghost btn--sm" data-flip-all aria-pressed="false">Tout retourner</button>
+      </div>
+    </div>
+
+    <ul class="deck" data-deck>
+      {% for m in team %}
+      <li class="deck__slot" style="--i: {{ loop.index0 }}">
+        <button type="button" class="tcard" data-card aria-pressed="false" aria-label="Retourner la carte de {{ m.nom }}">
+          <span class="tcard__inner">
+            <span class="tcard__face tcard__face--back">
+              <img src="{{ url_for('static', filename='cards.png') }}" alt="" width="300" height="500" loading="lazy">
+            </span>
+            <span class="tcard__face tcard__face--front">
+              <img src="{{ url_for('static', filename=m.id ~ '.png') }}" alt="Carte de {{ m.nom }}" width="300" height="500" loading="lazy">
+              <span class="tcard__holo" aria-hidden="true"></span>
+            </span>
+          </span>
+        </button>
+        <p class="tcard__name">{{ m.nom }}</p>
+        <p class="tcard__handle mono">@{{ m.pseudo }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container grid grid--2 project">
+    <div class="panel panel--glow" data-reveal>
+      <div class="window-bar"><span>projet.txt</span><span class="window-bar__dots"><i></i><i></i><i></i></span></div>
+      <h2 class="project__title">Le projet</h2>
+      <p>WAY-BE est notre projet de fin de première année en sciences informatiques à l'UCLouvain (2024). L'idée&nbsp;: rendre lisibles les données de mobilité belges récoltées par les capteurs citoyens <a href="https://telraam.net" target="_blank" rel="noopener">Telraam</a>, avec un univers visuel rétro-futuriste, entre l'an 2000 et les néons.</p>
+      <p class="muted">Tout a été codé à la main&nbsp;: le serveur Flask, la base SQLite, les requêtes, le memory et le calcul des phases de la lune.</p>
+    </div>
+    <div class="panel" data-reveal data-delay="1">
+      <div class="window-bar" aria-hidden="true"><span>specs.ini</span><span class="window-bar__dots"><i></i><i></i><i></i></span></div>
+      <h2 class="project__title">Sous le capot</h2>
+      <dl class="specs">
+        <div><dt>Back-end</dt><dd>Python · Flask · Jinja</dd></div>
+        <div><dt>Données</dt><dd>SQLite · comptages Telraam</dd></div>
+        <div><dt>Front</dt><dd>HTML · CSS · JavaScript vanilla</dd></div>
+        <div><dt>Cours</dt><dd>Projet Bac&nbsp;1 · EPL · UCLouvain</dd></div>
+        <div><dt>Année</dt><dd>2024</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/about.js') }}" defer></script>
+{% endblock %}

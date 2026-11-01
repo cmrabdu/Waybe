@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Explorer les données · WAY-BE{% endblock %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/data.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="container data-hero">
+  <ol class="stepper" aria-label="Étapes">
+    <li class="is-current"><b>01</b> Ville</li>
+    <li><b>02</b> Rue &amp; période</li>
+    <li><b>03</b> Résultats</li>
+  </ol>
+  <h1>Explore la <span class="text-gradient">mobilité belge</span></h1>
+  <p class="lead">Des capteurs Telraam posés aux fenêtres comptent, heure par heure, les voitures, vélos, piétons et poids lourds qui passent dans la rue. Choisis une ville pour commencer.</p>
+</section>
+
+<section class="container">
+  {% if error %}
+  <div class="alert" role="alert">Cette ville n'existe pas dans la base. Choisis-en une dans la liste.</div>
+  {% endif %}
+
+  <div class="city-grid">
+    {% for v in villes %}
+    <a class="city-tile" href="{{ url_for('nextrequest', ville=v.nom) }}" style="--i: {{ loop.index0 }}">
+      <div class="city-tile__top">
+        <span class="city-tile__name">{{ v.label }}</span>
+        <span class="city-tile__cp">{{ v.code_postal }}</span>
+      </div>
+      <div class="city-tile__meta">
+        <span><strong>{{ '{:,}'.format(v.population).replace(',', ' ') }}</strong> hab.</span>
+        <span><strong>{{ v.nb_rues }}</strong> rue{{ 's' if v.nb_rues > 1 }}</span>
+      </div>
+      <div class="split" role="img" aria-label="Répartition : {% for t in types %}{{ labels[t] }} {{ v.rep.pct[t] }} %{{ ', ' if not loop.last }}{% endfor %}">
+        {% for t in types %}<span class="dot-{{ t }}" style="width: {{ v.rep.pct[t] }}%"></span>{% endfor %}
+      </div>
+      <div class="city-tile__top">
+        <span class="city-tile__velo"><strong>{{ '%.1f'|format(v.rep.pct.velo) }} %</strong> de vélos</span>
+        <span class="city-tile__go" aria-hidden="true">explorer &rarr;</span>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+
+  <ul class="legend" style="margin-top: var(--space-5)">
+    {% for t in types %}<li class="dot-{{ t }}">{{ labels[t] }}</li>{% endfor %}
+  </ul>
+</section>
+{% endblock %}

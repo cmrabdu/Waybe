@@ -1,0 +1,104 @@
+/* WAY-BE — mini lecteur MP3 Y2K (fenêtre .panel + .window-bar de style.css) */
+
+.mp3 { --pad: var(--space-4); width: 100%; max-width: 480px; justify-self: center; }
+.mp3 .window-bar { margin-bottom: var(--space-4); }
+.mp3__body { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: var(--space-4); }
+.mp3__main { display: grid; gap: var(--space-3); min-width: 0; }
+
+/* Gros bouton gel Aqua */
+.mp3__play {
+  position: relative; width: 84px; aspect-ratio: 1; padding: 0; border-radius: 50%;
+  display: grid; place-items: center; color: #fff;
+  border: 1px solid #5a0434;
+  background:
+    radial-gradient(60% 38% at 50% 20%, rgba(255, 255, 255, .9), rgba(255, 255, 255, 0) 100%),
+    radial-gradient(circle at 50% 110%, #ffb3dd 0%, #ff3ea5 45%, #a00a5a 100%);
+  box-shadow: 0 0 0 4px var(--win-face), 0 0 0 5px var(--win-hi), 0 6px 16px rgba(0, 0, 0, .55), 0 0 22px rgba(255, 62, 165, .45),
+    inset 0 -6px 12px rgba(90, 0, 45, .55);
+  transition: transform 150ms var(--ease), filter 150ms var(--ease);
+}
+.mp3__play:hover { transform: scale(1.05); filter: saturate(1.15) brightness(1.06); }
+.mp3__play:active { transform: scale(.96); }
+.mp3__play svg { width: 40%; fill: currentColor; filter: drop-shadow(0 2px 2px rgba(90, 0, 45, .8)); }
+.mp3__ico-pause, [data-state="play"] .mp3__ico-play, [data-state="load"] .mp3__ico-play { display: none; }
+[data-state="play"] .mp3__ico-pause, [data-state="load"] .mp3__ico-pause { display: block; }
+[data-state="play"] .mp3__play { animation: mp3-glow 2.4s ease-in-out infinite; }
+
+/* Écran LCD */
+.mp3__lcd {
+  min-width: 0; padding: 6px 10px 4px;
+  background:
+    repeating-linear-gradient(180deg, rgba(255, 255, 255, .05) 0 1px, transparent 1px 3px),
+    radial-gradient(120% 140% at 50% 0%, #10346b 0%, #071533 60%, #040b1f 100%);
+  border: 2px solid; border-color: var(--win-lo) var(--win-hi) var(--win-hi) var(--win-lo);
+  font-family: var(--font-mono); color: #7df9ff; text-shadow: 0 0 6px rgba(125, 249, 255, .75);
+}
+.mp3__top { display: flex; align-items: center; gap: var(--space-2); font-size: 1.05rem; line-height: 1.1; }
+.mp3__status { font-family: var(--font-pixel); font-size: .6rem; letter-spacing: .08em; color: #ff8fd0; text-shadow: 0 0 6px rgba(255, 62, 165, .8); }
+[data-state="play"] .mp3__status { color: var(--success); text-shadow: 0 0 6px rgba(93, 255, 176, .8); }
+[data-state="load"] .mp3__status { color: var(--accent-yellow); animation: mp3-blink .8s steps(1) infinite; }
+.mp3__time { margin-left: auto; white-space: nowrap; }
+
+/* Mini égaliseur décoratif : immobile sauf en lecture */
+.mp3__bars { display: flex; align-items: flex-end; gap: 2px; height: 12px; }
+.mp3__bars i { width: 3px; height: 25%; background: linear-gradient(0deg, #39e1ff, #ff3ea5); opacity: .5; }
+[data-state="play"] .mp3__bars i { opacity: 1; animation: mp3-bar .9s ease-in-out infinite alternate; }
+.mp3__bars i:nth-child(2) { animation-delay: -.3s !important; animation-duration: .7s !important; }
+.mp3__bars i:nth-child(3) { animation-delay: -.6s !important; }
+.mp3__bars i:nth-child(4) { animation-delay: -.2s !important; animation-duration: 1.1s !important; }
+.mp3__bars i:nth-child(5) { animation-delay: -.5s !important; animation-duration: .6s !important; }
+.mp3__bars i:nth-child(6) { animation-delay: -.8s !important; }
+
+.mp3__marquee { overflow: hidden; white-space: nowrap; font-size: 1.6rem; line-height: 1.25; }
+.mp3__track { display: inline-flex; animation: mp3-marquee 12s linear infinite; animation-play-state: paused; }
+.mp3__track span { flex-shrink: 0; padding-right: .5em; }
+[data-state="play"] .mp3__track, [data-state="load"] .mp3__track { animation-play-state: running; }
+
+/* Position + piste suivante */
+.mp3__row { display: flex; align-items: center; gap: var(--space-3); }
+.mp3__seek {
+  --p: 0%;
+  flex: 1; min-width: 0; height: 24px; margin: 0; background: transparent; cursor: pointer;
+  -webkit-appearance: none; appearance: none;
+}
+.mp3__seek::-webkit-slider-runnable-track {
+  height: 12px; border: 1px solid; border-color: var(--win-lo) var(--win-hi) var(--win-hi) var(--win-lo); border-radius: 3px;
+  background: linear-gradient(90deg, var(--accent) 0 var(--p), #05020c var(--p));
+}
+.mp3__seek::-moz-range-track { height: 10px; border: 1px solid; border-color: var(--win-lo) var(--win-hi) var(--win-hi) var(--win-lo); border-radius: 3px; background: #05020c; }
+.mp3__seek::-moz-range-progress { height: 10px; border-radius: 3px 0 0 3px; background: var(--accent); box-shadow: 0 0 8px rgba(255, 62, 165, .6); }
+.mp3__seek::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 14px; height: 20px; margin-top: -5px;
+  background: var(--silver); border: 1px solid #1a0b2c; border-radius: 3px;
+  box-shadow: inset -1px -2px 0 rgba(120, 95, 170, .35), inset 1px 1px 0 #fff;
+}
+.mp3__seek::-moz-range-thumb {
+  width: 12px; height: 18px;
+  background: var(--silver); border: 1px solid #1a0b2c; border-radius: 3px;
+  box-shadow: inset -1px -2px 0 rgba(120, 95, 170, .35), inset 1px 1px 0 #fff;
+}
+.mp3__next {
+  flex-shrink: 0; width: 44px; height: 36px; padding: 0; display: grid; place-items: center;
+  background: var(--silver); color: #23123a; border: 1px solid #1a0b2c; border-radius: 4px;
+  box-shadow: inset -1px -2px 0 rgba(120, 95, 170, .35), inset 1px 1px 0 #fff, 0 2px 0 rgba(0, 0, 0, .45);
+}
+.mp3__next svg { width: 18px; fill: currentColor; }
+.mp3__next:hover { color: var(--accent); }
+.mp3__next:active { transform: translateY(1px); box-shadow: inset 1px 1px 2px rgba(60, 30, 90, .6); }
+
+@keyframes mp3-marquee { to { transform: translateX(-50%); } }
+@keyframes mp3-bar { from { height: 15%; } to { height: 100%; } }
+@keyframes mp3-blink { 50% { opacity: .3; } }
+@keyframes mp3-glow { 50% { box-shadow: 0 0 0 4px var(--win-face), 0 0 0 5px var(--win-hi), 0 6px 16px rgba(0, 0, 0, .55), 0 0 38px rgba(255, 62, 165, .85), inset 0 -6px 12px rgba(90, 0, 45, .55); } }
+
+@media (max-width: 420px) {
+  .mp3__body { gap: var(--space-3); }
+  .mp3__play { width: 68px; }
+  .mp3__marquee { font-size: 1.4rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mp3__track { animation: none; }
+  .mp3__track span + span { display: none; }
+  .mp3__bars i, [data-state="play"] .mp3__play, [data-state="load"] .mp3__status { animation: none !important; }
+  [data-state="play"] .mp3__bars i:nth-child(odd) { height: 70%; }
+}

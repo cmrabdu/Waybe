@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Memory · WAY-BE{% endblock %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='cards.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="container game-hero">
+  <span class="eyebrow">Mini-jeu</span>
+  <h1>Memory <span class="text-gradient">mobilité</span></h1>
+  <p class="lead">Retourne les cartes et associe chaque véhicule à sa vraie part du trafic dans la ville choisie. Voiture, vélo, piéton, camion : tu sais vraiment qui roule chez toi ?</p>
+  <ul class="rules">
+    <li><b>8</b> cartes</li>
+    <li><b>4</b> paires véhicule ↔ pourcentage</li>
+    <li><b>3</b> étoiles à décrocher</li>
+  </ul>
+  <div class="mode-switch" role="radiogroup" aria-label="Mode de jeu">
+    <input type="radio" name="mode" id="mode-classic" value="classic" checked>
+    <label for="mode-classic">Classique<small>aperçu de 3 s</small></label>
+    <input type="radio" name="mode" id="mode-expert" value="expert">
+    <label for="mode-expert">Expert<small>sans aperçu</small></label>
+  </div>
+  {% if error %}<p class="muted" role="alert" style="margin-top: var(--space-4); color: var(--danger)">Cette ville n'a pas de cartes. Choisis-en une ci-dessous.</p>{% endif %}
+</section>
+
+<section class="container">
+  <div class="deck">
+    {% for v in villes if v.prefix %}
+    <a class="deck__item" href="{{ url_for('game', ville=v.nom) }}" data-prefix="{{ v.prefix }}" style="--i: {{ loop.index0 }}"
+       aria-label="Jouer avec {{ v.label }}">
+      <div class="deck__card">
+        <img src="{{ url_for('static', filename='back.jpg') }}" alt="" loading="lazy" width="585" height="819">
+        <img src="{{ url_for('static', filename=v.prefix ~ '_car.jpg') }}" alt="" loading="lazy" width="585" height="819">
+      </div>
+      <span class="deck__name">{{ v.label }}</span>
+      <span class="deck__best" data-best></span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+  const store = {
+    get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+  };
+  const radios = document.querySelectorAll('input[name="mode"]');
+  const saved = store.get("wb-memory-mode");
+  if (saved) radios.forEach((r) => { r.checked = r.value === saved; });
+
+  function sync() {
+    const mode = document.querySelector('input[name="mode"]:checked').value;
+    store.set("wb-memory-mode", mode);
+    document.querySelectorAll(".deck__item").forEach((a) => {
+      const url = new URL(a.href);
+      if (mode === "expert") url.searchParams.set("mode", "expert"); else url.searchParams.delete("mode");
+      a.href = url.toString();
+      const best = store.get(`wb-memory-${a.dataset.prefix}-${mode}`);
+      a.querySelector("[data-best]").innerHTML = best
+        ? `record <b>${"★".repeat(best.stars)}</b> ${best.moves} coups` : "";
+    });
+  }
+  radios.forEach((r) => r.addEventListener("change", sync));
+  sync();
+
+  // Survol d'une ville : on précharge ses 9 cartes, la partie démarre ensuite sans attente.
+  const STATIC = "{{ url_for('static', filename='') }}";
+  const loaded = {};
+  function warm(prefix) {
+    if (!prefix || loaded[prefix]) return;
+    loaded[prefix] = true;
+    ["back", "car", "cycle", "human", "truc"].concat(["car", "cycle", "human", "truc"].map((n) => `${prefix}_${n}`))
+      .forEach((n) => { const i = new Image(); i.src = `${STATIC}${n}.jpg`; });
+  }
+  const deck = document.querySelector(".deck");
+  document.querySelectorAll(".deck__item").forEach((a) => {
+    a.addEventListener("pointerenter", () => warm(a.dataset.prefix));
+    a.addEventListener("focus", () => warm(a.dataset.prefix));
+    a.addEventListener("touchstart", () => warm(a.dataset.prefix), { passive: true });
+    // Clic : la carte choisie se met en avant, les autres s'effacent, puis on part.
+    a.addEventListener("click", (e) => {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+      if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      e.preventDefault();
+      e.stopPropagation();
+      warm(a.dataset.prefix);
+      a.classList.add("is-picked");
+      deck.classList.add("is-picking");
+      setTimeout(() => { location.href = a.href; }, 320);
+    });
+  });
+  window.addEventListener("pageshow", () => {
+    deck.classList.remove("is-picking");
+    document.querySelectorAll(".is-picked").forEach((x) => x.classList.remove("is-picked"));
+  });
+})();
+</script>
+{% endblock %}

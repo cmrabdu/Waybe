@@ -1,0 +1,100 @@
+/* =========================================================
+   WAY-BE — design tokens (Y2K / néon / futur rétro)
+
+   COMMENT ÉTENDRE base.html
+   -------------------------
+   {% extends "base.html" %}
+   {% block title %}Ma page · WAY-BE{% endblock %}            (optionnel)
+   {% block head_extra %}
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/ma-page.css') }}">
+   {% endblock %}                                              (optionnel)
+   {% block body_class %}page-ma-page{% endblock %}            (optionnel, classe sur <body>)
+   {% block content %}
+     <section class="section"><div class="container"> ... </div></section>
+   {% endblock %}
+   {% block scripts %}
+     <script src="{{ url_for('static', filename='js/ma-page.js') }}" defer></script>
+   {% endblock %}                                              (optionnel, fin de <body>)
+
+   - base.html fournit déjà <html>, <head>, la nav (.site-nav) et le footer :
+     ne pas remettre <body>, <nav> ni <footer> dans le template enfant.
+   - <main id="main" class="site-main"> a déjà un padding-top = hauteur de la nav.
+   - Toujours url_for('static', ...) pour les assets (pas de chemins relatifs).
+   - Composants dispo dans style.css : .container .section .grid--2/3 .panel
+     (.panel--glow, .window-bar) .btn (.btn--primary/--ghost/--sm) .badge .eyebrow
+     .field + inputs/selects stylés auto dans .site-main .table .stat .lead .muted
+     .mono .text-gradient .text-chrome, [data-reveal] (apparition au scroll).
+   - Compat temporaire : {% block body %} et {% block header %} marchent encore
+     (rendus dans .legacy-page / <head>), l'ancienne <nav> y est masquée. À migrer.
+   ========================================================= */
+:root {
+  color-scheme: dark;
+
+  /* Couleurs */
+  --bg: #0a0614;
+  --bg-elev: #130b24;
+  --surface: rgba(255, 255, 255, 0.045);
+  --surface-strong: rgba(255, 255, 255, 0.08);
+  --border: rgba(255, 140, 220, 0.18);
+  --border-strong: rgba(255, 140, 220, 0.38);
+  --text: #f6eefc;
+  --text-muted: #b3a3c9;
+  --accent: #ff3ea5;          /* rose néon */
+  --accent-2: #39e1ff;        /* cyan chrome */
+  --accent-3: #b388ff;        /* violet lilas */
+  --accent-yellow: #ffc61a;   /* jaune du logo */
+  --accent-glow: 0 0 18px rgba(255, 62, 165, 0.55), 0 0 42px rgba(255, 62, 165, 0.25);
+  --accent-2-glow: 0 0 18px rgba(57, 225, 255, 0.45);
+  --gradient: linear-gradient(120deg, #ff3ea5 0%, #b388ff 50%, #39e1ff 100%);
+  --chrome: linear-gradient(180deg, #ffffff 0%, #d9cfe9 45%, #8f7fb0 55%, #f3ecff 100%);
+  --success: #5dffb0;
+  --danger: #ff5d7a;
+
+  /* Formes */
+  --radius: 6px;
+  --radius-lg: 10px;
+  --radius-pill: 999px;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.45), 0 2px 6px rgba(0, 0, 0, 0.3);
+
+  /* Typo */
+  --font-display: "Orbitron", "Space Grotesk", system-ui, sans-serif;
+  --font-body: Tahoma, Verdana, "Segoe UI", "Space Grotesk", system-ui, sans-serif;
+  --font-ui: Tahoma, Verdana, "Segoe UI", system-ui, sans-serif;  /* barres de titre, boutons */
+  --font-mono: "VT323", "JetBrains Mono", ui-monospace, monospace;
+  --font-pixel: "Silkscreen", "VT323", ui-monospace, monospace;  /* petits détails bitmap */
+
+  /* Espacements (échelle 4px) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 72px;
+
+  /* Chrome « OS 2000 » (fenêtres, biseaux, LCD) */
+  --win-face: #1a1030;
+  --win-face-2: #120a24;
+  --win-hi: #8a6cc4;          /* biseau clair (haut/gauche) */
+  --win-lo: #05020c;          /* biseau sombre (bas/droite) */
+  --win-title: linear-gradient(180deg, #ff9ad3 0%, #ff4fb0 9%, #e0177f 45%, #c00f6c 80%, #a00a5a 100%);
+  --win-title-idle: linear-gradient(180deg, #a98ad9 0%, #7d5bb8 12%, #5b3f92 60%, #4a3179 100%);
+  --bevel-out: inset 1px 1px 0 rgba(255, 255, 255, .22), inset -1px -1px 0 rgba(0, 0, 0, .55);
+  --bevel-in: inset 1px 1px 0 rgba(0, 0, 0, .65), inset -1px -1px 0 rgba(255, 255, 255, .14);
+  --hard-shadow: 5px 5px 0 rgba(0, 0, 0, .55);
+  --lcd-bg: #061a12;
+  --lcd-fg: #7dffb8;
+  --silver: linear-gradient(180deg, #ffffff 0%, #efe9f7 42%, #d6cbe8 52%, #e9e2f4 100%);
+
+  --container: 1160px;
+  --nav-h: 68px;
+
+  /* Mouvement */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur: 280ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur: 1ms; }
+}

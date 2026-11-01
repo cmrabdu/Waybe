@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+
+{% block title %}{{ rue.nom }}, {{ ville_label }} · WAY-BE{% endblock %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/data.css') }}">
+{% endblock %}
+
+{% set rep = d.repartition %}
+{% set p_debut = debut[:10] ~ ' ' ~ debut[11:16] %}
+{% set p_fin = fin[:10] ~ ' ' ~ fin[11:16] %}
+{% set edit_url = url_for('nextrequest', ville=rue.ville, rue=rue.rue_id, start_date=debut[:10], end_date=fin[:10],
+                          heure_debut=args.get('heure_debut', ''), heure_fin=args.get('heure_fin', '')) %}
+
+{% block content %}
+<section class="container data-hero">
+  <ol class="stepper" aria-label="Étapes">
+    <li class="is-done"><a href="{{ url_for('request_handler') }}"><b>01</b> {{ ville_label }}</a></li>
+    <li class="is-done"><a href="{{ edit_url }}"><b>02</b> {{ rue.nom }}</a></li>
+    <li class="is-current"><b>03</b> Résultats</li>
+  </ol>
+  <h1>{{ rue.nom }} <span class="muted" style="font-size: .55em">· {{ ville_label }}</span></h1>
+  <p class="lead"><span class="mono">{{ p_debut }} → {{ p_fin }}</span> (heure UTC du capteur)</p>
+  <div class="form-actions" style="margin-top: var(--space-4)">
+    <a class="btn btn--ghost btn--sm" href="{{ edit_url }}">Modifier la période</a>
+    <a class="btn btn--ghost btn--sm" href="{{ url_for('nextrequest', ville=rue.ville) }}">Autre rue</a>
+    <a class="back-link" href="{{ url_for('request_handler') }}">&larr; autre ville</a>
+  </div>
+</section>
+
+<section class="container">
+{% if not rep.total %}
+  <div class="empty">
+    <div class="empty__icon">∅</div>
+    <h2>Aucun passage mesuré</h2>
+    <p>Le capteur de {{ rue.nom }} n'a rien enregistré sur cette période (il mesure de {{ rue.debut }} à {{ rue.fin }}, et seulement de jour).</p>
+    <a class="btn btn--primary" href="{{ edit_url }}">Changer la période <span class="arrow">&rarr;</span></a>
+  </div>
+{% else %}
+  <div class="kpis">
+    <div class="kpi kpi--accent" style="--i:0">
+      <div class="kpi__value" data-count="{{ rep.total }}">{{ rep.total }}</div>
+      <div class="kpi__label">passages comptés</div>
+    </div>
+    <div class="kpi kpi--cyan" style="--i:1">
+      <div class="kpi__value"><span data-count="{{ rep.pct.velo }}" data-digits="1">{{ rep.pct.velo }}</span><small>%</small></div>
+      <div class="kpi__label">de vélos ({{ '{:,}'.format(rep.totaux.velo).replace(',', ' ') }})</div>
+    </div>
+    <div class="kpi" style="--i:2">
+      <div class="kpi__value">{% if d.heure_pointe is not none %}{{ d.heure_pointe }}<small>h</small>{% else %}–{% endif %}</div>
+      <div class="kpi__label">heure de pointe (UTC)</div>
+    </div>
+    <div class="kpi" style="--i:3">
+      <div class="kpi__value">{% if d.v85_moy %}{{ d.v85_moy|round|int }}<small>km/h</small>{% else %}–{% endif %}</div>
+      <div class="kpi__label">V85 moyen{% if d.v85_max %} · max {{ d.v85_max|round|int }} km/h{% endif %}</div>
+    </div>
+  </div>
+
+  <div class="grid" style="grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); align-items: stretch;" id="res-grid">
+    <div class="panel">
+      <div class="window-bar" aria-hidden="true"><span>passages.xls</span><span class="window-bar__dots"><i></i><i></i><i></i></span></div>
+      <div class="chart-head">
+        <h2>Passages {{ 'par heure' if d.serie.par_heure else 'par jour' }}</h2>
+        <p>{{ d.nb_mesures }} {{ 'heures' if d.serie.par_heure else 'jours' }} mesuré{{ 's' if d.nb_mesures > 1 }}</p>
+      </div>
+      <div class="chart-box"><canvas id="serie" role="img" aria-label="Passages dans le temps par type"></canvas></div>
+    </div>
+    <div class="panel">
+      <div class="window-bar" aria-hidden="true"><span>repartition.gif</span><span class="window-bar__dots"><i></i><i></i><i></i></span></div>
+      <div class="chart-head"><h2>Répartition</h2></div>
+      <div class="donut-wrap chart-box--donut">
+        <canvas id="donut" role="img" aria-label="Répartition par type"></canvas>
+        <div class="donut-center"><strong>{{ '%.0f'|format(rep.pct.voiture) }}%</strong><span>de voitures</span></div>
+      </div>
+      <ul class="legend" style="margin-top: var(--space-4); justify-content: center">
+        {% for t in types %}<li class="dot-{{ t }}">{{ labels[t] }} <strong>{{ '%.1f'|format(rep.pct[t]) }} %</strong></li>{% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-top: var(--space-5)">
+      <div class="window-bar" aria-hidden="true"><span>journee_type.xls</span><span class="window-bar__dots"><i></i><i></i><i></i></span></div>
+    <div class="chart-head">
+      <h2>Une journée type</h2>
+      <p>moyenne horaire sur la période · le capteur ne compte que de jour</p>
+    </div>
+    <div class="chart-box chart-box--sm"><canvas id="profil" role="img" aria-label="Profil horaire moyen"></canvas></div>
+    <details class="table-toggle">
+      <summary>Voir les chiffres en tableau</summary>
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>Type</th><th class="num">Passages</th><th class="num">Part</th><th class="num">Pic horaire moyen</th></tr></thead>
+          <tbody>
+          {% for t in types %}
+            <tr><td><span class="swatch dot-{{ t }}"></span>{{ labels[t] }}</td>
+                <td class="num">{{ '{:,}'.format(rep.totaux[t]).replace(',', ' ') }}</td>
+                <td class="num">{{ '%.1f'|format(rep.pct[t]) }} %</td>
+                <td class="num">{{ d.profil[t]|max }}</td></tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </details>
+  </div>
+{% endif %}
+</section>
+{% endblock %}
+
+{% block scripts %}
+{% if rep.total %}
+<script src="{{ url_for('static', filename='vendor/chart.umd.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/data.js') }}"></script>
+<script>
+(function () {
+  WB.theme();
+  const types = {{ types|list|tojson }};
+  const labels = {{ labels|tojson }};
+  const serie = {{ d.serie|tojson }};
+  const profil = {{ d.profil|tojson }};
+  const pct = {{ rep.pct|tojson }};
+  const C = WB.COLORS;
+
+  const grid = document.getElementById("res-grid");
+  const mq = window.matchMedia("(max-width: 900px)");
+  const layout = () => { grid.style.gridTemplateColumns = mq.matches ? "1fr" : "minmax(0, 2fr) minmax(0, 1fr)"; };
+  mq.addEventListener("change", layout); layout();
+
+  const tick = (v) => WB.fmt(v);
+  new Chart(document.getElementById("serie"), {
+    type: "bar",
+    data: {
+      labels: serie.labels,
+      datasets: types.map((t) => ({
+        label: labels[t], data: serie.data[t],
+        backgroundColor: C[t], borderColor: "#130b24", borderWidth: { top: 2 },
+        borderRadius: 3, borderSkipped: "bottom", maxBarThickness: 28,
+      })),
+    },
+    options: {
+      scales: {
+        x: { stacked: true, grid: { display: false }, ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 10 } },
+        y: { stacked: true, beginAtZero: true, ticks: { callback: tick } },
+      },
+      plugins: {
+        legend: { position: "top", align: "end" },
+        tooltip: { callbacks: { label: (c) => ` ${c.dataset.label} : ${WB.fmt(c.raw)}`,
+                                footer: (items) => "Total : " + WB.fmt(items.reduce((s, i) => s + i.raw, 0)) } },
+      },
+    },
+  });
+
+  new Chart(document.getElementById("donut"), {
+    type: "doughnut",
+    data: { labels: types.map((t) => labels[t]),
+            datasets: [{ data: types.map((t) => pct[t]), backgroundColor: types.map((t) => C[t]),
+                         borderColor: "#130b24", borderWidth: 2, hoverOffset: 8 }] },
+    options: { cutout: "72%", interaction: { mode: "nearest", intersect: true },
+               plugins: { legend: { display: false },
+                          tooltip: { callbacks: { label: (c) => ` ${c.label} : ${WB.fmt(c.raw, 1)} %` } } } },
+  });
+
+  const hours = Array.from({ length: 24 }, (_, h) => `${h}h`);
+  new Chart(document.getElementById("profil"), {
+    type: "line",
+    data: {
+      labels: hours,
+      datasets: types.map((t) => ({
+        label: labels[t], data: profil[t], borderColor: C[t], backgroundColor: WB.alpha(C[t], .12),
+        borderWidth: 2, tension: .35, pointRadius: 0, pointHoverRadius: 5, fill: t === "voiture",
+      })),
+    },
+    options: {
+      scales: { x: { grid: { display: false } }, y: { beginAtZero: true, ticks: { callback: tick } } },
+      plugins: { legend: { position: "top", align: "end" },
+                 tooltip: { callbacks: { label: (c) => ` ${c.dataset.label} : ${WB.fmt(c.raw, 1)} / h` } } },
+    },
+  });
+})();
+</script>
+{% endif %}
+{% endblock %}

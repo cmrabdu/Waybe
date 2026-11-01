@@ -1,0 +1,95 @@
+/* Page Équipe : cartes à collectionner qui se retournent */
+
+.team { padding-top: var(--space-7); overflow-x: clip; } /* cartes distribuées en biais : pas de scroll horizontal */
+.team__head { justify-items: start; }
+.team__head h1 { font-size: clamp(2rem, 1.3rem + 3vw, 3.6rem); }
+
+.deck {
+  list-style: none; padding: 0;
+  display: grid; gap: var(--space-6) var(--space-5);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+@media (max-width: 1000px) { .deck { grid-template-columns: repeat(2, minmax(0, 260px)); justify-content: center; } }
+@media (max-width: 480px) { .deck { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-5) var(--space-3); } .tcard__name { font-size: .85rem; } }
+
+.deck__slot { display: grid; justify-items: center; gap: var(--space-1); text-align: center;
+  animation: deal 800ms var(--ease) both; animation-delay: calc(var(--i) * 110ms + 150ms); }
+@keyframes deal { from { opacity: 0; transform: translateY(40px) rotate(calc((var(--i) - 1.5) * 6deg)) scale(.92); } }
+
+.tcard {
+  --rx: 0deg; --ry: 0deg; --mx: 50%; --my: 50%;
+  position: relative; width: 100%; aspect-ratio: 3 / 5;
+  padding: 0; border: 0; background: none; border-radius: 18px;
+  perspective: 1200px; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.tcard:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 6px; }
+.tcard__inner {
+  position: absolute; inset: 0; display: block;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--rx)) rotateY(calc(var(--ry) + 0deg));
+  transition: transform 700ms var(--ease);
+}
+.tcard.is-tilting .tcard__inner { transition: transform 120ms linear; }
+.tcard.is-flipped .tcard__inner { transform: rotateX(var(--rx)) rotateY(calc(var(--ry) + 180deg)); }
+
+.tcard__face {
+  position: absolute; inset: 0; display: block; overflow: hidden;
+  border-radius: 18px;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, .5), 0 0 0 1px rgba(255, 255, 255, .1);
+}
+.tcard__face img { width: 100%; height: 100%; object-fit: cover; }
+.tcard__face--front { transform: rotateY(180deg); }
+.tcard:hover .tcard__face, .tcard:focus-visible .tcard__face { box-shadow: 0 26px 50px rgba(0, 0, 0, .55), 0 0 30px rgba(255, 62, 165, .35), 0 0 0 1px rgba(255, 255, 255, .2); }
+
+/* Reflet holographique qui suit le pointeur */
+.tcard__holo {
+  position: absolute; inset: 0; pointer-events: none; mix-blend-mode: color-dodge; opacity: 0;
+  background:
+    radial-gradient(circle at var(--mx) var(--my), rgba(255,255,255,.55), transparent 40%),
+    linear-gradient(115deg, transparent 20%, rgba(255, 62, 165, .45) 36%, rgba(57, 225, 255, .45) 50%, rgba(255, 198, 26, .4) 64%, transparent 80%);
+  background-size: 100% 100%, 220% 220%;
+  background-position: center, var(--mx) var(--my);
+  transition: opacity var(--dur) var(--ease);
+}
+.tcard.is-tilting .tcard__holo { opacity: .55; }
+
+.tcard__name { margin-top: var(--space-4); font-family: var(--font-display); font-weight: 700; font-size: 1rem; letter-spacing: .02em; }
+.tcard__handle { color: var(--accent); font-size: 1.15rem; }
+
+/* Projet */
+.project__title { font-size: 1.5rem; margin-bottom: var(--space-4); }
+.project .panel p + p { margin-top: var(--space-3); }
+.project a { color: var(--accent-2); }
+.specs { display: grid; gap: 0; }
+.specs div { display: flex; justify-content: space-between; gap: var(--space-4); padding: var(--space-3) 0; border-bottom: 1px solid var(--border); }
+.specs div:last-child { border-bottom: 0; }
+.specs dt { color: var(--text-muted); font-size: .85rem; letter-spacing: .06em; text-transform: uppercase; font-weight: 600; }
+.specs dd { margin: 0; font-weight: 600; text-align: right; }
+
+@media (prefers-reduced-motion: reduce) {
+  .deck__slot { animation: none; }
+  .tcard__inner { transition: none; }
+}
+
+/* =========================================================
+   Habillage « web 2000 » : cartes à collectionner
+   ========================================================= */
+.tcard__face { box-shadow: 0 0 0 2px #000, 6px 6px 0 rgba(0, 0, 0, .55); }
+.tcard:hover .tcard__face, .tcard:focus-visible .tcard__face { box-shadow: 0 0 0 2px #000, 8px 8px 0 rgba(0, 0, 0, .55), 0 0 30px rgba(255, 62, 165, .45); }
+.tcard__name { font-family: var(--font-ui); font-size: .95rem; }
+.tcard__handle {
+  display: inline-block; margin-top: 2px; padding: 0 6px;
+  background: #000; color: #ff8fd0; font-size: 1.1rem;
+  border: 1px solid; border-color: var(--win-lo) var(--win-hi) var(--win-hi) var(--win-lo);
+}
+.deck__slot::before { /* pastille « édition limitée » */
+  content: "★ RARE"; justify-self: end; margin-bottom: -18px; position: relative; z-index: 2;
+  padding: 2px 6px; transform: rotate(6deg) translate(6px, 4px);
+  background: radial-gradient(circle at 40% 35%, #fff6a8, #ffc61a 55%, #ff8a00); color: #2a0016;
+  font-family: var(--font-pixel); font-size: .6rem; border: 1px solid #000; box-shadow: 2px 2px 0 rgba(0,0,0,.5);
+}
+.specs dt { font-family: var(--font-pixel); font-weight: 400; font-size: .66rem; }
+.specs dd { font-family: var(--font-ui); }
+.specs div { border-bottom-style: dotted; }

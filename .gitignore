@@ -1,5 +1,15 @@
 venv/
 .venv/
+vevn/
+
+.idea/
+.DS_Store
+
+*.db
+*.mp3
+!mobility/static/tk.mp3
+!mobility/static/tk2.mp3
+deploy/.env
 
 *.pyc
 __pycache__/
@@ -15,3 +25,5 @@ build/
 *.egg-info/
 
 .vimhistory
+
+mobility/static/rapport_WAY_BE*.pdf

@@ -1,0 +1,6 @@
+# Add to watchy's Caddyfile, then: caddy reload
+waybe.cmrabdu.com {
+	encode zstd gzip
+	reverse_proxy 127.0.0.1:8010
+	header -Server
+}

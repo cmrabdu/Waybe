@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% set mois = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'] %}
+{% macro date_fr(d) -%}{{ d.day }}{% if d.day == 1 %}<sup>er</sup>{% endif %} {{ mois[d.month - 1] }} {{ d.year }}{%- endmacro %}
+
+{% block title %}{{ lune.label }} · Lune · WAY-BE{% endblock %}
+
+{% block head_extra %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/moon.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/moon-anim.css') }}">
+{% endblock %}
+
+{% block body_class %}page-moon{% endblock %}
+
+{% block content %}
+<section class="moon-hero">
+  <div class="container moon-hero__inner">
+    <figure class="rise moon-visual" data-moon data-age="{{ '%.4f'|format(lune.age) }}">
+      <div class="moon-visual__halo" style="--lit: {{ '%.2f'|format(lune.illumination) }}"></div>
+      <svg class="moon-svg" viewBox="0 0 200 200" role="img" aria-label="{{ lune.label }}, {{ (lune.illumination * 100)|round|int }} % du disque éclairé">
+        <defs>
+          <radialGradient id="moon-lit" cx="38%" cy="34%" r="75%">
+            <stop offset="0%" stop-color="#fffaf0"/>
+            <stop offset="55%" stop-color="#f1e6ff"/>
+            <stop offset="100%" stop-color="#b9a6dc"/>
+          </radialGradient>
+          <radialGradient id="moon-dark" cx="50%" cy="50%" r="60%">
+            <stop offset="0%" stop-color="#241a3d"/>
+            <stop offset="100%" stop-color="#120c22"/>
+          </radialGradient>
+          <clipPath id="moon-clip"><path data-moon-clip d="{{ lune.path }}"/></clipPath>
+        </defs>
+        <circle cx="100" cy="100" r="90" fill="url(#moon-dark)" stroke="rgba(179,136,255,.35)" stroke-width="1"/>
+        <path data-moon-lit d="{{ lune.path }}" fill="url(#moon-lit)"/>
+        <g clip-path="url(#moon-clip)" fill="#8f7fb0" opacity=".28">
+          <circle cx="72" cy="66" r="14"/><circle cx="128" cy="58" r="8"/><circle cx="118" cy="118" r="18"/>
+          <circle cx="66" cy="132" r="9"/><circle cx="146" cy="96" r="6"/><circle cx="96" cy="160" r="7"/>
+          <circle cx="92" cy="96" r="5"/><circle cx="150" cy="140" r="5"/><circle cx="48" cy="98" r="6"/>
+        </g>
+      </svg>
+      <figcaption class="sr-only">{{ lune.label }}</figcaption>
+    </figure>
+
+    <div class="moon-info" data-moon-info>
+      <span class="rise eyebrow" data-swap="eyebrow">{% if is_today %}La lune ce soir{% else %}Calculateur lunaire{% endif %}</span>
+      <h1 class="rise" data-delay="1" data-swap="label">{{ lune.label }}</h1>
+      <p class="rise lead" data-delay="1" data-swap="lead">{% if is_today %}Aujourd'hui, {% else %}Le {% endif %}{{ date_fr(lune.date) }}</p>
+
+      <dl class="rise moon-facts" data-delay="2" data-swap="facts">
+        <div class="moon-fact"><dt>Âge</dt><dd><span class="mono-num">{{ '%.1f'|format(lune.age) }}</span> j</dd></div>
+        <div class="moon-fact"><dt>Éclairée</dt><dd><span class="mono-num">{{ (lune.illumination * 100)|round|int }}</span> %</dd></div>
+        <div class="moon-fact"><dt>Pleine lune</dt><dd>{{ date_fr(lune.prochaine_pleine) }}</dd></div>
+        <div class="moon-fact"><dt>Nouvelle lune</dt><dd>{{ date_fr(lune.prochaine_nouvelle) }}</dd></div>
+      </dl>
+
+      <form data-moon-form class="rise moon-form" action="{{ url_for('moon_phase_view') }}" method="get" data-delay="3">
+        <div class="field">
+          <label for="date">Choisir une date</label>
+          <input type="date" id="date" name="date" value="{{ date_str }}" min="1900-01-01" max="2100-12-31" required>
+        </div>
+        <button class="btn btn--primary" type="submit">Calculer</button>
+        <a class="btn btn--ghost" data-moon-today href="{{ url_for('moon_phase_view') }}"{% if is_today %} hidden{% endif %}>Aujourd'hui</a>
+      </form>
+      <p class="moon-error" role="alert" data-swap="error"{% if not error %} hidden{% endif %}>{{ error or '' }}</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <ol data-swap="cycle" class="moon-cycle" aria-label="Les huit phases de la lunaison" data-reveal>
+      {% for c in cycle %}
+      <li class="moon-cycle__item{% if c.key == lune.key %} is-current{% endif %}"{% if c.key == lune.key %} aria-current="true"{% endif %}>
+        <svg viewBox="0 0 200 200" aria-hidden="true">
+          <circle cx="100" cy="100" r="90" fill="#1d1533" stroke="rgba(179,136,255,.4)" stroke-width="3"/>
+          {% if c.path %}<path d="{{ c.path }}" fill="#efe6ff"/>{% endif %}
+        </svg>
+        <span>{{ c.label }}</span>
+      </li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>
+
+{% if velos and velos.jours %}
+{% set ecart = ((velos.pleine - velos.autres) / velos.autres * 100) if velos.pleine and velos.autres else 0 %}
+{% set ecart_txt = ('%+.1f'|format(ecart)) if ecart|abs >= 0.05 else '0' %}
+{% set max_moy = velos.phases | selectattr('moyenne') | map(attribute='moyenne') | max %}
+<section class="section" id="velos">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">Données Telraam</span>
+      <h2>La pleine lune fait-elle sortir les vélos&nbsp;?</h2>
+      <p>Moyenne de vélos comptés par jour, toutes rues confondues, selon la phase de la lune du soir. Échantillon&nbsp;: {{ velos.jours }} jours de mesures.</p>
+    </div>
+
+    <div class="grid grid--2 moon-data">
+      <div class="panel panel--glow" data-reveal>
+        <div class="window-bar"><span>verdict.exe</span><span class="window-bar__dots"><i></i><i></i><i></i></span></div>
+        <div class="versus">
+          <div class="stat">
+            <span class="stat__label">Soirs de pleine lune · {{ velos.jours_pleine }} j</span>
+            <span class="stat__value text-gradient">{{ velos.pleine if velos.pleine is not none else '–' }}</span>
+          </div>
+          <span class="versus__vs mono">VS</span>
+          <div class="stat">
+            <span class="stat__label">Autres jours · {{ velos.jours_autres }} j</span>
+            <span class="stat__value">{{ velos.autres if velos.autres is not none else '–' }}</span>
+          </div>
+        </div>
+        <p class="verdict">
+          {% if ecart|abs < 3 %}
+            <strong>Match nul.</strong> Écart de {{ ecart_txt }}&nbsp;% : la lune ne change rien au vélo, la météo et le jour de la semaine pèsent bien plus.
+          {% elif ecart > 0 %}
+            <strong>Effet lune ?</strong> {{ ecart_txt }}&nbsp;% de vélos les soirs de pleine lune. Avec si peu de jours, prudence : ça peut être la météo.
+          {% else %}
+            <strong>Plutôt l'inverse.</strong> {{ ecart_txt }}&nbsp;% de vélos les soirs de pleine lune. Avec si peu de jours, prudence : ça peut être la météo.
+          {% endif %}
+        </p>
+      </div>
+
+      <div class="panel" data-reveal data-delay="1">
+        <h3 class="panel__title">Vélos par jour, selon la phase</h3>
+        <ul class="phase-bars" data-swap="bars">
+          {% for p in velos.phases %}
+          <li class="phase-bars__row{% if p.phase.name == 'FULL_MOON' %} is-full{% endif %}{% if p.phase.name == lune.key %} is-current{% endif %}">
+            <span class="phase-bars__label">{{ p.label }}</span>
+            <span class="phase-bars__track">
+              <span class="phase-bars__fill" style="--w: {{ ((p.moyenne or 0) / max_moy * 100)|round(1) }}%"></span>
+            </span>
+            <span class="phase-bars__value mono-num">{{ p.moyenne if p.moyenne is not none else '–' }}</span>
+            <span class="phase-bars__days">{{ p.jours }} j</span>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/moon.js') }}" defer></script>
+{% endblock %}

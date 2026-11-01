@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}WAY-BE · mobilité belge{% endblock %}</title>
+  <meta name="description" content="WAY-BE : la mobilité belge en données Telraam, version Y2K. Projet Bac 1 UCLouvain.">
+  <meta name="theme-color" content="#0a0614">
+  {# Fond sombre immédiat : pas de flash blanc entre deux pages, même avant le CSS #}
+  <style>html{background:#0a0614;color-scheme:dark}</style>
+  <script>
+    (function (d) {
+      d.classList.add('js');
+      /* La grille synthwave reprend là où elle en était : pas de saut d'une page à l'autre */
+      d.style.setProperty('--grid-delay', -(Date.now() % 6000) + 'ms');
+      /* Navigateurs sans View Transitions entre pages : transition gérée en JS (site.js) */
+      if (!('onpagereveal' in window)) d.classList.add('no-vt');
+    })(document.documentElement);
+  </script>
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <link rel="preload" href="{{ url_for('static', filename='fonts/Orbitron-500-latin.woff2') }}" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/fonts.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/tokens.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  {% block head_extra %}{% endblock %}
+  {# Compat temporaire : anciens templates qui remplissent {% block header %} / {% block head %} #}
+  {% block header %}{% endblock %}
+  {% block head %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %} has-statusbar">
+  <a class="skip-link" href="#main">Aller au contenu</a>
+  <div class="bg-fx" aria-hidden="true">
+    <div class="bg-fx__grid"></div>
+    <div class="bg-fx__glow bg-fx__glow--a"></div>
+    <div class="bg-fx__glow bg-fx__glow--b"></div>
+    <div class="bg-fx__dither"></div>
+    <div class="bg-fx__stars"></div>
+    <div class="bg-fx__twinkles"><i class="bg-fx__twinkle"></i><i class="bg-fx__twinkle"></i><i class="bg-fx__twinkle"></i><i class="bg-fx__twinkle"></i><i class="bg-fx__twinkle"></i></div>
+  </div>
+  <div class="crt" aria-hidden="true"></div>
+
+  {% set nav_items = [
+    ('/', 'Accueil'),
+    ('/request', 'Data'),
+    ('/stats', 'Stats'),
+    ('/chosegame', 'Memory'),
+    ('/moon', 'Lune'),
+    ('/about', 'Équipe'),
+  ] %}
+  {% set path = request.path %}
+  <header class="site-nav" data-nav>
+    <div class="site-nav__inner">
+      <a class="site-nav__brand" href="/" aria-label="WAY-BE, accueil">
+        <img src="{{ url_for('static', filename='titre.png') }}" alt="WAY-BE" width="880" height="271">
+      </a>
+      <button type="button" class="site-nav__toggle" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="site-menu" data-nav-toggle>
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="site-menu" class="site-nav__links" aria-label="Navigation principale">
+        {% for href, label in nav_items %}
+          {% set active = (href == '/' and path == '/')
+              or (href == '/request' and path in ['/request', '/nextrequest', '/endrequest'])
+              or (href == '/chosegame' and path in ['/chosegame', '/game'])
+              or (href == '/moon' and path in ['/moon', '/chosemoon'])
+              or (href not in ['/', '/request', '/chosegame', '/moon'] and path == href) %}
+          <a href="{{ href }}"{% if active %} class="is-active" aria-current="page"{% endif %}>{{ label }}</a>
+        {% endfor %}
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="site-main">
+    {% set ticker = [
+      '★ Bienvenue sur <b>WAY-BE</b>, le portail n°1 de la mobilité belge',
+      '★ <b>NEW!</b> le Memory mobilité est en ligne',
+      '★ La pleine lune fait-elle sortir les vélos ? Réponse page Lune',
+      '★ Ajoute-nous à tes favoris : <b>Ctrl+D</b>',
+      '★ Données Telraam fraîches de l’hiver 2024',
+      '★ Best viewed in <b>1024×768</b>, 16 millions de couleurs',
+    ] %}
+    <div class="ticker" role="marquee" aria-label="Infos WAY-BE">
+      <span class="ticker__label">INFO&nbsp;FLASH</span>
+      <div class="ticker__viewport">
+        <div class="ticker__track">
+          <span>{{ ticker|join(' &nbsp; ')|safe }}</span>
+          <span aria-hidden="true">{{ ticker|join(' &nbsp; ')|safe }}</span>
+        </div>
+      </div>
+    </div>
+    {% block content %}{% endblock %}
+    {# Compat temporaire : anciens templates en {% block body %}. Leur ancienne <nav> est masquée par le CSS. #}
+    <div class="legacy-page">{% block body %}{% endblock %}</div>
+  </main>
+
+  {% block footerer %}
+  {% set ring = ['/', '/request', '/stats', '/chosegame', '/moon', '/about'] %}
+  {% set here = ring.index(path) if path in ring else 0 %}
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <div class="retro-foot">
+        <div class="retro-foot__row">
+          <p class="counter">Tu es le visiteur n°
+            <span class="counter__digits" data-counter aria-label="0013370">{% for c in '0013370' %}<span>{{ c }}</span>{% endfor %}</span>
+          </p>
+          <nav class="webring" aria-label="Webring">
+            <a href="{{ ring[here - 1] }}">&laquo; préc.</a>
+            <span class="webring__name">✦ Webring de la mobilité belge ✦</span>
+            <a href="{{ ring[(here + 1) % ring|length] }}">suiv. &raquo;</a>
+            <a href="{{ ring|random }}">au hasard</a>
+          </nav>
+        </div>
+        <ul class="b88s" aria-label="Badges">
+          <li><a class="b88 b88--waybe" href="/"><span class="b88__ico" aria-hidden="true">★</span><span class="b88__txt"><b>WAY-BE</b>est. 2024</span></a></li>
+          <li><span class="b88 b88--netscape"><span class="b88__ico" aria-hidden="true">N</span><span class="b88__txt">Netscape<b>NOW!</b></span></span></li>
+          <li><span class="b88 b88--ie"><span class="b88__ico" aria-hidden="true">e</span><span class="b88__txt">IE 5.5<b>ready</b></span></span></li>
+          <li><a class="b88 b88--telraam" href="https://telraam.net" target="_blank" rel="noopener"><span class="b88__ico" aria-hidden="true">◉</span><span class="b88__txt">powered by<b>Telraam</b></span></a></li>
+          <li><span class="b88 b88--flask"><span class="b88__txt">made with<b>Flask</b></span></span></li>
+          <li><span class="b88 b88--html"><span class="b88__ico" aria-hidden="true">W3C</span><span class="b88__txt">HTML<b>4.01</b></span></span></li>
+          <li><button type="button" class="b88 b88--book" data-guestbook-open hidden><span class="b88__ico" aria-hidden="true">✎</span><span class="b88__txt">signe le<b>livre d'or</b></span></button></li>
+        </ul>
+        <div class="retro-foot__row">
+          <span class="construction"><span class="construction__tape" aria-hidden="true"></span>Site en construction depuis 2001</span>
+          <span class="best-viewed">Best viewed in 1024×768 · Netscape 4+ · IE 5.5+</span>
+        </div>
+      </div>
+      <p class="site-footer__brand"><span class="mono">WAY-BE</span> · Groupe C02 · EPL UCLouvain · 2024</p>
+      <p class="site-footer__meta">Données de comptage <a href="https://telraam.net" target="_blank" rel="noopener">Telraam</a> · Projet Bac&nbsp;1 sciences informatiques</p>
+    </div>
+  </footer>
+  {% endblock %}
+
+  <div class="statusbar" aria-hidden="true">
+    <div><span class="statusbar__ico"></span><span class="statusbar__text" data-status-text>Terminé</span></div>
+    <div><span class="xp-progress"><i data-status-bar></i></span></div>
+    <div><span class="statusbar__ico"></span>Zone Internet</div>
+  </div>
+
+  <dialog class="xp-dialog" id="guestbook" aria-labelledby="guestbook-title">
+    <div class="window-bar"><span id="guestbook-title">livre_d_or.exe</span><span class="window-bar__dots"><i></i><i></i><button type="button" data-guestbook-close aria-label="Fermer"><i></i></button></span></div>
+    <div class="xp-dialog__body">
+      <ul class="guestbook">
+        <li><time>14/02/2004</time><b>xX_cycliste_Xx</b> : trop bien le site !!! je repasse demain ++</li>
+        <li><time>02/09/2003</time><b>LouvainLaNeuve4ever</b> : super la musique ;-) vous avez msn ?</li>
+        <li><time>21/06/2001</time><b>webmaster</b> : merci à tous pour vos messages ♥</li>
+      </ul>
+      <p class="muted">Le livre d'or est fermé pour cause de spam depuis 2004. Reviens plus tard&nbsp;!</p>
+      <div class="xp-dialog__actions"><button type="button" class="btn btn--sm" data-guestbook-close>OK</button></div>
+    </div>
+  </dialog>
+
+  <script src="{{ url_for('static', filename='js/site.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='js/y2k.js') }}" defer></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

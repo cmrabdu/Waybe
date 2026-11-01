@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Memory {{ label }} · WAY-BE{% endblock %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/data.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='cards.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="container game-top">
+  <a class="back-link" href="{{ url_for('chosegame') }}">&larr; changer de ville</a>
+  <div class="game-title">
+    <h1>Memory · <span class="text-gradient">{{ label }}</span></h1>
+    <p id="mode-label">Associe chaque véhicule à sa part du trafic.</p>
+  </div>
+  <div class="hud" aria-live="polite">
+    <div class="hud__item hud__item--ok">
+      <div class="hud__label">Paires</div>
+      <div class="hud__value"><span id="pairs">0</span>/4</div>
+      <div class="progress"><span id="progress"></span></div>
+    </div>
+    <div class="hud__item"><div class="hud__label">Coups</div><div class="hud__value" id="moves">0</div></div>
+    <div class="hud__item hud__item--err"><div class="hud__label">Erreurs</div><div class="hud__value" id="errors">0</div></div>
+    <div class="hud__item"><div class="hud__label">Temps</div><div class="hud__value" id="time">0:00</div></div>
+    <div class="hud__item"><div class="hud__label">Record</div><div class="hud__value" id="best">–</div></div>
+  </div>
+</section>
+
+<section class="container">
+  <div class="board-wrap">
+    <div class="board is-loading" id="board" aria-label="Plateau de jeu">
+      {# Dos de cartes affichés tout de suite : le plateau a sa taille finale dès le premier rendu (pas de saut) #}
+      {% for i in range(8) %}
+      <span class="card card--ghost" style="--i: {{ i }}" aria-hidden="true"><span class="card__shake"><span class="card__inner">
+        <span class="card__face card__face--back"><img src="{{ url_for('static', filename='back.jpg') }}" alt="" width="585" height="819"></span>
+      </span></span></span>
+      {% endfor %}
+    </div>
+    <div class="toast" id="toast" role="status"></div>
+  </div>
+  <div class="game-actions">
+    <button type="button" class="btn btn--primary" id="restart">Rejouer</button>
+    <a class="btn btn--ghost" href="{{ url_for('nextrequest', ville=ville.nom) }}">Explorer {{ label }} <span class="arrow">&rarr;</span></a>
+  </div>
+</section>
+
+<div class="win" id="win" role="dialog" aria-modal="true" aria-labelledby="win-title" hidden>
+  <div class="win__box">
+    <h2 class="win__title" id="win-title">Bien joué !</h2>
+    <div class="stars" id="stars" aria-label=""><span>★</span><span>★</span><span>★</span></div>
+    <div class="win__stats">
+      <div><b id="win-moves">0</b>coups</div>
+      <div><b id="win-errors">0</b>erreurs</div>
+      <div><b id="win-time">0:00</b>temps</div>
+    </div>
+    <p class="win__record" id="win-record"></p>
+    <div class="truth">
+      <h3>Le trafic réel à {{ label }}</h3>
+      {% for t in types %}
+      <div class="truth__row dot-{{ t }}">
+        <span>{{ labels[t] }}</span>
+        <span class="truth__bar" style="width: {{ [pct[t], 1]|max }}%; transition-delay: {{ loop.index0 * 120 }}ms"></span>
+        <span>{{ '%.1f'|format(pct[t]) }} %</span>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="game-actions">
+      <button type="button" class="btn btn--primary" id="win-again">Rejouer</button>
+      <a class="btn btn--ghost" href="{{ url_for('nextrequest', ville=ville.nom) }}">Explorer {{ label }}</a>
+      <a class="btn btn--ghost" href="{{ url_for('chosegame') }}">Autre ville</a>
+    </div>
+  </div>
+</div>
+
+<script type="application/json" id="game-config">{{ {
+  'prefix': prefix,
+  'ville': label,
+  'pct': pct,
+  'labels': labels,
+  'static': url_for('static', filename=''),
+}|tojson }}</script>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='cards.js') }}"></script>
+{% endblock %}

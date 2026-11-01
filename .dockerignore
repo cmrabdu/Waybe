@@ -1,0 +1,12 @@
+.git
+.venv
+venv
+vevn
+docs
+rapport WAY-BE
+deploy
+**/__pycache__
+**/*.db
+**/.DS_Store
+mobility/tests
+mobility/static/rapport_WAY_BE*.pdf

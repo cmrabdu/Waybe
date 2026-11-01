@@ -1,90 +1,62 @@
-{% extends "base.html" %}
-{% block header %}
- <link rel="stylesheet" href="static/style.css">
-{% endblock %}
-{% block body %}
-         <nav>
-        <!-- Image à gauche de la barre de navigation -->
-        <a href="game">
-            <img src="/static/stars.png" alt="Image" class="image-left">
-            <div class="game">
-                <a href="/chosegame">Game</a>
-            </div>
-        </a>
-        <!-- Logo -->
-        <a href="/"> <img src="/static/titre.png" alt="Logo" class="navbar-logo"></a>
-        <!-- Conteneur du menu -->
-        <div class="menu-container">
-            <!-- Menu -->
-            <ul class="menu">
-                <li><a href="/request">Request</a></li>
-                <li><a href="/stats">Stats</a></li>
-                <li><a href="/about">Team</a></li>
-                <li><a href="/chosemoon">Moon</a></li>
-
-            </ul>
-        </div>
-    </nav>
-    <
-
-<body class="moon-page">
-    <div class="moon-and-graph-container">
-        <!-- Div pour la lune -->
-        <div class="moon-info">
-            <h1>Phase de la Lune</h1>
-            <p>Âge de la lune : {{ age_lune }} jours</p>
-            <p>Phase actuelle : {{ moon_phase }}</p>
-            <!-- Affichage de l'image de la phase de la lune -->
-            <img src="{{ url_for('static', filename='images/' + moon_image) }}" alt="Phase de la Lune">
-        </div>
-        <!-- Div pour le graphique -->
-        <div class="graph-info">
-            <h2>Graphique circulaire des moyennes de vélos sur les jours en données</h2>
-            <canvas id="myChart" width="200" height="200"></canvas>
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-            <script>
-                var ctx = document.getElementById('myChart').getContext('2d');
-                var myChart = new Chart(ctx, {
-                    type: 'pie',
-                    data: {
-                        labels: ['Jours de pleine lune', 'Jours normaux'],
-                        datasets: [{
-                            label: 'Moyenne de vélos',
-                            data: [{{ sump }}, {{ smur }}],
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.7)',
-                                'rgba(54, 162, 235, 0.7)'
-                            ],
-                            borderColor: [
-                                'rgba(255, 99, 132, 1)',
-                                'rgba(54, 162, 235, 1)'
-                            ],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                display: false // Masquer l'axe y
-                            },
-                            x: {
-                                display: false // Masquer l'axe x
-                            }
-                        },
-                        plugins: {
-                            legend: {
-                                labels: {
-                                    color: 'white' // Changer la couleur du texte des labels
-                                }
-                            }
-                        }
-                    }
-                });
-            </script>
-        </div>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moon — WAY-BE</title>
+  <link rel="icon" href="assets/img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css?v=3">
+</head>
+<body class="wb-moon">
+  <header class="wb-nav">
+    <div class="wb-nav__inner">
+      <a class="wb-nav__game" href="game.html"><img src="assets/img/stars.png" alt="">Game</a>
+      <a class="wb-nav__brand" href="index.html"><img src="assets/img/titre.png" alt="WAY-BE"></a>
+      <button type="button" class="wb-nav__toggle" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+      <nav class="wb-nav__links" aria-label="Navigation">
+        <a href="request.html">Request</a>
+        <a href="stats.html">Stats</a>
+        <a href="about.html">Team</a>
+        <a href="moon.html">Moon</a>
+      </nav>
     </div>
-</body>
+  </header>
 
-{% endblock %}
-{% block footer %}
-{% endblock %}
+  <main class="wb-main">
+    <span class="wb-badge">Démo static · données graphique mock</span>
+    <h1 id="moon-heading">Phase lunaire</h1>
+
+    <form id="moon-form" class="wb-form wb-panel wb-section" aria-labelledby="moon-heading">
+      <label for="moon-date">Date</label>
+      <input type="date" id="moon-date" name="moon-date" required>
+      <button type="submit" class="wb-btn wb-btn--primary">Calculer</button>
+    </form>
+
+    <div class="wb-moon-layout">
+      <section class="wb-panel" aria-live="polite">
+        <h2 class="wb-panel__title">Résultat</h2>
+        <p id="moon-selected-date"></p>
+        <p>Âge de la lune : <strong><span id="moon-age">—</span></strong> jours</p>
+        <p>Phase actuelle : <strong><span id="moon-phase-label">—</span></strong></p>
+        <img id="moon-phase-image" src="" alt="Phase de la Lune">
+      </section>
+
+      <section class="wb-panel">
+        <h2 class="wb-panel__title">Moyennes vélos · pleine lune vs autres jours</h2>
+        <div class="wb-chart-wrap">
+          <canvas id="moonChart" aria-label="Graphique circulaire des moyennes de vélos"></canvas>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="wb-footer"><p>© 2024 Groupe C02 — WAY-BE · Projet Bac 1 UCLouvain/EPL · Vitrine demo</p></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="assets/js/nav.js"></script>
+  <script src="assets/js/moon.js"></script>
+</body>
+</html>

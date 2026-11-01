@@ -1,0 +1,202 @@
+/* Page Lune */
+
+.mono-num { font-family: var(--font-mono); font-size: 1.35em; letter-spacing: .02em; line-height: 1; }
+
+.moon-hero { position: relative; padding-block: var(--space-7) var(--space-5); }
+.moon-hero::before { /* champ d'étoiles */
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 22%, #fff, transparent),
+    radial-gradient(1px 1px at 28% 68%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 44% 12%, #ffc2e3, transparent),
+    radial-gradient(1px 1px at 63% 44%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 81% 18%, #bff6ff, transparent),
+    radial-gradient(1px 1px at 92% 62%, #fff, transparent),
+    radial-gradient(1px 1px at 6% 80%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 55% 86%, #fff, transparent);
+  background-size: 520px 420px;
+  opacity: .7;
+  animation: stars-twinkle 5s ease-in-out infinite alternate;
+}
+@keyframes stars-twinkle { to { opacity: .35; } }
+
+.moon-hero__inner {
+  display: grid; align-items: center; gap: var(--space-7);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+}
+
+.moon-visual { position: relative; display: grid; place-items: center; margin: 0; }
+.moon-visual__halo {
+  position: absolute; width: 92%; aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(241, 230, 255, calc(.12 + var(--lit) * .35)), rgba(179, 136, 255, .15) 60%, transparent 75%);
+  filter: blur(18px);
+  animation: halo 6s ease-in-out infinite alternate;
+}
+.moon-visual::after { /* anneau orbital */
+  content: ""; position: absolute; width: 112%; aspect-ratio: 3 / 1; border-radius: 50%;
+  border: 1px solid rgba(255, 62, 165, .45);
+  box-shadow: 0 0 18px rgba(255, 62, 165, .25);
+  transform: rotate(-16deg);
+  z-index: 0;
+}
+.moon-svg {
+  position: relative; z-index: 1; width: min(100%, 400px); height: auto;
+  filter: drop-shadow(0 0 28px rgba(241, 230, 255, .35));
+  animation: moon-float 8s ease-in-out infinite;
+}
+@keyframes halo { to { transform: scale(1.06); opacity: .8; } }
+@keyframes moon-float { 50% { transform: translateY(-10px); } }
+
+.moon-info { display: grid; gap: var(--space-4); justify-items: start; }
+.moon-info h1 { font-size: clamp(2.2rem, 1.4rem + 3.2vw, 3.8rem); }
+.moon-info .lead { color: var(--text); }
+
+.moon-facts {
+  width: 100%;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px;
+  margin: var(--space-2) 0;
+  border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden;
+  background: var(--border);
+}
+.moon-fact { padding: var(--space-4) var(--space-5); background: rgba(19, 11, 36, .92); display: grid; gap: var(--space-1); }
+.moon-fact dt { font-size: .75rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); }
+.moon-fact dd { margin: 0; font-weight: 600; font-size: 1.05rem; }
+
+.moon-form { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--space-3); width: 100%; }
+.moon-form .field { flex: 1 1 220px; }
+.moon-error { color: var(--danger); font-weight: 600; }
+
+/* Frise des phases */
+.moon-cycle {
+  list-style: none; padding: 0;
+  margin-top: var(--space-7);
+  display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: var(--space-2);
+}
+.moon-cycle__item {
+  display: grid; justify-items: center; gap: var(--space-2);
+  padding: var(--space-3) var(--space-2);
+  border: 1px solid transparent; border-radius: var(--radius);
+  text-align: center; font-size: .75rem; line-height: 1.25; color: var(--text-muted);
+  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.moon-cycle__item svg { width: min(56px, 100%); height: auto; transition: transform var(--dur) var(--ease); }
+.moon-cycle__item:hover svg { transform: scale(1.08); }
+.moon-cycle__item.is-current {
+  color: var(--text); border-color: var(--border-strong);
+  background: rgba(255, 62, 165, .1);
+  box-shadow: 0 0 24px rgba(255, 62, 165, .2);
+}
+.moon-cycle__item.is-current svg { filter: drop-shadow(0 0 10px rgba(241, 230, 255, .7)); }
+
+/* Données vélo */
+.moon-data { align-items: stretch; }
+.versus { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; }
+.versus .stat__value { font-size: clamp(2.2rem, 1.6rem + 2.4vw, 3.4rem); }
+.versus__vs {
+  display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%;
+  border: 1px solid var(--border-strong); color: var(--accent); font-size: 1.4rem;
+  box-shadow: var(--accent-glow);
+}
+.verdict { margin-top: var(--space-5); padding-top: var(--space-4); border-top: 1px dashed var(--border-strong); color: var(--text-muted); }
+.verdict strong { color: var(--text); }
+
+.phase-bars { list-style: none; padding: 0; display: grid; gap: var(--space-2); }
+.phase-bars__row {
+  display: grid; grid-template-columns: 172px minmax(0, 1fr) 56px 34px; align-items: center; gap: var(--space-3);
+  font-size: .88rem; color: var(--text-muted);
+}
+.phase-bars__track { height: 12px; border-radius: 12px; background: var(--surface-strong); overflow: hidden; }
+.phase-bars__fill {
+  display: block; height: 100%; width: var(--w); border-radius: inherit;
+  background: linear-gradient(90deg, #39e1ff, #b388ff);
+  transform-origin: left; animation: bar-grow 1s var(--ease) both;
+}
+.phase-bars__row.is-full .phase-bars__fill { background: linear-gradient(90deg, #b388ff, #ff3ea5); box-shadow: 0 0 12px rgba(255, 62, 165, .6); }
+.phase-bars__row.is-full, .phase-bars__row.is-current { color: var(--text); }
+.phase-bars__row.is-current .phase-bars__label::after { content: " ●"; color: var(--accent-2); font-size: .7em; vertical-align: middle; }
+.phase-bars__value { text-align: right; color: var(--text); font-size: 1.15rem; }
+.phase-bars__days { font-size: .75rem; text-align: right; }
+@keyframes bar-grow { from { transform: scaleX(0); } }
+
+@media (max-width: 900px) {
+  .moon-hero { padding-top: var(--space-5); }
+  .moon-hero__inner { grid-template-columns: 1fr; gap: var(--space-5); }
+  .moon-svg { width: min(70vw, 300px); }
+  .moon-cycle { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (max-width: 480px) {
+  .moon-fact { padding: var(--space-3) var(--space-4); }
+  .phase-bars__row { grid-template-columns: 1fr 48px 30px; row-gap: 4px; }
+  .phase-bars__track { grid-column: 1 / -1; grid-row: 2; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .moon-hero::before, .moon-visual__halo, .moon-svg, .phase-bars__fill { animation: none; }
+}
+
+/* =========================================================
+   Habillage « web 2000 » (page lune, CSS uniquement)
+   ========================================================= */
+
+/* Fiche lune : panneau de propriétés Windows, valeurs sur LCD */
+.moon-facts {
+  border-radius: 3px; gap: 2px; padding: 2px;
+  background: var(--win-face);
+  border: 2px solid; border-color: var(--win-hi) var(--win-lo) var(--win-lo) var(--win-hi);
+  box-shadow: 0 0 0 1px #000, var(--hard-shadow);
+}
+.moon-fact { background: #07030f; border: 2px solid; border-color: var(--win-lo) var(--win-hi) var(--win-hi) var(--win-lo); }
+.moon-fact dt { font-family: var(--font-pixel); font-weight: 400; font-size: .64rem; letter-spacing: .06em; }
+.moon-fact dd { font-family: var(--font-ui); color: #7df9ff; text-shadow: 0 0 6px rgba(125, 249, 255, .55); }
+.moon-fact .mono-num { font-size: 1.7em; }
+
+/* Les 8 phases : icônes du bureau, la courante est « sélectionnée » */
+.moon-cycle__item { border-radius: 0; font-family: var(--font-ui); font-size: .74rem; }
+.moon-cycle__item:hover { background: rgba(255, 255, 255, .04); border-color: rgba(255, 255, 255, .25); border-style: dotted; }
+.moon-cycle__item.is-current { background: transparent; border-color: transparent; box-shadow: none; }
+.moon-cycle__item.is-current span { background: #000080; color: #fff; outline: 1px dotted #fff; outline-offset: 0; padding: 0 3px; }
+.moon-cycle__item.is-current svg { filter: drop-shadow(0 0 10px rgba(241, 230, 255, .7)) sepia(1) hue-rotate(190deg) saturate(3); }
+
+/* Panneau sans barre de titre : le titre devient la barre */
+.moon-data .panel:not(.panel--glow) .panel__title {
+  display: flex; align-items: center; gap: 6px; min-height: 30px;
+  margin: calc(-1 * var(--pad) + 2px) calc(-1 * var(--pad) + 2px) var(--space-5);
+  padding: 3px 8px; border-radius: 6px 6px 0 0;
+  background: var(--win-title-idle); color: #fff;
+  font-family: var(--font-ui); font-size: .84rem; text-shadow: 1px 1px 0 #2a1050;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.45);
+}
+.moon-data .panel:not(.panel--glow) .panel__title::before {
+  content: ""; width: 14px; height: 12px; flex-shrink: 0;
+  background: linear-gradient(#000080 0 3px, #fff 3px); border: 1px solid #000;
+}
+
+/* Verdict : VS en étoile */
+.versus__vs {
+  width: 60px; height: 60px; border: 0; border-radius: 0; box-shadow: none;
+  background: radial-gradient(circle at 40% 35%, #fff6a8, #ffc61a 55%, #ff8a00);
+  clip-path: polygon(50% 0, 61% 18%, 82% 10%, 80% 32%, 100% 40%, 85% 55%, 98% 74%, 76% 76%, 70% 98%, 52% 86%, 32% 100%, 27% 79%, 4% 78%, 15% 58%, 0 40%, 20% 31%, 17% 9%, 38% 17%);
+  color: #2a0016; font-family: var(--font-pixel); font-size: .9rem;
+  transform: rotate(-10deg);
+}
+.versus .stat__value { font-family: var(--font-mono); font-weight: 400; font-size: clamp(2.6rem, 2rem + 2.4vw, 3.8rem); }
+.versus .stat__value:not(.text-gradient) { color: #7df9ff; text-shadow: 0 0 10px rgba(125, 249, 255, .6); }
+
+/* Barres par phase : progression XP en segments */
+.phase-bars__row { font-family: var(--font-ui); font-size: .82rem; }
+.phase-bars__track {
+  height: 16px; border-radius: 2px; padding: 1px; background: #05020c;
+  border: 1px solid; border-color: var(--win-lo) var(--win-hi) var(--win-hi) var(--win-lo);
+}
+.phase-bars__fill {
+  border-radius: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,0) 50%, rgba(0,0,0,.2)), linear-gradient(90deg, #39e1ff, #b388ff);
+  -webkit-mask: repeating-linear-gradient(90deg, #000 0 7px, transparent 7px 9px);
+  mask: repeating-linear-gradient(90deg, #000 0 7px, transparent 7px 9px);
+}
+.phase-bars__row.is-full .phase-bars__fill { background: linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,0) 50%, rgba(0,0,0,.2)), linear-gradient(90deg, #b388ff, #ff3ea5); }
+.phase-bars__value { font-size: 1.3rem; }
+.phase-bars__row.is-current .phase-bars__label { justify-self: start; background: #000080; color: #fff; padding: 0 3px; }
+.phase-bars__row.is-current .phase-bars__label::after { content: " ◄"; color: var(--accent-yellow); }
+.verdict { font-size: .92rem; }
+/* l'anneau orbital (112 %) ne doit jamais créer de scroll horizontal sur mobile */
+.moon-hero { overflow-x: clip; }

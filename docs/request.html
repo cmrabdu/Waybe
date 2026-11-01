@@ -1,58 +1,238 @@
-
-{% extends "base.html" %}
-
-{% block header %}
-
-    <link rel="stylesheet" href="static/style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-{% endblock   %}
-
-{% block body %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Request — WAY-BE</title>
+  <link rel="icon" href="assets/img/favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css?v=3">
+</head>
 <body>
-    <nav>
-        <!-- Image à gauche de la barre de navigation -->
-        <a href="game">
-            <img src="/static/stars.png" alt="Image" class="image-left">
-            <div class="game">
-                <a href="/chosegame">Game</a>
-            </div>
-        </a>
-        <!-- Logo -->
-        <a href="/"> <img src="/static/titre.png" alt="Logo" class="navbar-logo"></a>
-        <!-- Conteneur du menu -->
-        <div class="menu-container">
-            <!-- Menu -->
-            <ul class="menu">
-                <li><a href="/request">Request</a></li>
-                <li><a href="/stats">Stats</a></li>
-                <li><a href="/about">Team</a></li>
-                <li><a href="/chosemoon">Moon</a></li>
+  <header class="wb-nav">
+    <div class="wb-nav__inner">
+      <a class="wb-nav__game" href="game.html"><img src="assets/img/stars.png" alt="">Game</a>
+      <a class="wb-nav__brand" href="index.html"><img src="assets/img/titre.png" alt="WAY-BE"></a>
+      <button type="button" class="wb-nav__toggle" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+      <nav class="wb-nav__links" aria-label="Navigation">
+        <a href="request.html">Request</a>
+        <a href="stats.html">Stats</a>
+        <a href="about.html">Team</a>
+        <a href="moon.html">Moon</a>
+      </nav>
+    </div>
+  </header>
 
-            </ul>
+  <main class="wb-main">
+    <span class="wb-badge">Démo interactive — données d'exemple</span>
+
+    <section class="wb-section">
+      <div class="wb-panel">
+        <h1>Requête mobilité</h1>
+        <form id="city-form" class="wb-form">
+          <label for="ville">Ville</label>
+          <select id="ville" name="ville" required>
+            <option value="">Choisir une ville</option>
+          </select>
+          <button type="submit" class="wb-btn wb-btn--primary">Valider</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="wb-section" id="results-panel" hidden>
+      <div class="wb-panel">
+        <h2 id="city-title" class="wb-panel__title"></h2>
+
+        <div class="wb-chart-wrap">
+          <canvas id="city-chart" aria-label="Répartition du trafic par type"></canvas>
         </div>
-    </nav>
 
-    <!-- Formulaire -->
-    <form id="myForm" action="/request" method="POST">
-        <!-- Label pour la sélection de la ville -->
-        <label for="ville">Ville:</label>
-        <!-- Sélecteur de ville -->
-        <select id="ville" name="ville">
-            <!-- Option par défaut -->
-            <option value="None" selected>Choisir une ville</option>
-            <!-- Options pour les différentes villes -->
-            <ul>
-            {% for item in ville %}
-                <option>{{ item[0] }}</option>
-            {% endfor %}
-            </ul>
+        <h3>Rues couvertes (<span id="streets-count">0</span>)</h3>
+        <ul id="streets-list" class="wb-list"></ul>
+      </div>
+    </section>
 
-            <!-- Ajoutez plus d'options ici selon vos besoins -->
-        </select>
-        <!-- Bouton de soumission -->
-        <input type="submit" value="Valider">
-    </form>
+    <section class="wb-section" id="step-two-panel" hidden>
+      <div class="wb-panel">
+        <h2 class="wb-panel__title">Détail par rue</h2>
+        <form id="street-form" class="wb-form">
+          <label for="rue">Rue</label>
+          <select id="rue" name="rue" required></select>
 
-{% endblock  %}
-{% block footer %}
-{% endblock %}
+          <label for="periode">Période</label>
+          <select id="periode" name="periode" required></select>
+
+          <button type="submit" class="wb-btn wb-btn--primary">Afficher</button>
+        </form>
+
+        <div class="wb-chart-wrap">
+          <canvas id="street-chart" aria-label="Trafic sur la période sélectionnée"></canvas>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wb-footer"><p>© 2024 Groupe C02 — WAY-BE · Projet Bac 1 UCLouvain/EPL · Vitrine demo</p></footer>
+
+  <script src="assets/js/demo-data.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="assets/js/nav.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      var TRAFFIC_LABELS = ['lourd', 'pieton', 'voiture', 'velo'];
+      var TRAFFIC_COLORS = [
+        'rgba(255, 183, 0, 0.85)',
+        'rgba(201, 168, 196, 0.85)',
+        'rgba(236, 41, 123, 0.85)',
+        'rgba(255, 111, 181, 0.85)'
+      ];
+      var CHART_FONT = { family: '"Space Grotesk", system-ui, sans-serif' };
+      var cityChart = null;
+      var streetChart = null;
+      var currentCity = null;
+
+      var villeSelect = document.getElementById('ville');
+      var cityForm = document.getElementById('city-form');
+      var resultsPanel = document.getElementById('results-panel');
+      var stepTwoPanel = document.getElementById('step-two-panel');
+      var cityTitle = document.getElementById('city-title');
+      var streetsList = document.getElementById('streets-list');
+      var streetsCount = document.getElementById('streets-count');
+      var rueSelect = document.getElementById('rue');
+      var periodeSelect = document.getElementById('periode');
+      var streetForm = document.getElementById('street-form');
+
+      WAYBE_DEMO.cities.forEach(function (city) {
+        var option = document.createElement('option');
+        option.value = city.name;
+        option.textContent = city.name;
+        villeSelect.appendChild(option);
+      });
+
+      WAYBE_DEMO.periods.forEach(function (period) {
+        var option = document.createElement('option');
+        option.value = period.id;
+        option.textContent = period.label;
+        periodeSelect.appendChild(option);
+      });
+
+      function hashString(str) {
+        var hash = 0;
+        for (var i = 0; i < str.length; i++) {
+          hash = ((hash << 5) - hash) + str.charCodeAt(i);
+          hash |= 0;
+        }
+        return Math.abs(hash);
+      }
+
+      function chartOptions() {
+        return {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            x: {
+              ticks: { color: '#c9a8c4', font: CHART_FONT },
+              grid: { color: 'rgba(255, 255, 255, 0.08)' }
+            },
+            y: {
+              beginAtZero: true,
+              ticks: { color: '#c9a8c4', font: CHART_FONT },
+              grid: { color: 'rgba(255, 255, 255, 0.08)' }
+            }
+          }
+        };
+      }
+
+      function buildChart(canvasId, labels, values, existingChart) {
+        if (existingChart) existingChart.destroy();
+        var ctx = document.getElementById(canvasId).getContext('2d');
+        return new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Volume',
+              data: values,
+              backgroundColor: TRAFFIC_COLORS,
+              borderColor: TRAFFIC_COLORS.map(function (c) { return c.replace('0.85', '1'); }),
+              borderWidth: 1,
+              borderRadius: 6
+            }]
+          },
+          options: chartOptions()
+        });
+      }
+
+      function streetTraffic(base, street, periodId) {
+        var seed = hashString(street + periodId);
+        return TRAFFIC_LABELS.map(function (key, index) {
+          var factor = 0.55 + ((seed + index * 17) % 90) / 100;
+          return Math.round(base[key] * factor);
+        });
+      }
+
+      cityForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        var name = villeSelect.value;
+        currentCity = WAYBE_DEMO.cities.find(function (c) { return c.name === name; });
+        if (!currentCity) return;
+
+        cityTitle.textContent = currentCity.name;
+        streetsCount.textContent = currentCity.streetsCount;
+        streetsList.innerHTML = '';
+        currentCity.streets.forEach(function (street) {
+          var li = document.createElement('li');
+          li.textContent = street;
+          streetsList.appendChild(li);
+        });
+
+        var trafficValues = TRAFFIC_LABELS.map(function (key) {
+          return currentCity.traffic[key];
+        });
+        cityChart = buildChart('city-chart', TRAFFIC_LABELS, trafficValues, cityChart);
+
+        rueSelect.innerHTML = '';
+        currentCity.streets.forEach(function (street) {
+          var option = document.createElement('option');
+          option.value = street;
+          option.textContent = street;
+          rueSelect.appendChild(option);
+        });
+
+        resultsPanel.hidden = false;
+        stepTwoPanel.hidden = false;
+        if (streetChart) {
+          streetChart.destroy();
+          streetChart = null;
+        }
+      });
+
+      streetForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        if (!currentCity) return;
+
+        var street = rueSelect.value;
+        var periodId = periodeSelect.value;
+        var values = streetTraffic(currentCity.traffic, street, periodId);
+        var periodLabel = WAYBE_DEMO.periods.find(function (p) { return p.id === periodId; }).label;
+
+        streetChart = buildChart('street-chart', TRAFFIC_LABELS, values, streetChart);
+        streetChart.options.plugins.title = {
+          display: true,
+          text: street + ' · ' + periodLabel,
+          color: '#c9a8c4',
+          font: { size: 14, family: '"Space Grotesk", system-ui, sans-serif', weight: '600' }
+        };
+        streetChart.update();
+      });
+    })();
+  </script>
+</body>
+</html>

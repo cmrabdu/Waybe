@@ -1,7 +1,7 @@
 import sqlite3
 import os
 from flask import current_app, g
-filename = "mobility/ugly.csv"
+filename = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ugly.csv")
 def get_db():
 
     """Returns the database connection. Create the connection if needed.

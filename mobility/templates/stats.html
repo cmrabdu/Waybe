@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+
+{% block title %}Stats · WAY-BE{% endblock %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/data.css') }}">
+{% endblock %}
+
+{% set rep = s.repartition %}
+{% set top = s.villes[0] if s.villes else none %}
+{% set max_velo = (s.villes|map(attribute='pct_velo')|max) if s.villes else 1 %}
+{% set max_rue = (s.top_rues|map(attribute='total')|max) if s.top_rues else 1 %}
+
+{% block content %}
+<section class="container data-hero">
+  <span class="eyebrow">Stats · du {{ s.debut }} au {{ s.fin }}</span>
+  <div class="story" style="margin-top: var(--space-4)">
+    <div>
+      <div class="big-number" data-count="{{ rep.total }}">{{ rep.total }}</div>
+      <p class="lead" style="margin-top: var(--space-3)">passages comptés par <strong>{{ s.counts.rue }} capteurs</strong> Telraam dans <strong>{{ s.counts.ville }} villes</strong> belges, en sept semaines d'hiver.</p>
+    </div>
+    <div>
+      <h1 style="font-family: var(--font-display); font-size: clamp(1.6rem, 1.2rem + 1.8vw, 2.6rem); line-height: 1.1">Ce que racontent <span class="text-gradient">nos rues</span></h1>
+      <p class="muted" style="margin-top: var(--space-3)">Chaque heure, un petit capteur posé à une fenêtre compte ce qui passe devant lui. Mis bout à bout, ça dessine la mobilité d'un pays : qui roule, qui pédale, et à quelle heure.</p>
+      <div class="db-chips" aria-label="Contenu de la base de données">
+        {% for t, n in s.counts.items() %}<span class="db-chip">{{ t }} <b>{{ '{:,}'.format(n).replace(',', ' ') }}</b></span>{% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container section--tight reveal">
+  <div class="story">
+    <div>
+      <div class="story__num">01</div>
+      <h2>La voiture écrase tout</h2>
+      <p><strong>{{ '%.0f'|format(rep.pct.voiture) }} %</strong> des passages sont des voitures. Les vélos ne pèsent que <strong>{{ '%.1f'|format(rep.pct.velo) }} %</strong>, moins que les poids lourds ({{ '%.1f'|format(rep.pct.lourd) }} %).</p>
+    </div>
+    <div class="panel">
+      <div class="window-bar" aria-hidden="true"><span>repartition.gif</span><span class="window-bar__dots"><i></i><i></i><i></i></span></div>
+      <div class="split split--lg" role="img" aria-label="Répartition globale">
+        {% for t in types %}<span class="dot-{{ t }}" style="width: {{ rep.pct[t] }}%"></span>{% endfor %}
+      </div>
+      <div class="kpis" style="margin: var(--space-5) 0 0">
+        {% for t in types %}
+        <div class="kpi" style="--i: {{ loop.index0 }}; padding: var(--space-4)">
+          <div class="kpi__value" style="color: var(--c-{{ t }}); font-size: 1.7rem"><span data-count="{{ rep.pct[t] }}" data-digits="1">{{ rep.pct[t] }}</span><small>%</small></div>
+          <div class="kpi__label">{{ labels[t] }} · {{ '{:,}'.format(rep.totaux[t]).replace(',', ' ') }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container section--tight reveal">
+  <div class="story story--rev">
+    <div>
+      <div class="story__num">02</div>
+      <h2>Qui pédale le plus ?</h2>
+      {% if top %}
+      <p><strong>{{ top.nom }}</strong> arrive en tête : <strong>{{ top.pct_velo }} %</strong> des passages y sont des vélos. Rapporté à la population, c'est une autre histoire : les petites communes comptent bien plus de vélos par habitant.</p>
+      {% endif %}
+    </div>
+    <div class="panel">
+      <div class="window-bar" aria-hidden="true"><span>classement_velo.txt</span><span class="window-bar__dots"><i></i><i></i><i></i></span></div>
+      <div class="chart-head"><h3>Part des vélos dans le trafic</h3><p>vélos / habitant à droite</p></div>
+      <ol class="rank">
+        {% for v in s.villes %}
+        <li>
+          <span class="rank__name">{{ v.nom }}<small>{{ '{:,}'.format(v.population).replace(',', ' ') }} hab.</small></span>
+          <span class="rank__bar" style="--w: {{ (v.pct_velo / max_velo * 100)|round(1) }}; --i: {{ loop.index0 }}" title="{{ v.pct_velo }} %"></span>
+          <span class="rank__val">{{ v.pct_velo }} %<small class="muted" style="display:block; font-family: var(--font-body); font-size: .75rem">{{ v.velo_par_hab }} /hab</small></span>
+        </li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="container section--tight reveal">
+  <div class="section-head">
+    <div class="story__num">03</div>
+    <h2 style="font-family: var(--font-display); font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.3rem)">Le rythme d'une journée</h2>
+    <p>Moyenne de passages par heure et par capteur (heure UTC). Les vélos montent toute la journée et culminent en fin d'après-midi. La nuit reste à zéro : les capteurs Telraam ont besoin de lumière.</p>
+  </div>
+  <div class="panel">
+      <div class="window-bar" aria-hidden="true"><span>profil_horaire.xls</span><span class="window-bar__dots"><i></i><i></i><i></i></span></div><div class="chart-box"><canvas id="profil" role="img" aria-label="Profil horaire moyen par type"></canvas></div></div>
+</section>
+
+<section class="container section--tight reveal">
+  <div class="grid grid--2">
+    <div class="panel">
+      <div class="window-bar" aria-hidden="true"><span>semaine.xls</span><span class="window-bar__dots"><i></i><i></i><i></i></span></div>
+      <div class="story__num">04</div>
+      <div class="chart-head"><h3>Semaine contre week-end</h3><p>passages moyens / heure</p></div>
+      <div class="chart-box chart-box--sm"><canvas id="semaine" role="img" aria-label="Moyenne par jour de la semaine"></canvas></div>
+    </div>
+    <div class="panel">
+      <div class="window-bar" aria-hidden="true"><span>vitesse_v85.xls</span><span class="window-bar__dots"><i></i><i></i><i></i></span></div>
+      <div class="story__num">05</div>
+      <div class="chart-head"><h3>À quelle vitesse ?</h3><p>V85 moyen par ville (km/h)</p></div>
+      <div class="chart-box chart-box--sm"><canvas id="v85" role="img" aria-label="Vitesse V85 moyenne par ville"></canvas></div>
+      <p class="note">Le V85 est la vitesse sous laquelle roulent 85 % des véhicules.</p>
+    </div>
+  </div>
+</section>
+
+<section class="container section--tight reveal">
+  <div class="story">
+    <div>
+      <div class="story__num">06</div>
+      <h2>Les rues préférées des cyclistes</h2>
+      <p>Le top 5 des capteurs qui ont vu passer le plus de vélos. Clique sur une rue pour l'explorer en détail.</p>
+    </div>
+    <div class="panel">
+      <div class="window-bar" aria-hidden="true"><span>top5_rues.txt</span><span class="window-bar__dots"><i></i><i></i><i></i></span></div>
+      <ol class="rank">
+        {% for r in s.top_rues %}
+        <li>
+          <a class="rank__name" style="color: inherit; text-decoration: none" href="{{ url_for('endrequest', rue=r.rue_id) }}">{{ r.nom }}<small>{{ r.ville }}</small></a>
+          <span class="rank__bar" style="--w: {{ (r.total / max_rue * 100)|round(1) }}; --i: {{ loop.index0 }}"></span>
+          <span class="rank__val">{{ '{:,}'.format(r.total|int).replace(',', ' ') }}</span>
+        </li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="container section--tight reveal">
+  <div class="panel">
+      <div class="window-bar" aria-hidden="true"><span>toutes_les_villes.csv</span><span class="window-bar__dots"><i></i><i></i><i></i></span></div>
+    <div class="chart-head"><h3>Toutes les villes</h3><p>passages totaux sur la période</p></div>
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th>Ville</th>{% for t in types %}<th class="num"><span class="swatch dot-{{ t }}"></span>{{ labels[t] }}</th>{% endfor %}<th class="num">Total</th><th class="num">Vélos / hab.</th></tr></thead>
+        <tbody>
+        {% for v in s.villes|sort(attribute='total', reverse=true) %}
+          <tr><td><a href="{{ url_for('nextrequest', ville=v.nom) }}" style="color: var(--text)">{{ v.nom }}</a></td>
+            {% for t in types %}<td class="num">{{ '{:,}'.format(v[t]).replace(',', ' ') }}</td>{% endfor %}
+            <td class="num"><strong>{{ '{:,}'.format(v.total).replace(',', ' ') }}</strong></td>
+            <td class="num">{{ v.velo_par_hab }}</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="form-actions" style="justify-content: center">
+    <a class="btn btn--primary" href="{{ url_for('request_handler') }}">Explorer ma ville <span class="arrow">&rarr;</span></a>
+    <a class="btn btn--ghost" href="{{ url_for('chosegame') }}">Tester mes connaissances</a>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='vendor/chart.umd.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/data.js') }}"></script>
+<script>
+(function () {
+  WB.theme();
+  const types = {{ types|list|tojson }};
+  const labels = {{ labels|tojson }};
+  const profil = {{ s.profil|tojson }};
+  const semaine = {{ s.semaine|tojson }};
+  const v85 = {{ s.v85_ville|tojson }};
+  const C = WB.COLORS;
+  const tick = (v) => WB.fmt(v);
+  const lazy = (id, make) => { const el = document.getElementById(id); WB.onVisible(el, () => make(el)); };
+
+  lazy("profil", (el) => new Chart(el, {
+    type: "line",
+    data: {
+      labels: Array.from({ length: 24 }, (_, h) => `${h}h`),
+      datasets: types.map((t) => ({
+        label: labels[t], data: profil[t], borderColor: C[t], backgroundColor: WB.alpha(C[t], .1),
+        borderWidth: 2, tension: .35, pointRadius: 0, pointHoverRadius: 5, fill: t === "voiture",
+      })),
+    },
+    options: {
+      scales: { x: { grid: { display: false } }, y: { beginAtZero: true, ticks: { callback: tick } } },
+      plugins: { legend: { position: "top", align: "end" },
+                 tooltip: { callbacks: { label: (c) => ` ${c.dataset.label} : ${WB.fmt(c.raw, 1)} / h` } } },
+    },
+  }));
+
+  lazy("semaine", (el) => new Chart(el, {
+    type: "bar",
+    data: {
+      labels: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
+      datasets: types.map((t) => ({
+        label: labels[t], data: semaine[t], backgroundColor: C[t], borderColor: "#130b24",
+        borderWidth: { top: 2 }, borderRadius: 3, borderSkipped: "bottom", maxBarThickness: 34,
+      })),
+    },
+    options: {
+      scales: { x: { stacked: true, grid: { display: false } }, y: { stacked: true, beginAtZero: true, ticks: { callback: tick } } },
+      plugins: { legend: { position: "bottom" },
+                 tooltip: { callbacks: { label: (c) => ` ${c.dataset.label} : ${WB.fmt(c.raw, 1)}` } } },
+    },
+  }));
+
+  lazy("v85", (el) => new Chart(el, {
+    type: "bar",
+    data: {
+      labels: v85.map((r) => r[0]),
+      datasets: [{ label: "V85 moyen", data: v85.map((r) => r[1]), backgroundColor: WB.alpha(C.voiture, .85),
+                   hoverBackgroundColor: C.voiture, borderRadius: 4, borderSkipped: "start", maxBarThickness: 18 }],
+    },
+    options: {
+      indexAxis: "y",
+      interaction: { mode: "nearest", axis: "y", intersect: false },
+      scales: { x: { beginAtZero: true, ticks: { callback: (v) => v + " km/h" } }, y: { grid: { display: false } } },
+      plugins: { legend: { display: false },
+                 tooltip: { callbacks: { label: (c) => ` ${WB.fmt(c.raw, 1)} km/h` } } },
+    },
+  }));
+})();
+</script>
+{% endblock %}
