@@ -1,4 +1,7 @@
 # WAY-BE on watchy. Hard limits: the site can never take more than 256 MB RAM / half a CPU.
+# Own project name: the folder is called "deploy", like other stacks on the server.
+name: waybe
+
 services:
   waybe:
     build: ..
