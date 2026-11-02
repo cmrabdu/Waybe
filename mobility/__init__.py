@@ -92,6 +92,24 @@ def create_app(test_config=None):
             app.logger.warning('CSP VIOLATION %s', request.get_data(as_text=True)[:400])
             return ('', 204)
 
+    # Les données ne changent jamais : un calcul par ville suffit pour toute la vie du serveur.
+    _rep_cache = {}
+
+    def _rep(code_postal):
+        if code_postal not in _rep_cache:
+            _rep_cache[code_postal] = T.repartition_ville(code_postal)
+        return _rep_cache[code_postal]
+
+    app.teardown_appcontext(close_db)
+
+    @app.after_request
+    def _html_cache(resp):
+        # Pages en cache court côté navigateur (prod) : navigation immédiate, données figées.
+        if (not app.debug and request.method == 'GET' and resp.status_code == 200
+                and resp.mimetype == 'text/html'):
+            resp.headers['Cache-Control'] = 'public, max-age=300, stale-while-revalidate=86400'
+        return resp
+
     _home_cache = {}
 
     @app.route('/')
@@ -137,7 +155,7 @@ def create_app(test_config=None):
         if not prefix:
             return redirect(url_for('chosegame', error='1') if request.args.get('ville')
                             else url_for('chosegame'))
-        rep = T.repartition_ville(v['code_postal'])
+        rep = _rep(v['code_postal'])
         return render_template('game.html', ville=v, label=T.display_city(v['nom']),
                                prefix=prefix, pct=rep['pct'], labels=T.LABELS, types=T.TYPES)
 
@@ -154,7 +172,7 @@ def create_app(test_config=None):
     def request_handler():
         if request.method == 'POST':  # ancien formulaire -> étape 2
             return redirect(url_for('nextrequest', ville=request.form.get('ville', '')))
-        villes = [dict(v, label=T.display_city(v['nom']), rep=T.repartition_ville(v['code_postal']))
+        villes = [dict(v, label=T.display_city(v['nom']), rep=_rep(v['code_postal']))
                   for v in T.villes()]
         return render_template('request.html', villes=villes, labels=T.LABELS, types=T.TYPES,
                                error=request.args.get('error'))
@@ -162,7 +180,7 @@ def create_app(test_config=None):
     def _render_step2(v, error=None, form=None, status=200):
         rues = T.rues(v['code_postal'])
         return render_template('nextrequest.html', ville=v, label=T.display_city(v['nom']),
-                               rues=rues, rep=T.repartition_ville(v['code_postal']),
+                               rues=rues, rep=_rep(v['code_postal']),
                                labels=T.LABELS, types=T.TYPES, error=error,
                                form=form or {}), status
 
@@ -258,5 +276,14 @@ def create_app(test_config=None):
             if resp.mimetype == 'text/html' and not resp.direct_passthrough:
                 resp.set_data(resp.get_data() + _snippet)
             return resp
+
+    # Prod : tout est calculé au démarrage, le premier visiteur n'attend pas.
+    if not app.debug and not app.testing:
+        try:
+            with app.test_client() as c:
+                for page in ('/', '/stats', '/request', '/moon', '/chosegame'):
+                    c.get(page)
+        except Exception:
+            app.logger.exception('Préchauffage du cache impossible')
 
     return app

@@ -74,8 +74,8 @@
   border: 1px solid var(--border); color: var(--text); text-decoration: none;
   overflow: hidden; isolation: isolate;
   transition: transform var(--dur) var(--ease), border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
-  animation: rise .6s var(--ease) both;
-  animation-delay: calc(var(--i, 0) * 45ms);
+  animation: rise .26s var(--ease) backwards;
+  animation-delay: calc(var(--i, 0) * 15ms);
 }
 .city-tile::after {
   content: ""; position: absolute; inset: -40% -40% auto auto; width: 180px; height: 180px;
@@ -108,7 +108,7 @@
 .split--lg { height: 18px; }
 .split span {
   display: block; height: 100%; background: var(--c); min-width: 0;
-  transform-origin: left; animation: grow .9s var(--ease) both;
+  transform-origin: left; animation: grow .45s var(--ease) both;
 }
 .legend { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); list-style: none; padding: 0; font-size: .88rem; color: var(--text-muted); }
 .legend li { display: inline-flex; align-items: center; gap: var(--space-2); }
@@ -180,7 +180,7 @@
 .kpi {
   padding: var(--space-5); border-radius: var(--radius-lg); border: 1px solid var(--border);
   background: linear-gradient(160deg, var(--surface-strong), var(--surface));
-  animation: rise .6s var(--ease) both; animation-delay: calc(var(--i, 0) * 70ms);
+  animation: rise .26s var(--ease) backwards; animation-delay: calc(var(--i, 0) * 20ms);
 }
 .kpi__value { font-family: var(--font-display); font-weight: 900; font-size: clamp(1.7rem, 1.2rem + 1.8vw, 2.5rem); line-height: 1.05; }
 .kpi__value small { font-size: .5em; color: var(--text-muted); font-weight: 500; margin-left: 4px; }

@@ -13,7 +13,7 @@
 @media (max-width: 480px) { .deck { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-5) var(--space-3); } .tcard__name { font-size: .85rem; } }
 
 .deck__slot { display: grid; justify-items: center; gap: var(--space-1); text-align: center;
-  animation: deal 800ms var(--ease) both; animation-delay: calc(var(--i) * 110ms + 150ms); }
+  animation: deal 380ms var(--ease) both; animation-delay: calc(var(--i) * 40ms); }
 @keyframes deal { from { opacity: 0; transform: translateY(40px) rotate(calc((var(--i) - 1.5) * 6deg)) scale(.92); } }
 
 .tcard {

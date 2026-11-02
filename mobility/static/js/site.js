@@ -51,6 +51,22 @@
   }
   document.addEventListener('pointerover', function (e) { prefetch(e.target.closest && e.target.closest('a[href]')); }, { passive: true });
   document.addEventListener('focusin', function (e) { prefetch(e.target.closest && e.target.closest('a[href]')); });
+  document.addEventListener('touchstart', function (e) { warm(e.target.closest && e.target.closest('a[href]')); }, { passive: true });
+
+  /* iPhone : Safari ignore <link rel=prefetch>. On met les pages en cache HTTP avec fetch,
+     au repos, pour que la navigation soit immédiate. Rien si l'économie de données est active. */
+  function warm(a) {
+    if (!a || a.origin !== location.origin || prefetched['f' + a.href] || a.pathname.indexOf('/static/') === 0) return;
+    prefetched['f' + a.href] = true;
+    try { fetch(a.href, { credentials: 'same-origin' }).catch(function () {}); } catch (err) {}
+  }
+  var conn = navigator.connection;
+  if (!(conn && conn.saveData)) {
+    var idle = window.requestIdleCallback || function (f) { return setTimeout(f, 800); };
+    window.addEventListener('load', function () {
+      idle(function () { document.querySelectorAll('.site-nav a[href]').forEach(warm); });
+    });
+  }
 
   /* Repli JS pour les navigateurs sans View Transitions entre documents */
   if (root.classList.contains('no-vt') && !reduceMotion) {
@@ -59,7 +75,7 @@
       if (!internalLink(a, e)) return;
       e.preventDefault();
       root.classList.add('is-leaving');
-      setTimeout(function () { location.href = a.href; }, 170);
+      setTimeout(function () { location.href = a.href; }, 70);
     });
     document.addEventListener('submit', function (e) {
       if (!e.defaultPrevented) root.classList.add('is-leaving');
@@ -78,7 +94,7 @@
           io.unobserve(entry.target);
         }
       });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    }, { rootMargin: '0px 0px 15% 0px', threshold: 0 });
     items.forEach(function (el) { io.observe(el); });
   } else {
     items.forEach(function (el) { el.classList.add('is-visible'); });

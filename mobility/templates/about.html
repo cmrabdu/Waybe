@@ -26,10 +26,10 @@
         <button type="button" class="tcard" data-card aria-pressed="false" aria-label="Retourner la carte de {{ m.nom }}">
           <span class="tcard__inner">
             <span class="tcard__face tcard__face--back">
-              <img src="{{ url_for('static', filename='cards.png') }}" alt="" width="300" height="500" loading="lazy">
+              <img src="{{ url_for('static', filename='cards.webp') }}" alt="" width="300" height="500" loading="lazy">
             </span>
             <span class="tcard__face tcard__face--front">
-              <img src="{{ url_for('static', filename=m.id ~ '.png') }}" alt="Carte de {{ m.nom }}" width="300" height="500" loading="lazy">
+              <img src="{{ url_for('static', filename=m.id ~ '.webp') }}" alt="Carte de {{ m.nom }}" width="300" height="500" loading="lazy">
               <span class="tcard__holo" aria-hidden="true"></span>
             </span>
           </span>

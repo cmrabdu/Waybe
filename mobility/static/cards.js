@@ -27,7 +27,7 @@
 
   let state;
 
-  const src = (name) => `${cfg.static}${name}.jpg`;
+  const src = (name) => `${cfg.static}${name}.webp`;
   const fmtTime = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
   const fmtPct = (n) => new Intl.NumberFormat("fr-BE", { maximumFractionDigits: 1 }).format(n);
 
@@ -109,7 +109,7 @@
     board.innerHTML = "";
     deck.forEach((c, i) => board.appendChild(makeCard(c, i)));
 
-    const dealMs = reduced ? 0 : 700 + deck.length * 70;
+    const dealMs = reduced ? 0 : 300 + deck.length * 30;
     if (mode === "expert") {
       $("mode-label").textContent = "Mode expert : aucun aperçu, à toi de jouer.";
       setTimeout(() => { s.lock = false; }, dealMs);

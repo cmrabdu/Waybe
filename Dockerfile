@@ -16,5 +16,5 @@ EXPOSE 8000
 
 # Build the database once (from mobility/ugly.csv), then serve.
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "2", "--threads", "2", \
-     "--timeout", "30", "--max-requests", "2000", "--max-requests-jitter", "200", \
+     "--timeout", "120", "--preload", "--max-requests", "2000", "--max-requests-jitter", "200", \
      "--access-logfile", "-", "mobility.wsgi:application"]

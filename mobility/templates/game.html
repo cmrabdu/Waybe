@@ -33,7 +33,7 @@
       {# Dos de cartes affichés tout de suite : le plateau a sa taille finale dès le premier rendu (pas de saut) #}
       {% for i in range(8) %}
       <span class="card card--ghost" style="--i: {{ i }}" aria-hidden="true"><span class="card__shake"><span class="card__inner">
-        <span class="card__face card__face--back"><img src="{{ url_for('static', filename='back.jpg') }}" alt="" width="585" height="819"></span>
+        <span class="card__face card__face--back"><img src="{{ url_for('static', filename='back.webp') }}" alt="" width="585" height="819"></span>
       </span></span></span>
       {% endfor %}
     </div>

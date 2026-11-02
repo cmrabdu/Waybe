@@ -31,8 +31,8 @@
     <a class="deck__item" href="{{ url_for('game', ville=v.nom) }}" data-prefix="{{ v.prefix }}" style="--i: {{ loop.index0 }}"
        aria-label="Jouer avec {{ v.label }}">
       <div class="deck__card">
-        <img src="{{ url_for('static', filename='back.jpg') }}" alt="" loading="lazy" width="585" height="819">
-        <img src="{{ url_for('static', filename=v.prefix ~ '_car.jpg') }}" alt="" loading="lazy" width="585" height="819">
+        <img src="{{ url_for('static', filename='back.webp') }}" alt="" loading="lazy" width="585" height="819">
+        <img src="{{ url_for('static', filename=v.prefix ~ '_car.webp') }}" alt="" loading="lazy" width="585" height="819">
       </div>
       <span class="deck__name">{{ v.label }}</span>
       <span class="deck__best" data-best></span>
@@ -75,7 +75,7 @@
     if (!prefix || loaded[prefix]) return;
     loaded[prefix] = true;
     ["back", "car", "cycle", "human", "truc"].concat(["car", "cycle", "human", "truc"].map((n) => `${prefix}_${n}`))
-      .forEach((n) => { const i = new Image(); i.src = `${STATIC}${n}.jpg`; });
+      .forEach((n) => { const i = new Image(); i.src = `${STATIC}${n}.webp`; });
   }
   const deck = document.querySelector(".deck");
   document.querySelectorAll(".deck__item").forEach((a) => {
@@ -91,7 +91,7 @@
       warm(a.dataset.prefix);
       a.classList.add("is-picked");
       deck.classList.add("is-picking");
-      setTimeout(() => { location.href = a.href; }, 320);
+      setTimeout(() => { location.href = a.href; }, 130);
     });
   });
   window.addEventListener("pageshow", () => {

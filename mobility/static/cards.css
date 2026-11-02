@@ -41,7 +41,7 @@
 }
 .deck__item {
   display: grid; gap: var(--space-3); justify-items: center; text-decoration: none; color: var(--text);
-  perspective: 900px; animation: deal .7s var(--ease) both; animation-delay: calc(var(--i, 0) * 60ms);
+  perspective: 900px; animation: deal .3s var(--ease) both; animation-delay: calc(var(--i, 0) * 20ms);
 }
 .deck__card {
   position: relative; width: 100%; aspect-ratio: 585 / 819; transform-style: preserve-3d;
@@ -96,7 +96,7 @@
 .card {
   position: relative; display: block; width: 100%; aspect-ratio: 585 / 819;
   padding: 0; border: 0; background: none; cursor: pointer;
-  border-radius: 14px; animation: deal .6s var(--ease) both; animation-delay: calc(var(--i, 0) * 70ms);
+  border-radius: 14px; animation: deal .3s var(--ease) both; animation-delay: calc(var(--i, 0) * 30ms);
 }
 .card:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 4px; }
 .card__shake { position: absolute; inset: 0; perspective: 1000px; }
